@@ -14,7 +14,7 @@ Say hello when you arrive in the morning:
 
 Add a task when you have finished working on it:
 
-`$ utt add "reading document X"`
+`$ utt add "configuring server"`
 
 Show report:
 
@@ -28,16 +28,16 @@ Break   Time: 0h00
 
 ----------------------------------- Projects -----------------------------------
 
-(0h07) : reading document X
+(0h07) : configuring server
 
 ---------------------------------- Activities ----------------------------------
 
-(0h07) : reading document X
+(0h07) : configuring server
 
 
 ----------------------------------- Details ------------------------------------
 
-(0h07) 08:27-08:34 reading document X
+(0h07) 08:27-08:34 configuring server
 ```
 
 Edit your timesheet with your favorite text editor:
@@ -66,7 +66,7 @@ Example:
 
 ```
 $ utt add "lunch **"
-$ utt add "break ***"
+$ utt add "some task ***"
 ```
 
 #### Grouping by projects
@@ -131,7 +131,7 @@ $ utt add "#83"
 #### Changing the date of the report
 
 The `report` command let you specify for which date you want the
-report. If omitted, this is the current date.
+report. If omitted, it's the current date.
 
 Example:
 
