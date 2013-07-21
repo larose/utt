@@ -1,9 +1,9 @@
 Ultimate Time Tracking
 ======================
 
-Ultimate Time Tracking (utt) is a simple command-line interface time
-tracking application. It's designed for users that need to report
-their time on another system and want a preliminary timesheet.
+Ultimate Time Tracking (utt) is a simple command-line time tracking
+application. It's designed for users that need to report their time on
+another system and want a preliminary timesheet.
 
 
 ## Usage
