@@ -2,11 +2,13 @@ Ultimate Time Tracking
 ======================
 
 Ultimate Time Tracking (utt) is a simple command-line time tracking
-application. It's designed for users that need to report their time on
-another system and want a preliminary timesheet.
+application written in Python. It's designed for users that need to
+report their time on another system and want a preliminary timesheet.
 
 
 ## Usage
+
+There are four commands in utt: `hello`, `add`, `report` and `edit`.
 
 Say hello when you arrive in the morning:
 
@@ -45,29 +47,44 @@ Edit your timesheet with your favorite text editor:
 
 `$ utt edit`
 
-These are the four commands available in utt.
+### Activity
 
-### Report
+An activity name does more than just identifying it. It's used to
+determine its type and to group them.
 
-The name of a activity is important. It's used to determine its type
-(working, break, ignored) and to group them.
+There are three activity types: working, break, ignored.
 
-#### Type
+#### Working
 
-There are three types:
+This is the default activity. It contributes to the working time.
 
-* Working activity (default)
-* Break activity (add `**` at the end of the name)
-* Ignored activity (add `***` at the end of the name)
+```
+$ utt add "task #4"
+```
 
-Ignored activities will only be shown in the "Details" section.
+#### Break
+
+Activity whose name ends with `**`. It contributes to the break time.
 
 Example:
 
 ```
 $ utt add "lunch **"
-$ utt add "some task ***"
 ```
+
+#### Ignored
+
+Activity whose name ends with `***`. Only shown in the "Detail
+section".
+
+Example:
+
+```
+$ utt add "ignored activity ***"
+```
+
+
+### Report
 
 #### Grouping by projects
 
@@ -103,7 +120,7 @@ $ utt report
 
 #### Grouping by name
 
-If several activities have the same name, they will be merged as one
+If multiple activities have the same name, they are merged as one
 activity in the "Activities" section.
 
 Example:
@@ -128,10 +145,10 @@ $ utt add "#83"
 (0h45) 11:00-11:45 #83
 ```
 
-#### Changing the date of the report
+#### Selecting the date of the report
 
-The `report` command let you specify for which date you want the
-report. If omitted, it's the current date.
+The `report` command let you choose the date of the report. If
+omitted, it's the current date.
 
 Example:
 
@@ -141,8 +158,8 @@ $ utt report 2013-07-01
 
 #### Current activity
 
-By default, a `-- Current Activity--` is inserted if the date of the
-report is today's date.
+A `-- Current Activity --` is inserted if the date of the report is
+today.
 
 The first duration between the parentheses (1h00) represents the
 working time without the current activity. The second duration between
