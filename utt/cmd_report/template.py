@@ -52,8 +52,6 @@ def plain_text_format(context):
     print(_title('Details'))
     print()
 
-    # TODO: duration: aligne a droite
-    # TODO: Faire de quoi generique avec print_dicts
     for activity in context.activities:
         print("(%s) %s-%s %s" % (_format_duration(activity.duration),
                                  _format_time(activity.start),
