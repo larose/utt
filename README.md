@@ -247,7 +247,7 @@ with Python 3.
 
 ### `setup.py`
 
-python3 setup.py install
+`python3 setup.py install`
 
 
 ## Requirements
