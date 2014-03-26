@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import sys
 import os
 
@@ -14,18 +15,21 @@ def main():
     args = parser.parse_args()
     handler = handlers.get(args.command)
 
+    args.now = datetime.datetime.now()
+
     if handler:
         handler(args)
 
 def _parse_args(parser, modules):
-    parser.add_argument("--data", dest="data_filename", default=_utt_filename())
+    parser.add_argument("--data", dest="data_filename",
+                        default=_utt_filename())
     subparsers = parser.add_subparsers(dest="command")
     handlers = {}
 
     for module in modules:
         module.add_args(subparsers.add_parser(module.NAME))
         handlers[module.NAME] = module.execute
-    
+
     return handlers
 
 def _user_data_dir():
@@ -33,4 +37,3 @@ def _user_data_dir():
 
 def _utt_filename():
     return os.path.join(_user_data_dir(), 'utt', 'utt.log')
-

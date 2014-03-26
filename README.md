@@ -1,9 +1,9 @@
-Ultimate Time Tracking
+Ultimate Time Tracker
 ======================
 
-Ultimate Time Tracking (utt) is a simple command-line time tracking
-application written in Python. It's designed for users that need to
-report their time on another system and want a preliminary timesheet.
+Ultimate Time Tracker (utt) is a minimalist command-line time tracking
+application written in Python. It is intended for people who need to
+report their time on another system and want a preliminary time sheet.
 
 
 ## Usage
@@ -42,7 +42,7 @@ Break   Time: 0h00
 (0h07) 08:27-08:34 configuring server
 ```
 
-Edit your timesheet with your favorite text editor:
+Edit your time sheet with your favorite text editor:
 
 
 `$ utt edit`
@@ -238,10 +238,16 @@ Break   Time: 0h00
 
 ## Installation
 
+### `pip`
+
 `$ pip install utt`
 
 utt is only compatible with Python 3. Make sure you are using `pip`
 with Python 3.
+
+### `setup.py`
+
+python3 setup.py install
 
 
 ## Requirements

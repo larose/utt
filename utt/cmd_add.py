@@ -1,5 +1,6 @@
 import datetime
-from . import io
+from . import util
+from .entry import Entry
 
 NAME = 'add'
 
@@ -7,5 +8,5 @@ def add_args(parser):
     parser.add_argument("name")
 
 def execute(args):
-    io.add_entry(args.data_filename,
-                 io.Entry(datetime.datetime.today(), args.name))
+    util.add_entry(args.data_filename,
+                   Entry(datetime.datetime.today(), args.name, False))
