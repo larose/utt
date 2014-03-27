@@ -28,5 +28,5 @@ setup(
     packages=['utt'],
     scripts=[os.path.join('bin', 'utt')],
     url="https://github.com/larose/utt",
-    version='1.0',
+    version='1.1',
 )
