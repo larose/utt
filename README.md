@@ -86,7 +86,7 @@ $ utt add "ignored activity ***"
 
 ### Report
 
-#### Grouping by projects
+#### Grouping by project
 
 The "Projects" section of the report groups activities by projects. A
 project can be associated to an activity by prefixing it with a
@@ -236,6 +236,22 @@ Break   Time: 0h00
 (1h00) : #12
 ```
 
+#### Weekly working and break times
+
+The time reported in the square brackets is the total time for the
+week.
+
+```
+$ utt report
+
+----------------------- Tuesday, Mar 25, 2014 (week 13) ------------------------
+
+Working Time: 1h00 [8h00]
+Break   Time: 0h00 [0h30]
+
+...
+```
+
 ## Installation
 
 ### `pip`
@@ -257,7 +273,7 @@ Python 3
 
 ## Author
 
-Mathieu Larose <mathieu@mathieularose.com>
+Mathieu Larose <<mathieu@mathieularose.com>>
 
 
 ## License
