@@ -3,11 +3,11 @@ import datetime
 import sys
 import os
 
-from . import cmd_add, cmd_edit, cmd_hello, cmd_report
+from . import cmd_add, cmd_stretch, cmd_edit, cmd_hello, cmd_report
 
 def main():
     parser = argparse.ArgumentParser()
-    handlers = _parse_args(parser, [cmd_add, cmd_edit, cmd_hello, cmd_report])
+    handlers = _parse_args(parser, [cmd_add, cmd_stretch, cmd_edit, cmd_hello, cmd_report])
 
     if len(sys.argv) == 1:
         sys.argv.append('--help')

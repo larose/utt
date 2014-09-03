@@ -10,6 +10,10 @@ def add_entry(filename, entry):
     _create_directories_for_file(filename)
     _append_line_to_file(filename, str(entry))
 
+def write_entries(filename, entries):
+    _create_directories_for_file(filename)
+    _write_lines_to_file(filename, (str(entry) for entry in entries))
+
 def entries_from_file(filename):
     try:
         with open(filename) as text:
@@ -53,6 +57,12 @@ def _append_line_to_file(filename, string):
             file.write("\n")
         file.write(string)
         file.write("\n")
+
+def _write_lines_to_file(filename, strings):
+    with open(filename, 'w') as file:
+        for string in strings:
+            file.write(string)
+            file.write("\n")
 
 def _create_directories_for_file(filename):
     try:
