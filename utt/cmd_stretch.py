@@ -10,7 +10,7 @@ def add_args(parser):
 def execute(args):
     entries = list(util.entries_from_file(args.data_filename))
     if len(entries) == 0:
-        raise Exception("Non entry to modify")
+        raise Exception("No entry to stretch")
     old_entry = Entry(
             entries[-1].datetime,
             entries[-1].name,
