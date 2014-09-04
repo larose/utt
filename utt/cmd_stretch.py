@@ -13,7 +13,7 @@ def execute(args):
         raise Exception("Non entry to modify")
     old_entry = Entry(
             entries[-1].datetime,
-            entries[-1].name, 
+            entries[-1].name,
             entries[-1].is_current_entry)
     entries[-1].datetime = datetime.datetime.today()
     util.write_entries(args.data_filename, entries)
