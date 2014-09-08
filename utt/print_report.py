@@ -49,7 +49,7 @@ def _format_time(datetime):
 
 def _groupby_name(activities):
     def key(act):
-        return act.name.name.lower()
+        return act.name.name
 
     result = []
     sorted_activities = sorted(activities, key=key)
@@ -69,7 +69,7 @@ def _groupby_name(activities):
 
 def _groupby_project(activities):
     def key(act):
-        return act.name.project.lower()
+        return act.name.project
 
     result = []
     sorted_activities = sorted(activities, key=key)
@@ -84,7 +84,7 @@ def _groupby_project(activities):
                                      key=lambda task: task.lower()))
         })
 
-    return result
+    return sorted(result, key=lambda result: result['project'].lower())
 
 def _print_activities_section(report_date, activities):
     print()

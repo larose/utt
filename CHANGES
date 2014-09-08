@@ -1,7 +1,11 @@
-Version 1.1 released 27-03-2014
+(CURRENT)
 
-* Add weekly working and break times
+  * Name and project are case insensitive
 
-Version 1.0 released 21-07-2013
+1.1 released 27-03-2014
 
-* Original implementation
+  * Add weekly working and break times
+
+1.0 released 21-07-2013
+
+  * Original implementation
