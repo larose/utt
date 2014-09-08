@@ -20,6 +20,16 @@ VALID_ENTRIES = [
             "now": datetime.datetime(2014, 3, 19, 18, 30)
         },
         'expected_output_filename': 'utt-1.stdout'
+    },
+    {
+        'args': {
+            "report_date": datetime.date(2014, 3, 14),
+            "data_filename": 'utt-upper-case.log',
+            "current_activity": "-- Current Activity --",
+            "no_current_activity": True,
+            "now": datetime.datetime(2014, 3, 14, 12, 00)
+        },
+        'expected_output_filename': 'utt-upper-case.stdout'
     }
 ]
 
