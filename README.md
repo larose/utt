@@ -6,9 +6,25 @@ application written in Python. It is intended for people who need to
 report their time on another system and want a preliminary time sheet.
 
 
+## Installation
+
+
+### `pip`
+
+`$ pip install utt`
+
+utt is only compatible with Python 3. Make sure you are using `pip`
+with Python 3.
+
+
+### `setup.py`
+
+`python3 setup.py install`
+
+
 ## Usage
 
-There are four commands in utt: `hello`, `add`, `report` and `edit`.
+There are four commands in utt: `hello`, `add`, `report`, `edit` and `stretch`.
 
 Say hello when you arrive in the morning:
 
@@ -44,7 +60,6 @@ Break   Time: 0h00
 
 Edit your time sheet with your favorite text editor:
 
-
 `$ utt edit`
 
 Stretch updates the last entry with the current time:
@@ -63,6 +78,7 @@ determine its type and to group them.
 
 There are three activity types: working, break, ignored.
 
+
 #### Working
 
 This is the default activity. It contributes to the working time.
@@ -70,6 +86,7 @@ This is the default activity. It contributes to the working time.
 ```
 $ utt add "task #4"
 ```
+
 
 #### Break
 
@@ -80,6 +97,7 @@ Example:
 ```
 $ utt add "lunch **"
 ```
+
 
 #### Ignored
 
@@ -94,6 +112,7 @@ $ utt add "ignored activity ***"
 
 
 ### Report
+
 
 #### Grouping by project
 
@@ -127,6 +146,7 @@ $ utt report
 ...
 ```
 
+
 #### Grouping by name
 
 If multiple activities have the same name, they are merged as one
@@ -154,6 +174,7 @@ $ utt add "#83"
 (0h45) 11:00-11:45 #83
 ```
 
+
 #### Selecting the date of the report
 
 The `report` command let you choose the date of the report. If
@@ -164,6 +185,7 @@ Example:
 ```
 $ utt report 2013-07-01
 ```
+
 
 #### Current activity
 
@@ -245,6 +267,7 @@ Break   Time: 0h00
 (1h00) : #12
 ```
 
+
 #### Weekly working and break times
 
 The time reported in the square brackets is the total time for the
@@ -261,28 +284,14 @@ Break   Time: 0h00 [0h30]
 ...
 ```
 
-## Installation
-
-### `pip`
-
-`$ pip install utt`
-
-utt is only compatible with Python 3. Make sure you are using `pip`
-with Python 3.
-
-### `setup.py`
-
-`python3 setup.py install`
-
-
-## Requirements
-
-Python 3
-
-
 ## Author
 
-Mathieu Larose <<mathieu@mathieularose.com>>
+Mathieu Larose <mathieu@mathieularose.com>
+
+
+## Contributors
+
+David Munger <mungerd@gmail.com>
 
 
 ## License
