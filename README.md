@@ -47,6 +47,15 @@ Edit your time sheet with your favorite text editor:
 
 `$ utt edit`
 
+Stretch updates the last entry with the current time:
+
+```
+$ utt stretch
+stretched 2014-09-08 16:00 ab: 123
+        → 2014-09-08 16:30 ab: 123
+```
+
+
 ### Activity
 
 An activity name does more than just identifying it. It's used to
