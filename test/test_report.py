@@ -4,7 +4,13 @@ import ddt
 import os
 import unittest
 from io import StringIO
-from unittest import mock
+try:
+    from unittest import mock
+except ImportError:
+    # Python2
+    import mock
+    from StringIO import StringIO
+
 
 import utt.cmd_report
 

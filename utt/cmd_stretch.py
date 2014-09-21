@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 from . import util
 from .entry import Entry
