@@ -49,7 +49,9 @@ def _append_line_to_file(filename, string):
             file.seek(-1, os.SEEK_END)
             last_char = file.read(1)
             prepend_new_line = last_char != b"\n"
-    except FileNotFoundError:
+    except EnvironmentError as e:
+        if e.errno != errno.ENOENT:
+            raise
         prepend_new_line = False
 
     with open(filename, 'a') as file:
@@ -66,11 +68,8 @@ def _write_lines_to_file(filename, strings):
 
 def _create_directories_for_file(filename):
     try:
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        os.makedirs(os.path.dirname(filename))
     except OSError as err:
-        # We called os.makedirs with exist_ok=True so if the exception
-        # is errno.EEXIST, then it's a mode issue. We ignore it
-        # because it doesn't imply that the user has no permission
-        # (e.g. sticky bit on /tmp).
+        # If the exception is errno.EEXIST, we ignore it
         if err.errno != errno.EEXIST:
             raise

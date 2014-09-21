@@ -13,13 +13,12 @@ report their time on another system and want a preliminary time sheet.
 
 `$ pip install utt`
 
-utt is only compatible with Python 3. Make sure you are using `pip`
-with Python 3.
+utt is compatible with both Python 2 and Python 3.
 
 
 ### `setup.py`
 
-`python3 setup.py install`
+`python setup.py install`
 
 
 ## Usage
@@ -292,6 +291,7 @@ Mathieu Larose <mathieu@mathieularose.com>
 ## Contributors
 
 David Munger <mungerd@gmail.com>
+Paul Ivanov <pi@berkeley.edu>
 
 
 ## License

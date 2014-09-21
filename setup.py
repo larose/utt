@@ -16,7 +16,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python",
         "Topic :: Office/Business",
         "Topic :: Utilities"
     ],
