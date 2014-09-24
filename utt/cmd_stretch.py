@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
 from . import util
 from .entry import Entry
 
@@ -16,7 +15,7 @@ def execute(args):
             entries[-1].datetime,
             entries[-1].name,
             entries[-1].is_current_entry)
-    entries[-1].datetime = datetime.datetime.today()
+    entries[-1].datetime = args.now
     util.write_entries(args.data_filename, entries)
     print("stretched " + str(old_entry))
     print("        → " + str(entries[-1]))
