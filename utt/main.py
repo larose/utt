@@ -15,14 +15,15 @@ def main():
     args = parser.parse_args()
     handler = handlers.get(args.command)
 
-    args.now = datetime.datetime.now()
-
     if handler:
         handler(args)
 
 def _parse_args(parser, modules):
     parser.add_argument("--data", dest="data_filename",
                         default=_utt_filename())
+    parser.add_argument("--now", dest="now",
+                        default=datetime.datetime.today(),
+                        type=_parse_datetime)
     subparsers = parser.add_subparsers(dest="command")
     handlers = {}
 
@@ -31,6 +32,9 @@ def _parse_args(parser, modules):
         handlers[module.NAME] = module.execute
 
     return handlers
+
+def _parse_datetime(datetimestring):
+    return datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M")
 
 def _user_data_dir():
     return os.getenv('XDG_DATA_HOME', os.path.expanduser("~/.local/share"))

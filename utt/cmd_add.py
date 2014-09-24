@@ -1,4 +1,3 @@
-import datetime
 from . import util
 from .entry import Entry
 
@@ -9,4 +8,4 @@ def add_args(parser):
 
 def execute(args):
     util.add_entry(args.data_filename,
-                   Entry(datetime.datetime.today(), args.name, False))
+                   Entry(args.now, args.name, False))
