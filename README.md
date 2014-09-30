@@ -1,7 +1,7 @@
 Ultimate Time Tracker
 ======================
 
-Ultimate Time Tracker (utt) is a minimalist command-line time tracking
+Ultimate Time Tracker (utt) is a simple command-line time tracking
 application written in Python. It is intended for people who need to
 report their time on another system and want a preliminary time sheet.
 
