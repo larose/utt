@@ -8,7 +8,7 @@ all:
 integration: integration-py2 integration-py3
 
 integration-py%: integration-container-py%
-	docker run --rm -ti -e PYTHON_VERSION=$* $(CONTAINER_NAME)
+	docker run --rm -ti -e PYTHON_VERSION=$* $(CONTAINER_NAME) $(INTEGRATION_CMD)
 
 integration-clean:
 	rm -rf $(TMPDIR)/integration
