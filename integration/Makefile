@@ -1,7 +1,7 @@
 UTT_DATA_FILENAME = /.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
-all: smoke-test report-1 report-uppercase
+all: hello smoke-test report-1 report-uppercase
 
 $(UTT):
 	python setup.py install build --build-base /tmp/build install
@@ -9,11 +9,22 @@ $(UTT):
 bash:
 	bash -i
 
+hello: $(UTT)
+	@echo
+	@echo ">> HELLO"
+
+	rm -f $(UTT_DATA_FILENAME)
+	utt --now "2014-01-01 8:00" hello
+	utt --now "2014-01-01 9:00" hello
+
+	bash -c 'diff $(UTT_DATA_FILENAME) data/hello/utt.log'
+
+	@echo "<< HELLO"
+
 smoke-test: $(UTT)
 	@echo
 	@echo ">> SMOKE TEST"
 
-	utt hello
 	utt add foo
 	PYTHONIOENCODING=utf_8 utt stretch
 	EDITOR=true utt edit
@@ -39,4 +50,4 @@ report-uppercase: $(UTT)
 
 	@echo "<< REPORT-UPPERCASE"
 
-.PHONY: all bash smoke-test report-1 report-uppercase
+.PHONY: all bash hello smoke-test report-1 report-uppercase
