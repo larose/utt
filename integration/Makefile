@@ -4,7 +4,7 @@ UTT = /usr/local/bin/utt
 all: smoke-test report-1 report-uppercase
 
 $(UTT):
-	$(PYTHON) setup.py install build --build-base /tmp/build install
+	python setup.py install build --build-base /tmp/build install
 
 bash:
 	bash -i
