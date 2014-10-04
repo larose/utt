@@ -1,0 +1,5 @@
+FROM python:{{PYTHON_VERSION}}
+ENTRYPOINT ["make"]
+CMD []
+WORKDIR /utt
+ADD ./utt /utt
