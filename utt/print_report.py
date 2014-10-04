@@ -125,7 +125,7 @@ def _print_details_section(report_date, activities):
     print()
 
 def _print_dicts(dcts):
-    format_string = "({duration}) {project:^{projects_max_length}}: {name}"
+    format_string = "({duration}) {project:<{projects_max_length}}: {name}"
 
     projects = (dct['project'] for dct in dcts)
     projects_max_length = max(
