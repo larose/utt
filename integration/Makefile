@@ -1,7 +1,7 @@
 UTT_DATA_FILENAME = /.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
-all: add hello smoke-test report-1 report-uppercase
+all: add hello smoke-test stretch report-1 report-uppercase
 
 $(UTT):
 	python setup.py install build --build-base /tmp/build install
@@ -37,10 +37,19 @@ smoke-test: $(UTT)
 	@echo
 	@echo ">> SMOKE TEST"
 
-	PYTHONIOENCODING=utf_8 utt stretch
 	EDITOR=true utt edit
 
 	@echo "<< SMOKE TEST"
+
+stretch: $(UTT)
+	@echo
+	@echo ">> STRETCH"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/stretch/before.log $(UTT_DATA_FILENAME)
+	bash -c 'diff <(PYTHONIOENCODING=utf_8 utt --now "2014-01-01 10:00" stretch) data/stretch/stdout'
+
+	@echo "<< STRETCH"
 
 report-1: $(UTT)
 	@echo
@@ -60,4 +69,4 @@ report-uppercase: $(UTT)
 
 	@echo "<< REPORT-UPPERCASE"
 
-.PHONY: all add bash hello smoke-test report-1 report-uppercase
+.PHONY: all add bash hello smoke-test stretch report-1 report-uppercase
