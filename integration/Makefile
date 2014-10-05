@@ -1,7 +1,7 @@
 UTT_DATA_FILENAME = /.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
-all: add hello smoke-test stretch report-1 report-uppercase
+all: add edit hello stretch report-1 report-uppercase
 
 $(UTT):
 	python setup.py install build --build-base /tmp/build install
@@ -21,6 +21,16 @@ add: $(UTT)
 bash:
 	bash -i
 
+edit: $(UTT)
+	@echo
+	@echo ">> EDIT"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/hello/utt.log  $(UTT_DATA_FILENAME)
+	bash -c 'diff <(EDITOR=cat utt edit) data/hello/utt.log'
+
+	@echo "<< EDIT"
+
 hello: $(UTT)
 	@echo
 	@echo ">> HELLO"
@@ -32,14 +42,6 @@ hello: $(UTT)
 	bash -c 'diff $(UTT_DATA_FILENAME) data/hello/utt.log'
 
 	@echo "<< HELLO"
-
-smoke-test: $(UTT)
-	@echo
-	@echo ">> SMOKE TEST"
-
-	EDITOR=true utt edit
-
-	@echo "<< SMOKE TEST"
 
 stretch: $(UTT)
 	@echo
@@ -69,4 +71,4 @@ report-uppercase: $(UTT)
 
 	@echo "<< REPORT-UPPERCASE"
 
-.PHONY: all add bash hello smoke-test stretch report-1 report-uppercase
+.PHONY: all add bash edit hello stretch report-1 report-uppercase
