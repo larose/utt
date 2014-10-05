@@ -4,7 +4,7 @@ UTT = /usr/local/bin/utt
 all: add edit hello stretch report-1 report-uppercase
 
 $(UTT):
-	python setup.py install build --build-base /tmp/build install
+	pip install utt-*.tar.gz
 
 add: $(UTT)
 	@echo
