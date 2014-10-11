@@ -2,36 +2,52 @@ Ultimate Time Tracker
 ======================
 
 Ultimate Time Tracker (utt) is a simple command-line time tracking
-application written in Python. It is intended for people who need to
-report their time on another system and want a preliminary time sheet.
+application written in Python.
+
+## Contents
+
+- [Quick start](#quick-start)
+    - [hello](#hello)
+    - [add](#add)
+    - [report](#report)
+    - [edit](#edit)
+    - [stretch](#stretch)
+- [Usage](#usage)
+    - [Activity](#activity)
+    - [Report](#report)
+- [Development](#development)
+    - [Integration tests](#integration-tests)
+    - [Unit tests](#unit-tests)
+- [Author](#author)
+    - [Contributors](#contributors)
+- [License](#license)
+- [Website](#website)
 
 
-## Installation
+## Quick start
 
-
-### `pip`
+Install `utt` from PyPI:
 
 `$ pip install utt`
 
-utt is compatible with both Python 2 and Python 3.
+Note: utt is compatible with both Python 2 and Python 3.
 
 
-### `setup.py`
-
-`python setup.py install`
-
-
-## Usage
-
-There are four commands in utt: `hello`, `add`, `report`, `edit` and `stretch`.
+### hello
 
 Say hello when you arrive in the morning:
 
 `$ utt hello`
 
+
+### add
+
 Add a task when you have finished working on it:
 
-`$ utt add "configuring server"`
+`$ utt add "programming"`
+
+
+### report
 
 Show report:
 
@@ -45,30 +61,39 @@ Break   Time: 0h00
 
 ----------------------------------- Projects -----------------------------------
 
-(0h07) : configuring server
+(0h07) : programming
 
 ---------------------------------- Activities ----------------------------------
 
-(0h07) : configuring server
+(0h07) : programming
 
 
 ----------------------------------- Details ------------------------------------
 
-(0h07) 08:27-08:34 configuring server
+(0h07) 08:27-08:34 programming
 ```
 
-Edit your time sheet with your favorite text editor:
+
+### edit
+
+Edit your time sheet with your favorite text editor (according to the
+`EDITOR` environment variable):
 
 `$ utt edit`
 
-Stretch updates the last entry with the current time:
+
+### stretch
+
+Stretch the latest task to the current time:
 
 ```
 $ utt stretch
-stretched 2014-09-08 16:00 ab: 123
-        → 2014-09-08 16:30 ab: 123
+stretched 2013-07-08 08:34 programming
+        → 2013-07-08 09:00 programming
 ```
 
+
+## Usage
 
 ### Activity
 
@@ -283,15 +308,61 @@ Break   Time: 0h00 [0h30]
 ...
 ```
 
+
+## Development
+
+utt is written in Python and comptatible with both Python 2 and Python
+3.
+
+Directory layout:
+
+- `bin/utt`: executable file
+- `test/integration`: [integration tests](#integration-tests)
+- `test/unit`: [unit tests](#unit-tests)
+- `utt`: source code
+
+
+### Integration tests
+
+Although utt is cross-platform, the test environment is
+Linux-centric. We use Makefile and Docker.
+
+To run the integration tests for Python 2 and Python 3:
+
+`$ make integration`
+
+This will create two Docker containers, one for each version of
+Python, and run all the tests in `integration/Makefile`.
+
+To run the integration tests for Python 2 only:
+
+`$ make integration-py2`
+
+To run the integration tests for Python 3 only:
+
+`$ make integration-py3`
+
+To run a specific test:
+
+`$ make integration INTEGRATION_CMD=hello`
+
+
+### Unit tests
+
+To run the unit tests:
+
+`$ make unit`
+
+
 ## Author
 
 Mathieu Larose <mathieu@mathieularose.com>
 
 
-## Contributors
+### Contributors
 
-David Munger <mungerd@gmail.com>
-Paul Ivanov <pi@berkeley.edu>
+- David Munger <mungerd@gmail.com>
+- Paul Ivanov <pi@berkeley.edu>
 
 
 ## License
