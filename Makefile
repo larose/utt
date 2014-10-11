@@ -1,8 +1,10 @@
+INTEGRATION_DIR = test/integration
+UNIT_DIR = test/unit
 TMP = tmp
 TEST_TMP = $(TMP)/integration
 CONTAINER_DATA_DIR = $(TEST_TMP)/py$*
 CONTAINER_NAME = utt-integration-py$*
-TEST_FILES := integration/Makefile integration/data $(TMP)/dist/utt-*.tar.gz
+TEST_FILES := $(INTEGRATION_DIR)/Makefile $(INTEGRATION_DIR)/data $(TMP)/dist/utt-*.tar.gz
 
 all:
 
@@ -26,9 +28,9 @@ sdist:
 	python3 setup.py sdist --dist-dir $(TMP)/dist --manifest $(TMP)/MANIFEST
 
 unit:
-	python3 -munittest $(TESTOPTS)
+	python3 -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 
-$(TEST_TMP)/py%/Dockerfile: integration/Dockerfile.template
+$(TEST_TMP)/py%/Dockerfile: $(INTEGRATION_DIR)/Dockerfile.template
 	sed -e "s/{{PYTHON_VERSION}}/$*/" $< > $@
 
 
