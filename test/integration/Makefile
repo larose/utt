@@ -1,4 +1,4 @@
-UTT_DATA_FILENAME = /.local/share/utt/utt.log
+UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 all: add edit hello stretch report-1 report-uppercase
