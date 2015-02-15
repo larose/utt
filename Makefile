@@ -31,6 +31,9 @@ sdist:
 unit:
 	python3 -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 
+upload: unit integration
+	python3 setup.py sdist --dist-dir $(TMP) --manifest $(TMP)/MANIFEST upload
+
 $(TEST_TMP)/py%/Dockerfile: $(INTEGRATION_DIR)/Dockerfile.py%
 	mkdir -p $(CONTAINER_DATA_DIR)
 	cp $< $@
@@ -39,4 +42,4 @@ $(TEST_TMP)/py%/tarball/utt-$(VERSION).tar.gz: sdist
 	mkdir -p $(CONTAINER_DATA_DIR)/tarball
 	cp $(TMP)/utt-$(VERSION).tar.gz $@
 
-.PHONY: all clean integration dist unit
+.PHONY: all clean integration dist unit upload
