@@ -6,4 +6,5 @@ ENTRYPOINT ["make"]
 CMD []
 WORKDIR /utt
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends make python3-pip
-COPY . /utt
+COPY data /utt/data
+COPY Makefile /utt/
