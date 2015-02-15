@@ -4,7 +4,7 @@ UTT = /usr/local/bin/utt
 all: add edit hello stretch report-1 report-uppercase
 
 $(UTT):
-	$(PIP) install utt-*.tar.gz
+	$(PIP) install tarball/utt-*.tar.gz
 
 add: $(UTT)
 	@echo
