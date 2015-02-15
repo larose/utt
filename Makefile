@@ -30,8 +30,9 @@ sdist:
 unit:
 	python3 -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 
-$(TEST_TMP)/py%/Dockerfile: $(INTEGRATION_DIR)/Dockerfile.template
-	sed -e "s/{{PYTHON_VERSION}}/$*/" $< > $@
+$(TEST_TMP)/py%/Dockerfile: $(INTEGRATION_DIR)/Dockerfile.py%
+	mkdir -p $(CONTAINER_DATA_DIR)
+	cp $< $@
 
 
 .PHONY: all clean integration sdist unit

@@ -4,7 +4,7 @@ UTT = /usr/local/bin/utt
 all: add edit hello stretch report-1 report-uppercase
 
 $(UTT):
-	pip install utt-*.tar.gz
+	$(PIP) install utt-*.tar.gz
 
 add: $(UTT)
 	@echo
@@ -17,9 +17,6 @@ add: $(UTT)
 	bash -c 'diff $(UTT_DATA_FILENAME) data/add/utt.log'
 
 	@echo "<< ADD"
-
-bash:
-	bash -i
 
 edit: $(UTT)
 	@echo
@@ -71,4 +68,7 @@ report-uppercase: $(UTT)
 
 	@echo "<< REPORT-UPPERCASE"
 
-.PHONY: all add bash edit hello stretch report-1 report-uppercase
+shell:
+	bash
+
+.PHONY: all add edit hello stretch report-1 report-uppercase shell
