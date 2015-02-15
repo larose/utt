@@ -1,7 +1,7 @@
 UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
-all: add edit hello stretch report-1 report-uppercase
+all: add edit hello stretch report-1 report-dayname report-uppercase
 
 $(UTT):
 	$(PIP) install tarball/utt-*.tar.gz
@@ -59,6 +59,14 @@ report-1: $(UTT)
 
 	@echo "<< REPORT-1"
 
+report-dayname: $(UTT)
+	@echo
+	@echo ">> REPORT-DAYNAME"
+
+	utt --now "2015-2-16 12:00" report thursday | grep ^- | head -n 1 | diff data/report/dayname -
+
+	@echo "<< REPORT-DAYNAME"
+
 report-uppercase: $(UTT)
 	@echo
 	@echo ">> REPORT-UPPERCASE"
@@ -71,4 +79,4 @@ report-uppercase: $(UTT)
 shell:
 	bash
 
-.PHONY: all add edit hello stretch report-1 report-uppercase shell
+.PHONY: all add edit hello stretch report-1 report-dayname report-uppercase shell

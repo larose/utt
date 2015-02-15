@@ -199,16 +199,27 @@ $ utt add "#83"
 ```
 
 
-#### Selecting the date of the report
+#### Choosing the report date
 
-The `report` command let you choose the date of the report. If
-omitted, it's the current date.
+You can choose the report date by passing a date to the `report`
+command. The date must be either an absolute date formatted as
+"%Y-%m-%d" or a day of the week.
 
-Example:
+Examples:
+
+Absolute date:
 
 ```
 $ utt report 2013-07-01
 ```
+
+Day of the week:
+
+```
+$ utt report monday
+```
+
+If today is Wednesday, Feb 18, the report date is Monday, Feb 16.
 
 
 #### Current activity
