@@ -37,18 +37,19 @@ def execute(args):
     else:
         report_date = _parse_date(args.now, args.report_date)
 
-    entries = _filter_and_group_entries(
+    all_entries = _filter_and_group_entries(
         report_date,
         util.entries_from_file(args.data_filename)
     )
+    entries_of_day = _fetch_entries_of_day(report_date)
     _add_current_entry(
         report_date,
-        entries[report_date],
+        entries_of_day,
         args.now,
         args.current_activity,
         args.no_current_activity
     )
-    activities = _activities_from_entries(entries)
+    activities = _activities_from_entries(all_entries)
     print_report(report_date, activities)
 
 
@@ -56,6 +57,41 @@ def execute(args):
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+def _fetch_entries_of_day(report_date):
+    "fetches all entries of the specified date plus the ones overlapping"
+    
+    if not entries[report_date]:
+        return []
+        
+    def reset_date(datetime_to_reset, shift_day):
+        "resets datetime object to midnight"
+        _date = datetime_to_reset.date()
+        _time = datetime_to_reset.time()
+        _date.replace(_date.year, _date.month, _date.day+shift_day)
+        if shift_day > 0:
+            _time.replace(0, 0, 0, 0)
+        else:
+            _time.replace(23, 59, 59, 999)
+            
+    result = entries[report_date]
+    
+    day_before = report_date - datetime.timedelta(1)
+    if entries[report_date][0].name != "hello" 
+        and entries[day_before]:
+        last_activity = Entry.from_string(str(entries[day_before][-1]))
+        reset_date(last_activity.datetime, 1)
+        result.insert(0, last_activity)
+        
+    day_after = report_date + datetime.timedelta(1)
+    if entries.has_key(day_after) 
+        and entries[day_after] 
+        and entries[day_after][0].name != "hello":
+        next_activity = Entry.from_string(str(entries[day_after][0]))
+        reset_date(next_activity.datetime, -1)
+        result.append(one_day_before)
+    
+    return result
+    
 DAY_NAMES = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 
 def _activities_from_entries(entries_grouped_by_day):
