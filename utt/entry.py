@@ -15,6 +15,19 @@ class Entry:
         return " ".join([self.datetime.strftime("%Y-%m-%d %H:%M"),
                          self.name])
 
+    def __repr__(self):
+        return "'" + str(self) + "'"
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, Entry) 
+            and self.datetime == other.datetime 
+            and self.name == other.name
+        )
+
+    def __ne__(self, other):
+        return not self.__eq__(self, other)
+
     @staticmethod
     def from_string(string):
         match = Entry.regex.match(string)

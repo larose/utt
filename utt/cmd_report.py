@@ -7,6 +7,8 @@ from .entry import Entry
 from .print_report import print_report
 from . import util
 
+from .cmd_hello import HELLO
+
 NAME = 'report'
 
 
@@ -56,14 +58,53 @@ def execute(args):
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+def _adjust_entry(report_date, entry, isBeginning):
+    "resets datetime object to same day like report date but close to midnight"
+    datetime_to_reset = entry.datetime
+    datetime_to_reset = datetime_to_reset.replace(day=report_date.day)
+    if isBeginning:
+        datetime_to_reset = datetime_to_reset.replace(hour=0, minute=0)
+        entry.name += " (started the day before)"
+    else:
+        datetime_to_reset = datetime_to_reset.replace(hour=23, minute=59)
+        entry.name += " (finishes a day later)"
+    entry.datetime = datetime_to_reset 
+
+def _fetch_entries_of_day(entries, report_date):
+    "fetches all entries of the specified date plus the ones overlapping"
+    
+    if not entries or not entries[report_date]:
+        return []
+            
+    result = entries[report_date][:]
+    
+    day_before = report_date - datetime.timedelta(1)
+    if (entries[report_date][0].name != HELLO
+        and day_before in entries
+        and entries[day_before]):
+        last_entry = Entry.from_string(str(entries[day_before][-1]))
+        _adjust_entry(report_date, last_entry, True)
+        result.insert(0, last_entry)
+        
+    day_after = report_date + datetime.timedelta(1)
+    if (day_after in entries
+        and entries[day_after] 
+        and entries[day_after][0].name != HELLO):
+        next_entry = Entry.from_string(str(entries[day_after][0]))
+        _adjust_entry(report_date, next_entry, False)
+        result.append(next_entry)
+
+    return result
+    
 DAY_NAMES = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
 
 def _activities_from_entries(entries_grouped_by_day):
     activities_grouped_by_day = collections.defaultdict(list)
 
     for date, entries in entries_grouped_by_day.items():
+        enriched_entries = _fetch_entries_of_day(entries_grouped_by_day, date)
         activities_grouped_by_day[date] = list(
-            _activities_from_entries_day(entries))
+            _activities_from_entries_day(enriched_entries))
 
     return activities_grouped_by_day
 
