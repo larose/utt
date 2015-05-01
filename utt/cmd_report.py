@@ -41,7 +41,7 @@ def execute(args):
         report_date,
         util.entries_from_file(args.data_filename)
     )
-    entries_of_day = _fetch_entries_of_day(report_date)
+    entries_of_day = _fetch_entries_of_day(all_entries, report_date)
     _add_current_entry(
         report_date,
         entries_of_day,
@@ -57,37 +57,34 @@ def execute(args):
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-def _fetch_entries_of_day(report_date):
+def _fetch_entries_of_day(entries, report_date):
     "fetches all entries of the specified date plus the ones overlapping"
     
     if not entries[report_date]:
         return []
         
-    def reset_date(datetime_to_reset, shift_day):
-        "resets datetime object to midnight"
+    def reset_date(datetime_to_reset, isBeginning):
+        "resets datetime object to same day like report date but close to midnight"
         _date = datetime_to_reset.date()
         _time = datetime_to_reset.time()
-        _date.replace(_date.year, _date.month, _date.day+shift_day)
-        if shift_day > 0:
-            _time.replace(0, 0, 0, 0)
-        else:
-            _time.replace(23, 59, 59, 999)
+        _date.replace(report_date.year, report_date.month, report_date.day)
+        _time.replace(0, 0, 0, 0) if isBeginning else _time.replace(23, 59, 59, 999)
             
     result = entries[report_date]
     
     day_before = report_date - datetime.timedelta(1)
-    if entries[report_date][0].name != "hello" 
-        and entries[day_before]:
+    if (entries[report_date][0].name != "hello"
+        and entries[day_before]):
         last_activity = Entry.from_string(str(entries[day_before][-1]))
-        reset_date(last_activity.datetime, 1)
+        reset_date(last_activity.datetime, True)
         result.insert(0, last_activity)
         
     day_after = report_date + datetime.timedelta(1)
-    if entries.has_key(day_after) 
+    if (day_after in entries
         and entries[day_after] 
-        and entries[day_after][0].name != "hello":
+        and entries[day_after][0].name != "hello"):
         next_activity = Entry.from_string(str(entries[day_after][0]))
-        reset_date(next_activity.datetime, -1)
+        reset_date(next_activity.datetime, False)
         result.append(one_day_before)
     
     return result
