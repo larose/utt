@@ -65,10 +65,10 @@ def _adjust_entry(report_date, entry, isBeginning):
     datetime_to_reset = datetime_to_reset.replace(day=report_date.day)
     if isBeginning:
         datetime_to_reset = datetime_to_reset.replace(hour=0, minute=0)
-        entry.name += " (started yesterday)"
+        entry.name += " (started the day before)"
     else:
         datetime_to_reset = datetime_to_reset.replace(hour=23, minute=59)
-        entry.name += " (finishes tomorrow)"
+        entry.name += " (finishes a day later)"
     entry.datetime = datetime_to_reset 
 
 def _fetch_entries_of_day(entries, report_date):
