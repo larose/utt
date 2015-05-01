@@ -43,7 +43,6 @@ def execute(args):
         report_date,
         util.entries_from_file(args.data_filename)
     )
-    entries[report_date] = _fetch_entries_of_day(entries, report_date)
     _add_current_entry(
         report_date,
         entries[report_date],
@@ -74,7 +73,7 @@ def _adjust_entry(report_date, entry, isBeginning):
 def _fetch_entries_of_day(entries, report_date):
     "fetches all entries of the specified date plus the ones overlapping"
     
-    if not entries and not entries[report_date]:
+    if not entries or not entries[report_date]:
         return []
             
     result = entries[report_date][:]
@@ -103,8 +102,9 @@ def _activities_from_entries(entries_grouped_by_day):
     activities_grouped_by_day = collections.defaultdict(list)
 
     for date, entries in entries_grouped_by_day.items():
+        enriched_entries = _fetch_entries_of_day(entries_grouped_by_day, date)
         activities_grouped_by_day[date] = list(
-            _activities_from_entries_day(entries))
+            _activities_from_entries_day(enriched_entries))
 
     return activities_grouped_by_day
 
