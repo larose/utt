@@ -7,6 +7,8 @@ from .entry import Entry
 from .print_report import print_report
 from . import util
 
+from .cmd_hello import HELLO
+
 NAME = 'report'
 
 
@@ -37,19 +39,19 @@ def execute(args):
     else:
         report_date = _parse_date(args.now, args.report_date)
 
-    all_entries = _filter_and_group_entries(
+    entries = _filter_and_group_entries(
         report_date,
         util.entries_from_file(args.data_filename)
     )
-    entries_of_day = _fetch_entries_of_day(all_entries, report_date)
+    entries[report_date] = _fetch_entries_of_day(entries, report_date)
     _add_current_entry(
         report_date,
-        entries_of_day,
+        entries[report_date],
         args.now,
         args.current_activity,
         args.no_current_activity
     )
-    activities = _activities_from_entries(all_entries)
+    activities = _activities_from_entries(entries)
     print_report(report_date, activities)
 
 
@@ -57,36 +59,42 @@ def execute(args):
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+def _adjust_entry(report_date, entry, isBeginning):
+    "resets datetime object to same day like report date but close to midnight"
+    datetime_to_reset = entry.datetime
+    datetime_to_reset = datetime_to_reset.replace(day=report_date.day)
+    if isBeginning:
+        datetime_to_reset = datetime_to_reset.replace(hour=0, minute=0)
+        entry.name += " (started yesterday)"
+    else:
+        datetime_to_reset = datetime_to_reset.replace(hour=23, minute=59)
+        entry.name += " (finishes tomorrow)"
+    entry.datetime = datetime_to_reset 
+
 def _fetch_entries_of_day(entries, report_date):
     "fetches all entries of the specified date plus the ones overlapping"
     
-    if not entries[report_date]:
+    if not entries and not entries[report_date]:
         return []
-        
-    def reset_date(datetime_to_reset, isBeginning):
-        "resets datetime object to same day like report date but close to midnight"
-        _date = datetime_to_reset.date()
-        _time = datetime_to_reset.time()
-        _date.replace(report_date.year, report_date.month, report_date.day)
-        _time.replace(0, 0, 0, 0) if isBeginning else _time.replace(23, 59, 59, 999)
             
-    result = entries[report_date]
+    result = entries[report_date][:]
     
     day_before = report_date - datetime.timedelta(1)
-    if (entries[report_date][0].name != "hello"
+    if (entries[report_date][0].name != HELLO
+        and day_before in entries
         and entries[day_before]):
-        last_activity = Entry.from_string(str(entries[day_before][-1]))
-        reset_date(last_activity.datetime, True)
-        result.insert(0, last_activity)
+        last_entry = Entry.from_string(str(entries[day_before][-1]))
+        _adjust_entry(report_date, last_entry, True)
+        result.insert(0, last_entry)
         
     day_after = report_date + datetime.timedelta(1)
     if (day_after in entries
         and entries[day_after] 
-        and entries[day_after][0].name != "hello"):
-        next_activity = Entry.from_string(str(entries[day_after][0]))
-        reset_date(next_activity.datetime, False)
-        result.append(one_day_before)
-    
+        and entries[day_after][0].name != HELLO):
+        next_entry = Entry.from_string(str(entries[day_after][0]))
+        _adjust_entry(report_date, next_entry, False)
+        result.append(next_entry)
+
     return result
     
 DAY_NAMES = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
