@@ -1,4 +1,4 @@
-FROM ubuntu:14.10
+FROM ubuntu:14.04.3
 
 ENV PYTHON=python3
 ENV PIP=pip3
