@@ -1,11 +1,13 @@
 UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
+.PHONY: all
 all: add edit hello stretch report-1 report-dayname report-uppercase
 
 $(UTT):
-	$(PIP) install tarball/utt-*.tar.gz
+	$(PIP) install utt-*.tar.gz
 
+.PHONY: add
 add: $(UTT)
 	@echo
 	@echo ">> ADD"
@@ -18,6 +20,7 @@ add: $(UTT)
 
 	@echo "<< ADD"
 
+.PHONY: edit
 edit: $(UTT)
 	@echo
 	@echo ">> EDIT"
@@ -28,6 +31,7 @@ edit: $(UTT)
 
 	@echo "<< EDIT"
 
+.PHONY: hello
 hello: $(UTT)
 	@echo
 	@echo ">> HELLO"
@@ -40,6 +44,7 @@ hello: $(UTT)
 
 	@echo "<< HELLO"
 
+.PHONY: stretch
 stretch: $(UTT)
 	@echo
 	@echo ">> STRETCH"
@@ -50,6 +55,7 @@ stretch: $(UTT)
 
 	@echo "<< STRETCH"
 
+.PHONY: report-1
 report-1: $(UTT)
 	@echo
 	@echo ">> REPORT-1"
@@ -59,6 +65,7 @@ report-1: $(UTT)
 
 	@echo "<< REPORT-1"
 
+.PHONY: report-dayname
 report-dayname: $(UTT)
 	@echo
 	@echo ">> REPORT-DAYNAME"
@@ -67,6 +74,7 @@ report-dayname: $(UTT)
 
 	@echo "<< REPORT-DAYNAME"
 
+.PHONY: report-uppercase
 report-uppercase: $(UTT)
 	@echo
 	@echo ">> REPORT-UPPERCASE"
@@ -76,7 +84,6 @@ report-uppercase: $(UTT)
 
 	@echo "<< REPORT-UPPERCASE"
 
+.PHONY: shell
 shell:
 	bash
-
-.PHONY: all add edit hello stretch report-1 report-dayname report-uppercase shell

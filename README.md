@@ -343,7 +343,7 @@ To run the integration tests for Python 2 and Python 3:
 `$ make integration`
 
 This will create two Docker containers, one for each version of
-Python, and run all the tests in `integration/Makefile`.
+Python, and run all the tests in `test/integration/Makefile`.
 
 To run the integration tests for Python 2 only:
 
