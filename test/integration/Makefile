@@ -2,7 +2,7 @@ UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 .PHONY: all
-all: add edit hello stretch report-1 report-dayname report-uppercase
+all: add edit hello stretch report-1 report-dayname report-uppercase version
 
 $(UTT):
 	$(PIP) install utt-*.tar.gz
@@ -83,6 +83,16 @@ report-uppercase: $(UTT)
 	bash -c 'diff <(utt --now "2014-3-14 12:00" report 2014-3-14 --no-current-activity) data/utt-upper-case.stdout'
 
 	@echo "<< REPORT-UPPERCASE"
+
+.PHONY: version
+version: $(UTT)
+	@echo
+	@echo ">> VERSION"
+
+	utt --version
+
+	@echo "<< VERSION"
+
 
 .PHONY: shell
 shell:

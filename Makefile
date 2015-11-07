@@ -2,7 +2,7 @@ INTEGRATION_DIR = test/integration
 UNIT_DIR = test/unit
 TMP = tmp
 CONTAINER_NAME = utt-integration-py$*
-VERSION := $(shell cat VERSION)
+VERSION := $(shell python3 setup.py --version)
 
 .PHONY: all
 all:

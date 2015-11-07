@@ -9,6 +9,12 @@ long_description = (
     "another system and want a preliminary time sheet."
 )
 
+def get_version():
+    for line in open('utt/__version__.py'):
+        if 'version' in line:
+            return line.split('=')[1].strip(' \n\'"')
+    raise Error("No version")
+
 setup(
     author="Mathieu Larose",
     author_email="mathieu@mathieularose.com",
@@ -28,5 +34,5 @@ setup(
     packages=['utt'],
     scripts=[os.path.join('bin', 'utt')],
     url="https://github.com/larose/utt",
-    version=open('VERSION').readline(),
+    version=get_version(),
 )

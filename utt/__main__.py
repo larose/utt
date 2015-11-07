@@ -4,10 +4,14 @@ import sys
 import os
 
 from . import cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report
+from .__version__ import version
+
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
     handlers = _parse_args(parser, [cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report])
+    parser.add_argument('--version', action='version',
+                        version="\n".join(["utt {version}".format(version=version), "Python " + sys.version]))
 
     if len(sys.argv) == 1:
         sys.argv.append('--help')
@@ -41,3 +45,6 @@ def _user_data_dir():
 
 def _utt_filename():
     return os.path.join(_user_data_dir(), 'utt', 'utt.log')
+
+if __name__ == '__main__':
+    main()
