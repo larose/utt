@@ -1,0 +1,3 @@
+#!/bin/sh
+
+PYTHONPATH=. bin/utt "$@"

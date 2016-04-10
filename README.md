@@ -333,6 +333,13 @@ Directory layout:
 - `utt`: source code
 
 
+### Executing `utt` from source
+
+To execute `utt` from source:
+
+`./run`
+
+
 ### Integration tests
 
 Although utt is cross-platform, the test environment is
