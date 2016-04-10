@@ -6,9 +6,14 @@ from .entry import Entry
 # PUBLIC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-def add_entry(filename, entry):
+def add_entry(filename, new_entry):
     _create_directories_for_file(filename)
-    _append_line_to_file(filename, str(entry))
+    entries = list(entries_from_file(filename))
+    new_day = False
+    if entries:
+        last_entry = entries[-1]
+        new_day = new_entry.datetime.date() != last_entry.datetime.date()
+    _append_line_to_file(filename, str(new_entry), insert_blank_line=new_day)
 
 def write_entries(filename, entries):
     _create_directories_for_file(filename)
@@ -43,7 +48,7 @@ def entries_from_file(filename):
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-def _append_line_to_file(filename, string):
+def _append_line_to_file(filename, string, insert_blank_line):
     try:
         with open(filename, 'rb+') as file:
             file.seek(-1, os.SEEK_END)
@@ -56,6 +61,8 @@ def _append_line_to_file(filename, string):
 
     with open(filename, 'a') as file:
         if prepend_new_line:
+            file.write("\n")
+        if insert_blank_line:
             file.write("\n")
         file.write(string)
         file.write("\n")

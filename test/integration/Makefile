@@ -15,6 +15,8 @@ add: $(UTT)
 	rm -f $(UTT_DATA_FILENAME)
 	utt --now "2014-01-01 8:00" add "  spaces  "
 	utt --now "2014-01-01 9:00" add "utt: programming"
+	utt --now "2014-01-02 8:00" add "utt: programming"
+	utt --now "2014-01-02 9:00" add "utt: programming"
 
 	bash -c 'diff $(UTT_DATA_FILENAME) data/add/utt.log'
 
@@ -39,6 +41,8 @@ hello: $(UTT)
 	rm -f $(UTT_DATA_FILENAME)
 	utt --now "2014-01-01 8:00" hello
 	utt --now "2014-01-01 9:00" hello
+	utt --now "2014-01-02 8:00" hello
+	utt --now "2014-01-02 9:00" hello
 
 	bash -c 'diff $(UTT_DATA_FILENAME) data/hello/utt.log'
 
