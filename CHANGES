@@ -1,3 +1,5 @@
+1.5 (2016-04-10)
+
   * Insert a blank line between days in log file
   * Add argument --version
 
