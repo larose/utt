@@ -56,6 +56,7 @@ stretch: $(UTT)
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/stretch/before.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(PYTHONIOENCODING=utf_8 utt --now "2014-01-01 10:00" stretch) data/stretch/stdout'
+	bash -c 'diff $(UTT_DATA_FILENAME) data/stretch/after.log'
 
 	@echo "<< STRETCH"
 

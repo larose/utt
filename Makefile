@@ -10,7 +10,7 @@ all:
 .PHONY: clean
 clean:
 	rm -rf $(TMP)
-	rm -f $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
+	rm -f $(INTEGRATION_DIR)/utt-*.tar.gz
 
 .PHONY: integration
 integration: integration-py2 integration-py3
@@ -27,6 +27,9 @@ integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
 sdist:
 	mkdir -p $(TMP)
 	python3 setup.py sdist --dist-dir $(TMP) --manifest $(TMP)/MANIFEST
+
+.PHONY: test
+test: integration unit
 
 .PHONY: unit
 unit:

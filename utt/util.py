@@ -15,10 +15,6 @@ def add_entry(filename, new_entry):
         new_day = new_entry.datetime.date() != last_entry.datetime.date()
     _append_line_to_file(filename, str(new_entry), insert_blank_line=new_day)
 
-def write_entries(filename, entries):
-    _create_directories_for_file(filename)
-    _write_lines_to_file(filename, (str(entry) for entry in entries))
-
 def entries_from_file(filename):
     try:
         with open(filename) as text:
@@ -66,12 +62,6 @@ def _append_line_to_file(filename, string, insert_blank_line):
             file.write("\n")
         file.write(string)
         file.write("\n")
-
-def _write_lines_to_file(filename, strings):
-    with open(filename, 'w') as file:
-        for string in strings:
-            file.write(string)
-            file.write("\n")
 
 def _create_directories_for_file(filename):
     try:
