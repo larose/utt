@@ -1,0 +1,12 @@
+_utt()
+{
+    local IFS=$(echo -e '\v')
+    COMPREPLY=( $(_ARGCOMPLETE_IFS="$IFS" \
+                                  COMP_LINE="$COMP_LINE" \
+                                  COMP_POINT="$COMP_POINT" \
+                                  _ARGCOMPLETE_COMP_WORDBREAKS="$COMP_WORDBREAKS" \
+                                  _ARGCOMPLETE=1 \
+                                  "utt" 8>&1 9>&2 1>/dev/null 2>&1) )
+}
+
+complete -F _utt utt
