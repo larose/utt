@@ -8,7 +8,7 @@ from .print_report import print_report
 from . import util
 
 NAME = 'report'
-
+DESCRIPTION = 'Summarize tasks for given time period'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC

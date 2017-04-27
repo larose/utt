@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
+# NOTE: ^MUST BE IN FIRST 1024 BYTES OF SCRIPT TO ENABLE GLOBAL AUTOCOMPLETE
 
 from utt.__main__ import main
 

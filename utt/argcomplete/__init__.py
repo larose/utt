@@ -4,9 +4,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import os, sys, argparse, contextlib
-from . import my_shlex as shlex
+from . import completers, my_shlex as shlex
 from .compat import USING_PYTHON2, str, sys_encoding, ensure_str, ensure_bytes
 from .completers import FilesCompleter
+from .my_argparse import IntrospectiveArgumentParser, action_is_satisfied, action_is_open, action_is_greedy
 
 _DEBUG = "_ARC_DEBUG" in os.environ
 
@@ -26,9 +27,6 @@ safe_actions = (argparse._StoreAction,
                 argparse._AppendAction,
                 argparse._AppendConstAction,
                 argparse._CountAction)
-
-from . import completers
-from .my_argparse import IntrospectiveArgumentParser, action_is_satisfied, action_is_open
 
 @contextlib.contextmanager
 def mute_stdout():
@@ -55,7 +53,9 @@ class ArgcompleteException(Exception):
 def split_line(line, point=None):
     if point is None:
         point = len(line)
-    lexer = shlex.shlex(line, posix=True, punctuation_chars=True)
+    lexer = shlex.shlex(line, posix=True)
+    lexer.whitespace_split = True
+    lexer.wordbreaks = os.environ.get("_ARGCOMPLETE_COMP_WORDBREAKS", "")
     words = []
 
     def split_word(word):
@@ -76,9 +76,7 @@ def split_line(line, point=None):
         # if len(prefix) > 0 and prefix[0] in lexer.quotes:
         #    prequote, prefix = prefix[0], prefix[1:]
 
-        first_colon_pos = lexer.first_colon_pos if ":" in word else None
-
-        return prequote, prefix, suffix, words, first_colon_pos
+        return prequote, prefix, suffix, words, lexer.last_wordbreak_pos
 
     while True:
         try:
@@ -96,19 +94,19 @@ def split_line(line, point=None):
             if lexer.instream.tell() >= point:
                 return split_word(lexer.token)
             else:
-                raise ArgcompleteException("Unexpected internal state. Please report this bug at https://github.com/kislyuk/argcomplete/issues.")
+                raise ArgcompleteException("Unexpected internal state. Please report this bug at https://github.com/kislyuk/argcomplete/issues.")  # noqa
 
 def default_validator(completion, prefix):
     return completion.startswith(prefix)
 
 class CompletionFinder(object):
     """
-    Inherit from this class if you wish to override any of the stages below. Otherwise, use ``argcomplete.autocomplete()``
-    directly (it's a convenience instance of this class). It has the same signature as
+    Inherit from this class if you wish to override any of the stages below. Otherwise, use
+    ``argcomplete.autocomplete()`` directly (it's a convenience instance of this class). It has the same signature as
     :meth:`CompletionFinder.__call__()`.
     """
     def __init__(self, argument_parser=None, always_complete_options=True, exclude=None, validator=None,
-                 print_suppressed=False):
+                 print_suppressed=False, default_completer=FilesCompleter(), append_space=None):
         self._parser = argument_parser
         self.always_complete_options = always_complete_options
         self.exclude = exclude
@@ -118,16 +116,24 @@ class CompletionFinder(object):
         self.print_suppressed = print_suppressed
         self.completing = False
         self._display_completions = {}
+        self.default_completer = default_completer
+        if append_space is None:
+            append_space = os.environ.get("_ARGCOMPLETE_SUPPRESS_SPACE") != "1"
+        self.append_space = append_space
 
     def __call__(self, argument_parser, always_complete_options=True, exit_method=os._exit, output_stream=None,
-                 exclude=None, validator=None, print_suppressed=False):
+                 exclude=None, validator=None, print_suppressed=False, append_space=None,
+                 default_completer=FilesCompleter()):
         """
         :param argument_parser: The argument parser to autocomplete on
         :type argument_parser: :class:`argparse.ArgumentParser`
         :param always_complete_options:
-            Whether or not to autocomplete options even if an option string opening character (normally ``-``) has not
-            been entered
-        :type always_complete_options: boolean
+            Controls the autocompletion of option strings if an option string opening character (normally ``-``) has not
+            been entered. If ``True`` (default), both short (``-x``) and long (``--x``) option strings will be
+            suggested. If ``False``, no option strings will be suggested. If ``long``, long options and short options
+            with no long variant will be suggested. If ``short``, short options and long options with no short variant
+            will be suggested.
+        :type always_complete_options: boolean or string
         :param exit_method:
             Method used to stop the program after printing completions. Defaults to :meth:`os._exit`. If you want to
             perform a normal exit that calls exit handlers, use :meth:`sys.exit`.
@@ -141,6 +147,9 @@ class CompletionFinder(object):
         :param print_suppressed:
             Whether or not to autocomplete options that have the ``help=argparse.SUPPRESS`` keyword argument set.
         :type print_suppressed: boolean
+        :param append_space:
+            Whether to append a space to unique matches. The default is ``True``.
+        :type append_space: boolean
 
         .. note::
             If you are not subclassing CompletionFinder to override its behaviors,
@@ -149,10 +158,12 @@ class CompletionFinder(object):
         Produces tab completions for ``argument_parser``. See module docs for more info.
 
         Argcomplete only executes actions if their class is known not to have side effects. Custom action classes can be
-        added to argcomplete.safe_actions, if their values are wanted in the ``parsed_args`` completer argument, or their
-        execution is otherwise desirable.
+        added to argcomplete.safe_actions, if their values are wanted in the ``parsed_args`` completer argument, or
+        their execution is otherwise desirable.
         """
-        self.__init__(argument_parser, always_complete_options, exclude, validator, print_suppressed)
+        self.__init__(argument_parser, always_complete_options=always_complete_options, exclude=exclude,
+                      validator=validator, print_suppressed=print_suppressed, append_space=append_space,
+                      default_completer=default_completer)
 
         if "_ARGCOMPLETE" not in os.environ:
             # not an argument completion invocation
@@ -172,7 +183,7 @@ class CompletionFinder(object):
                 exit_method(1)
 
         # print("", stream=debug_stream)
-        # for v in "COMP_CWORD", "COMP_LINE", "COMP_POINT", "COMP_TYPE", "COMP_KEY", "_ARGCOMPLETE_COMP_WORDBREAKS", "COMP_WORDS":
+        # for v in "COMP_CWORD COMP_LINE COMP_POINT COMP_TYPE COMP_KEY _ARGCOMPLETE_COMP_WORDBREAKS COMP_WORDS".split():
         #     print(v, os.environ[v], stream=debug_stream)
 
         ifs = os.environ.get("_ARGCOMPLETE_IFS", "\013")
@@ -190,17 +201,21 @@ class CompletionFinder(object):
             comp_point = len(comp_line.encode(sys_encoding)[:comp_point].decode(sys_encoding))
 
         comp_line = ensure_str(comp_line)
-        cword_prequote, cword_prefix, cword_suffix, comp_words, first_colon_pos = split_line(comp_line, comp_point)
+        cword_prequote, cword_prefix, cword_suffix, comp_words, last_wordbreak_pos = split_line(comp_line, comp_point)
 
-        if os.environ["_ARGCOMPLETE"] == "2":
-            # Shell hook recognized the first word as the interpreter; discard it
-            comp_words.pop(0)
+        # _ARGCOMPLETE is set by the shell script to tell us where comp_words
+        # should start, based on what we're completing.
+        # 1: <script> [args]
+        # 2: python <script> [args]
+        # 3: python -m <module> [args]
+        start = int(os.environ["_ARGCOMPLETE"]) - 1
+        comp_words = comp_words[start:]
 
         debug("\nLINE: '{l}'\nPREQUOTE: '{pq}'\nPREFIX: '{p}'".format(l=comp_line, pq=cword_prequote, p=cword_prefix),
               "\nSUFFIX: '{s}'".format(s=cword_suffix),
               "\nWORDS:", comp_words)
 
-        completions = self._get_completions(comp_words, cword_prefix, cword_prequote, first_colon_pos)
+        completions = self._get_completions(comp_words, cword_prefix, cword_prequote, last_wordbreak_pos)
 
         debug("\nReturning completions:", completions)
         output_stream.write(ifs.join(completions).encode(sys_encoding))
@@ -208,7 +223,7 @@ class CompletionFinder(object):
         debug_stream.flush()
         exit_method(0)
 
-    def _get_completions(self, comp_words, cword_prefix, cword_prequote, first_colon_pos):
+    def _get_completions(self, comp_words, cword_prefix, cword_prequote, last_wordbreak_pos):
         active_parsers = self._patch_argument_parser()
 
         parsed_args = argparse.Namespace()
@@ -232,7 +247,7 @@ class CompletionFinder(object):
 
         completions = self.collect_completions(active_parsers, parsed_args, cword_prefix, debug)
         completions = self.filter_completions(completions)
-        completions = self.quote_completions(completions, cword_prequote, first_colon_pos)
+        completions = self.quote_completions(completions, cword_prequote, last_wordbreak_pos)
         return completions
 
     def _patch_argument_parser(self):
@@ -312,9 +327,20 @@ class CompletionFinder(object):
         completions = [subcmd for subcmd in parser.choices.keys() if subcmd.startswith(cword_prefix)]
         return completions
 
+    def _include_options(self, action, cword_prefix):
+        if len(cword_prefix) > 0 or self.always_complete_options is True:
+            return [ensure_str(opt) for opt in action.option_strings if ensure_str(opt).startswith(cword_prefix)]
+        long_opts = [ensure_str(opt) for opt in action.option_strings if len(opt) > 2]
+        short_opts = [ensure_str(opt) for opt in action.option_strings if len(opt) <= 2]
+        if self.always_complete_options == "long":
+            return long_opts if long_opts else short_opts
+        elif self.always_complete_options == "short":
+            return short_opts if short_opts else long_opts
+        return []
+
     def _get_option_completions(self, parser, cword_prefix):
         self._display_completions.update(
-            [[" ".join(ensure_str(x) for x in action.option_strings if ensure_str(x).startswith(cword_prefix)), action.help]
+            [[" ".join(ensure_str(x) for x in action.option_strings if ensure_str(x).startswith(cword_prefix)), action.help]  # noqa
              for action in parser._actions
              if action.option_strings])
 
@@ -322,24 +348,52 @@ class CompletionFinder(object):
         for action in parser._actions:
             if action.help == argparse.SUPPRESS and not self.print_suppressed:
                 continue
+            if not self._action_allowed(action, parser):
+                continue
             if not isinstance(action, argparse._SubParsersAction):
-                for option in action.option_strings:
-                    if ensure_str(option).startswith(cword_prefix):
-                        option_completions.append(ensure_str(option))
+                option_completions += self._include_options(action, cword_prefix)
         return option_completions
+
+    @staticmethod
+    def _action_allowed(action, parser):
+        # Logic adapted from take_action in ArgumentParser._parse_known_args
+        # (members are saved by my_argparse.IntrospectiveArgumentParser)
+        for conflict_action in parser._action_conflicts.get(action, []):
+            if conflict_action in parser._seen_non_default_actions:
+                return False
+        return True
 
     def _complete_active_option(self, parser, next_positional, cword_prefix, parsed_args, completions):
         debug("Active actions (L={l}): {a}".format(l=len(parser.active_actions), a=parser.active_actions))
 
-        # Only run completers if current word does not start with - (is not an optional)
-        if len(cword_prefix) > 0 and cword_prefix[0] in parser.prefix_chars:
+        isoptional = cword_prefix and cword_prefix[0] in parser.prefix_chars
+        greedy_actions = [x for x in parser.active_actions if action_is_greedy(x, isoptional)]
+        if greedy_actions:
+            assert len(greedy_actions) == 1, "expect at most 1 greedy action"
+            # This means the action will fail to parse if the word under the cursor is not given
+            # to it, so give it exclusive control over completions (flush previous completions)
+            debug("Resetting completions because", greedy_actions[0], "must consume the next argument")
+            self._display_completions = {}
+            completions = []
+        elif isoptional:
+            # Only run completers if current word does not start with - (is not an optional)
             return completions
 
-        for active_action in parser.active_actions:
+        complete_remaining_positionals = False
+        # Use the single greedy action (if there is one) or all active actions.
+        for active_action in greedy_actions or parser.active_actions:
             if not active_action.option_strings:  # action is a positional
-                if action_is_satisfied(active_action) and not action_is_open(active_action):
-                    debug("Skipping", active_action)
-                    continue
+                if action_is_open(active_action):
+                    # Any positional arguments after this may slide down into this action
+                    # if more arguments are added (since the user may not be done yet),
+                    # so it is extremely difficult to tell which completers to run.
+                    # Running all remaining completers will probably show more than the user wants
+                    # but it also guarantees we won't miss anything.
+                    complete_remaining_positionals = True
+                if not complete_remaining_positionals:
+                    if action_is_satisfied(active_action) and not action_is_open(active_action):
+                        debug("Skipping", active_action)
+                        continue
 
             debug("Activating completion for", active_action, active_action._orig_class)
             # completer = getattr(active_action, "completer", DefaultCompleter())
@@ -349,19 +403,12 @@ class CompletionFinder(object):
                 if active_action.choices is not None and not isinstance(active_action, argparse._SubParsersAction):
                     completer = completers.ChoicesCompleter(active_action.choices)
                 elif not isinstance(active_action, argparse._SubParsersAction):
-                    completer = FilesCompleter()
+                    completer = self.default_completer
 
             if completer:
-                if len(active_action.option_strings) > 0:  # only for optionals
-                    if not action_is_satisfied(active_action):
-                        # This means the current action will fail to parse if the word under the cursor is not given
-                        # to it, so give it exclusive control over completions (flush previous completions)
-                        debug("Resetting completions because", active_action, "is unsatisfied")
-                        self._display_completions = {}
-                        completions = []
                 if callable(completer):
                     completions_from_callable = [c for c in completer(
-                        prefix=cword_prefix, action=active_action, parsed_args=parsed_args)
+                        prefix=cword_prefix, action=active_action, parser=parser, parsed_args=parsed_args)
                         if self.validator(c, cword_prefix)]
 
                     if completions_from_callable:
@@ -445,8 +492,8 @@ class CompletionFinder(object):
         This method is exposed for overriding in subclasses; there is no need to use it directly.
         """
         # On Python 2, we have to make sure all completions are unicode objects before we continue and output them.
-        # Otherwise, because python disobeys the system locale encoding and uses ascii as the default encoding, it will try
-        # to implicitly decode string objects using ascii, and fail.
+        # Otherwise, because python disobeys the system locale encoding and uses ascii as the default encoding, it will
+        # try to implicitly decode string objects using ascii, and fail.
         completions = [ensure_str(c) for c in completions]
 
         # De-duplicate completions and remove excluded ones
@@ -455,7 +502,7 @@ class CompletionFinder(object):
         seen = set(self.exclude)
         return [c for c in completions if c not in seen and not seen.add(c)]
 
-    def quote_completions(self, completions, cword_prequote, first_colon_pos):
+    def quote_completions(self, completions, cword_prequote, last_wordbreak_pos):
         """
         If the word under the cursor started with a quote (as indicated by a nonempty ``cword_prequote``), escapes
         occurrences of that quote character in the completions, and adds the quote to the beginning of each completion.
@@ -467,38 +514,39 @@ class CompletionFinder(object):
 
         This method is exposed for overriding in subclasses; there is no need to use it directly.
         """
-        comp_wordbreaks = ensure_str(os.environ.get("_ARGCOMPLETE_COMP_WORDBREAKS",
-                                                    os.environ.get("COMP_WORDBREAKS",
-                                                                   " \t\"'@><=;|&(:.")))
-
-        punctuation_chars = "();<>|&!`"
-        for char in punctuation_chars:
-            if char not in comp_wordbreaks:
-                comp_wordbreaks += char
-
-        # If the word under the cursor was quoted, escape the quote char and add the leading quote back in.
-        # Otherwise, escape all COMP_WORDBREAKS chars.
+        special_chars = "\\"
+        # If the word under the cursor was quoted, escape the quote char.
+        # Otherwise, escape all special characters and specially handle all COMP_WORDBREAKS chars.
         if cword_prequote == "":
-            # Bash mangles completions which contain colons if COMP_WORDBREAKS contains a colon.
-            # This workaround has the same effect as __ltrim_colon_completions in bash_completion.
-            if ":" in comp_wordbreaks and first_colon_pos:
-                completions = [c[first_colon_pos + 1:] for c in completions]
+            # Bash mangles completions which contain characters in COMP_WORDBREAKS.
+            # This workaround has the same effect as __ltrim_colon_completions in bash_completion
+            # (extended to characters other than the colon).
+            if last_wordbreak_pos:
+                completions = [c[last_wordbreak_pos + 1:] for c in completions]
+            special_chars += "();<>|&!`$* \t\n\"'"
+        elif cword_prequote == '"':
+            special_chars += '"`$!'
 
-            for wordbreak_char in comp_wordbreaks:
-                completions = [c.replace(wordbreak_char, "\\" + wordbreak_char) for c in completions]
-        else:
-            if cword_prequote == '"':
-                for char in "`$!":
-                    completions = [c.replace(char, "\\" + char) for c in completions]
-            completions = [cword_prequote + c.replace(cword_prequote, "\\" + cword_prequote) for c in completions]
+        if os.environ.get("_ARGCOMPLETE_SHELL") == "tcsh":
+            # tcsh escapes special characters itself.
+            special_chars = ""
+        elif cword_prequote == "'":
+            # Nothing can be escaped in single quotes, so we need to close
+            # the string, escape the single quote, then open a new string.
+            special_chars = ""
+            completions = [c.replace("'", r"'\''") for c in completions]
 
-        # Note: similar functionality in bash is turned off by supplying the "-o nospace" option to complete.
-        # We can't use that functionality because bash is not smart enough to recognize continuation characters (/) for
-        # which no space should be added.
-        continuation_chars = "=/:"
-        if len(completions) == 1 and completions[0][-1] not in continuation_chars:
-            if cword_prequote == "" and not completions[0].endswith(" "):
-                completions[0] += " "
+        for char in special_chars:
+            completions = [c.replace(char, "\\" + char) for c in completions]
+
+        if self.append_space:
+            # Similar functionality in bash was previously turned off by supplying the "-o nospace" option to complete.
+            # Now it is conditionally disabled using "compopt -o nospace" if the match ends in a continuation character.
+            # This code is retained for environments where this isn't done natively.
+            continuation_chars = "=/:"
+            if len(completions) == 1 and completions[0][-1] not in continuation_chars:
+                if cword_prequote == "":
+                    completions[0] += " "
 
         return completions
 
@@ -564,6 +612,21 @@ class CompletionFinder(object):
 
         """
         return self._display_completions
+
+class ExclusiveCompletionFinder(CompletionFinder):
+    @staticmethod
+    def _action_allowed(action, parser):
+        if not CompletionFinder._action_allowed(action, parser):
+            return False
+
+        append_classes = (argparse._AppendAction, argparse._AppendConstAction)
+        if action._orig_class in append_classes:
+            return True
+
+        if action not in parser._seen_non_default_actions:
+            return True
+
+        return False
 
 autocomplete = CompletionFinder()
 autocomplete.__doc__ = """ Use this to access argcomplete. See :meth:`argcomplete.CompletionFinder.__call__()`. """

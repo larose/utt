@@ -1,0 +1,32 @@
+# CHANGES
+    * PULLED LATEST argcomplete FROM GITHUB FOR append_space= KEYWORD ARG IN argcomplete.autocomplete()
+    * FILENAME / DATA-DIR FUNCTIONS TO util.py FOR ACCESSIBILITY OUTSIDE OF main
+    * CUSTOM AUTOCOMPLETER FOR cmd_add.py FOR POPULATING FROM TASK HISTORY
+    * 'DESCRIPTION' ATTRIBUTE FOR EACH cmd_ MODULE FOR ENHANCED argparse HELP ON SUBCOMMANDS
+    * CONFIGURED LOGGING IN main() TO CAPTURE ANY AUTOCOMPLETE PROBLEMS (argcomplete CAPTURES STDERR)
+    * CHECK FOR DEBIAN DEFAULT EDITOR /usr/bin/editor WHEN $VISUAL AND $EDITOR ARE NOT SET BEFORE FALLING BACK TO vi
+    * ADDED STRING 'PYTHON_ARGCOMPLETE_OK' TO FIRST 1024 BYTES OF MAIN SCRIPT IN bin/ TO BE USED WITH GLOBAL ARGCOMPLETE IF ENABLED IN /etc/profile
+
+# QUESTIONS
+    * FOR CONSISTENCY, WE SHOULD EITHER PULL BOTH argcomplete/argparse FROM PIP, OR INCLUDE BOTH UNDER utt/.  PREFERENCE?
+    * JUST PARSING THE WHOLE utt.log FOR AUTOCOMPLETE NOW.  FAST ENOUGH ON MY SIDE, BUT MY LOG IS SMALL.  IS IT FAST ENOUGH ON YOUR SIDE?
+
+editor fix in
+   cmd_edit.py
+
+sudo pip3 install argcomplete
+sudo pip3 install argparse
+add argcomplete, argparse to dependencies
+
+https://argcomplete.readthedocs.io/en/latest/
+
+# ENABLE GLOBAL ARGCOMPLETE
+    pip3 install argcomplete
+    sudo activate-global-python-argcomplete
+
+# ENABLE UTT-ONLY ARGCOMPLETE
+    add to end of .bashrc:
+       eval "$(register-python-argcomplete utt)"
+
+# DEBUGGING AUTOCOMPLETE
+    export _ARC_DEBUG=1

@@ -12,15 +12,32 @@ __python_argcomplete_expand_tilde_by_ref () {
     fi
 }
 
+# Run something, muting output or redirecting it to the debug stream
+# depending on the value of _ARC_DEBUG.
+__python_argcomplete_run() {
+    if [[ -z "$_ARC_DEBUG" ]]; then
+        "$@" 8>&1 9>&2 1>/dev/null 2>&1
+    else
+        "$@" 8>&1 9>&2 1>&9 2>&1
+    fi
+}
+
 _python_argcomplete_global() {
     local executable=$1
     __python_argcomplete_expand_tilde_by_ref executable
 
     local ARGCOMPLETE=0
     if [[ "$executable" == python* ]] || [[ "$executable" == pypy* ]]; then
-        if [[ -f "${COMP_WORDS[1]}" ]] && (head -c 1024 "${COMP_WORDS[1]}" | grep --quiet "PYTHON_ARGCOMPLETE_OK") >/dev/null 2>&1; then
+        if [[ "${COMP_WORDS[1]}" == -m ]]; then
+            if "$executable" -m argcomplete._check_module "${COMP_WORDS[2]}" >/dev/null 2>&1; then
+                ARGCOMPLETE=3
+            else
+                return
+            fi
+        elif [[ -f "${COMP_WORDS[1]}" ]] && (head -c 1024 "${COMP_WORDS[1]}" | grep --quiet "PYTHON_ARGCOMPLETE_OK") >/dev/null 2>&1; then
             local ARGCOMPLETE=2
-            set -- "${COMP_WORDS[1]}"
+        else
+            return
         fi
     elif which "$executable" >/dev/null 2>&1; then
         local SCRIPT_NAME=$(which "$executable")
@@ -35,19 +52,23 @@ _python_argcomplete_global() {
         fi
     fi
 
-    if [[ $ARGCOMPLETE == 1 ]] || [[ $ARGCOMPLETE == 2 ]]; then
+    if [[ $ARGCOMPLETE != 0 ]]; then
         local IFS=$(echo -e '\v')
         COMPREPLY=( $(_ARGCOMPLETE_IFS="$IFS" \
             COMP_LINE="$COMP_LINE" \
             COMP_POINT="$COMP_POINT" \
+            COMP_TYPE="$COMP_TYPE" \
             _ARGCOMPLETE_COMP_WORDBREAKS="$COMP_WORDBREAKS" \
             _ARGCOMPLETE=$ARGCOMPLETE \
-            "$executable" 8>&1 9>&2 1>/dev/null 2>&1) )
+            _ARGCOMPLETE_SUPPRESS_SPACE=1 \
+            __python_argcomplete_run "$executable" "${COMP_WORDS[@]:1:ARGCOMPLETE-1}") )
         if [[ $? != 0 ]]; then
             unset COMPREPLY
+        elif [[ "$COMPREPLY" =~ [=/:]$ ]]; then
+            compopt -o nospace
         fi
     else
         type -t _completion_loader | grep -q 'function' && _completion_loader "$@"
     fi
 }
-complete -o nospace -o default -o bashdefault -D -F _python_argcomplete_global
+complete -o default -o bashdefault -D -F _python_argcomplete_global

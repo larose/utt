@@ -1,5 +1,7 @@
 import errno
 import os
+import datetime
+
 from .entry import Entry
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,6 +41,18 @@ def entries_from_file(filename):
     except IOError:
         pass
 
+
+def parse_datetime(datetimestring):
+    return datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M")
+
+def user_data_dir():
+    return os.getenv('XDG_DATA_HOME', os.path.expanduser("~/.local/share"))
+
+def utt_filename():
+    return os.path.join(user_data_dir(), 'utt', 'utt.log')
+
+def utt_debug_log():
+    return os.path.join(user_data_dir(), 'utt', 'debug.log'),
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PRIVATE
