@@ -5,8 +5,10 @@ from .entry import Entry
 NAME = 'stretch'
 DESCRIPTION = 'Stretch the latest task to the current time'
 
+
 def add_args(parser):
     pass
+
 
 def execute(args):
     entries = list(util.entries_from_file(args.data_filename))

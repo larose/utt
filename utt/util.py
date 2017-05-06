@@ -8,6 +8,7 @@ from .entry import Entry
 # PUBLIC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
 def add_entry(filename, new_entry):
     _create_directories_for_file(filename)
     entries = list(entries_from_file(filename))
@@ -16,6 +17,7 @@ def add_entry(filename, new_entry):
         last_entry = entries[-1]
         new_day = new_entry.datetime.date() != last_entry.datetime.date()
     _append_line_to_file(filename, str(new_entry), insert_blank_line=new_day)
+
 
 def entries_from_file(filename):
     try:
@@ -45,18 +47,34 @@ def entries_from_file(filename):
 def parse_datetime(datetimestring):
     return datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M")
 
+
+def utt_touch_path(szPath):
+    try:
+        os.makedirs(szPath, 0o770)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
+
+    return szPath
+
+
 def user_data_dir():
-    return os.getenv('XDG_DATA_HOME', os.path.expanduser("~/.local/share"))
+    szPath = os.getenv('XDG_DATA_HOME', os.path.expanduser("~/.local/share"))
+    szPath = os.path.join(szPath, 'utt')
+    return utt_touch_path(szPath)
+
 
 def utt_filename():
-    return os.path.join(user_data_dir(), 'utt', 'utt.log')
+    return os.path.join(user_data_dir(), 'utt.log')
+
 
 def utt_debug_log():
-    return os.path.join(user_data_dir(), 'utt', 'debug.log'),
+    return os.path.join(user_data_dir(), 'debug.log')
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 def _append_line_to_file(filename, string, insert_blank_line):
     try:
@@ -76,6 +94,7 @@ def _append_line_to_file(filename, string, insert_blank_line):
             file.write("\n")
         file.write(string)
         file.write("\n")
+
 
 def _create_directories_for_file(filename):
     try:

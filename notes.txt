@@ -11,9 +11,6 @@
     * FOR CONSISTENCY, WE SHOULD EITHER PULL BOTH argcomplete/argparse FROM PIP, OR INCLUDE BOTH UNDER utt/.  PREFERENCE?
     * JUST PARSING THE WHOLE utt.log FOR AUTOCOMPLETE NOW.  FAST ENOUGH ON MY SIDE, BUT MY LOG IS SMALL.  IS IT FAST ENOUGH ON YOUR SIDE?
 
-editor fix in
-   cmd_edit.py
-
 sudo pip3 install argcomplete
 sudo pip3 install argparse
 add argcomplete, argparse to dependencies

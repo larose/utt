@@ -1,10 +1,11 @@
 import datetime
 import re
 
+
 class Entry:
     regex = re.compile(
         "(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})\s+(?P<name>[^\s].*)"
-        )
+    )
 
     def __init__(self, datetime, name, is_current_entry):
         self.datetime = datetime

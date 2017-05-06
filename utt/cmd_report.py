@@ -14,6 +14,7 @@ DESCRIPTION = 'Summarize tasks for given time period'
 # PUBLIC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
 def add_args(parser):
     parser.add_argument("report_date",
                         metavar="date",
@@ -29,6 +30,7 @@ def add_args(parser):
                         action='store_true',
                         default=False,
                         help="Do not display the current activity")
+
 
 def execute(args):
     report_date = None
@@ -56,7 +58,9 @@ def execute(args):
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-DAY_NAMES = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+DAY_NAMES = ["MONDAY", "TUESDAY", "WEDNESDAY",
+             "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+
 
 def _activities_from_entries(entries_grouped_by_day):
     activities_grouped_by_day = collections.defaultdict(list)
@@ -67,9 +71,11 @@ def _activities_from_entries(entries_grouped_by_day):
 
     return activities_grouped_by_day
 
+
 def _activities_from_entries_day(entries):
     return (Activity(entry_pair[0].datetime, entry_pair[1])
             for entry_pair in _pairwise(entries))
+
 
 def _add_current_entry(report_date, entries, now, current_activity_name,
                        disable_current_activity):
@@ -77,6 +83,7 @@ def _add_current_entry(report_date, entries, now, current_activity_name,
     if report_date == today and entries and entries[-1].datetime < now and \
             not disable_current_activity:
         entries.append(Entry(now, current_activity_name, True))
+
 
 def _filter_and_group_entries(report_date, all_entries):
     week_start_date, week_end_date = _week_dates(report_date)
@@ -92,11 +99,13 @@ def _filter_and_group_entries(report_date, all_entries):
 
     return entries_grouped_by_day
 
+
 def _make_range_filter_fn(start_date, end_date):
     def filter_fn(entry):
         date = entry.datetime.date()
         return date >= start_date and date <= end_date
     return filter_fn
+
 
 def _pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
@@ -104,8 +113,10 @@ def _pairwise(iterable):
     next(b, None)
     return zip(a, b)
 
+
 def _parse_absolute_date(datestring):
     return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
+
 
 def _parse_date(now, datestring):
     date = _parse_relative_date(now, datestring)
@@ -113,11 +124,13 @@ def _parse_date(now, datestring):
         return date
     return _parse_absolute_date(datestring)
 
+
 def _parse_day(day):
     day_upper = day.upper()
     if day_upper in DAY_NAMES:
         return day_upper
     return None
+
 
 def _parse_relative_date(now, datestring):
     day = _parse_day(datestring)
@@ -129,6 +142,7 @@ def _parse_relative_date(now, datestring):
     if delta < 0:
         delta += len(DAY_NAMES)
     return now.date() - datetime.timedelta(days=delta)
+
 
 def _week_dates(date):
     week_start_date = date + datetime.timedelta(-date.weekday())

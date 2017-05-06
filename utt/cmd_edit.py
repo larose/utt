@@ -1,8 +1,9 @@
 import os
 import subprocess
 
-NAME        = 'edit'
+NAME = 'edit'
 DESCRIPTION = 'Edit task log using your system\'s default editor'
+
 
 def add_args(parser):
     pass
@@ -13,27 +14,27 @@ def execute(args):
     _run_editor(path_default_editor(), args.data_filename)
 
 
-def checkEnvPath(envVar):
+def checkEnvVar(envVar):
 
-   szPath = os.environ.get(envVar, '')
+    szPath = os.environ.get(envVar, '')
 
-   if( len(szPath) > 0 ):
-      if( os.path.exists(szPath) ):
-         return szPath
+    if(len(szPath) > 0):
+        return szPath
 
-   return False
+    return False
 
 
 def path_default_editor():
 
     szEditorDefault = '/usr/bin/editor'
 
-    if( not os.path.exists(szEditorDefault) ):
+    if(not os.path.exists(szEditorDefault)):
         szEditorDefault = 'vi'
 
+    # NOTE: CHECK $EDITOR FIRST SINCE IT IS SET TO 'cat' ON 'make test'
     return (
-        checkEnvPath("VISUAL") or
-        checkEnvPath("EDITOR") or
+        checkEnvVar("EDITOR") or
+        checkEnvVar("VISUAL") or
         szEditorDefault
     )
 

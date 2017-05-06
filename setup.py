@@ -31,9 +31,10 @@ setup(
     description=description,
     long_description=long_description,
     name='utt',
-    packages=['utt', os.path.join('utt', 'argcomplete')],
+    packages=['utt'],
     scripts=[os.path.join('bin', 'utt')],
     data_files=[(os.path.join('share', 'bash-completion', 'completions'),  (os.path.join('bash', 'utt'),))],
     url="https://github.com/larose/utt",
     version=get_version(),
+    install_requires=['argparse', 'argcomplete'],
 )

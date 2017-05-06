@@ -1,18 +1,19 @@
-import argparse
 import datetime
 import sys
 import logging
 import os
+import argparse
+import argcomplete
 
 from . import cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report
 from .__version__ import version
-from . import argcomplete
 from . import util
+
 
 def main():
 
     logging.basicConfig(
-        filename=os.path.join(util.user_data_dir(), 'utt', 'debug.log'),
+        filename=util.utt_debug_log(),
         level=logging.DEBUG,
         format='%(asctime)s %(message)s',
         datefmt='%m/%d/%Y %I:%M:%S %p'
@@ -22,11 +23,13 @@ def main():
         formatter_class=argparse.RawTextHelpFormatter,
         description='Ultimate Time Tracker (utt) is a simple command-line time tracking application written in Python.')
 
-    handlers = _parse_args(parser, [cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report])
+    handlers = _parse_args(
+        parser, [cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report])
     parser.add_argument(
         '--version',
         action='version',
-        version="\n".join(["utt {version}".format(version=version), "Python " + sys.version])
+        version="\n".join(["utt {version}".format(
+            version=version), "Python " + sys.version])
     )
 
     if len(sys.argv) == 1:
@@ -41,6 +44,7 @@ def main():
     if handler:
         handler(args)
 
+
 def _parse_args(parser, modules):
     parser.add_argument("--data", dest="data_filename",
                         default=util.utt_filename())
@@ -51,11 +55,13 @@ def _parse_args(parser, modules):
     handlers = {}
 
     for module in modules:
-        oSubParse = subparsers.add_parser(module.NAME, description=module.DESCRIPTION)
+        oSubParse = subparsers.add_parser(
+            module.NAME, description=module.DESCRIPTION)
         module.add_args(oSubParse)
         handlers[module.NAME] = module.execute
 
     return handlers
+
 
 if __name__ == '__main__':
     main()

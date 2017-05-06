@@ -1,4 +1,5 @@
 *~
+*.swp
 *.pyc
 test/integration/utt-*.tar.gz
 tmp

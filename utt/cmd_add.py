@@ -19,11 +19,11 @@ def ACDB_Search(pathDB, szPrefix):
 
             szItem = line.strip()
 
-            if( len(szItem) > 17 ):
+            if(len(szItem) > 17):
 
                 szItem = szItem[17:]
 
-                if( szItem.startswith(szPrefix) ):
+                if(szItem.startswith(szPrefix)):
                     setItems.add(szItem)
 
         fDB.close()
@@ -38,7 +38,7 @@ def ACDB_Completer(**kwargs):
         pathDB = util.utt_filename()
 
         # RETURN LIST OF TASKS THAT MATCH PREFIX
-        if( os.path.exists(pathDB) ):
+        if(os.path.exists(pathDB)):
             return ACDB_Search(pathDB, kwargs['prefix'])
 
         return []
@@ -51,7 +51,8 @@ def ACDB_Completer(**kwargs):
 
 
 def add_args(parser):
-    parser.add_argument("name", help="completed task description").completer = ACDB_Completer
+    parser.add_argument(
+        "name", help="completed task description").completer = ACDB_Completer
 
 
 def execute(args):
