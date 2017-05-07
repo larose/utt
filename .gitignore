@@ -1,4 +1,5 @@
 *~
+*.swp
 *.pyc
 utt.egg-info/
 test/integration/utt-*.tar.gz

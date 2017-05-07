@@ -30,6 +30,7 @@ def _format_date(datetime):
         "%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))
 
 
+
 def _format_duration(duration):
     mm, ss = divmod(duration.seconds, 60)
     hh, mm = divmod(mm, 60)
@@ -77,6 +78,7 @@ def _groupby_name(activities):
 
     return sorted(
         result, key=lambda act: (act['project'].lower(), act['name'].lower()))
+
 
 
 def _groupby_project(activities):
@@ -190,6 +192,7 @@ def _print_time(name, report_date, activities, activity_type):
 
     print(" [%s]" %
           _format_duration_hours_only(_total_time(activities, activity_type)))
+
 
 
 def _title(text):

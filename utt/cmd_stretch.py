@@ -3,6 +3,7 @@ from . import util
 from .entry import Entry
 
 NAME = 'stretch'
+DESCRIPTION = 'Stretch the latest task to the current time'
 
 
 def add_args(parser):

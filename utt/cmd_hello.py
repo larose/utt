@@ -2,6 +2,7 @@ from . import util
 from .entry import Entry
 
 NAME = 'hello'
+DESCRIPTION = 'Say \'hello\' when you arrive in the morning...'
 
 
 def add_args(parser):

@@ -8,6 +8,7 @@ from .print_report import print_report
 from . import util
 
 NAME = 'report'
+DESCRIPTION = 'Summarize tasks for given time period'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC
@@ -28,6 +29,7 @@ def add_args(parser):
         action='store_true',
         default=False,
         help="Do not display the current activity")
+
 
 
 def execute(args):
