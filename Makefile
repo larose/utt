@@ -12,6 +12,10 @@ clean:
 	rm -rf $(TMP)
 	rm -f $(INTEGRATION_DIR)/utt-*.tar.gz
 
+.PHONY: format
+format:
+	PYTHONPATH=lib python3 lib/yapf utt test -ir
+
 .PHONY: sdist
 sdist:
 	mkdir -p $(TMP)
