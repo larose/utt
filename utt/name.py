@@ -1,5 +1,6 @@
 import re
 
+
 class Name:
     NAME_REGEX = re.compile("(?P<project>[^\s:]+):\s(?P<task>.*)")
 

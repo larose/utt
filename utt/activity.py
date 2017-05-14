@@ -23,11 +23,10 @@ class Activity:
             self.type == other.type
 
     def __str__(self):
-        return "Activity(" + ", ".join(map(str, [self.name,
-                                                 self.start,
-                                                 self.end,
-                                                 self.duration,
-                                                 self.type])) + ")"
+        return "Activity(" + ", ".join(
+            map(str, [
+                self.name, self.start, self.end, self.duration, self.type
+            ])) + ")"
 
     def __repr__(self):
         return self.__str__()

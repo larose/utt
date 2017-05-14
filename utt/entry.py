@@ -1,10 +1,10 @@
 import datetime
 import re
 
+
 class Entry:
     regex = re.compile(
-        "(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})\s+(?P<name>[^\s].*)"
-        )
+        "(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})\s+(?P<name>[^\s].*)")
 
     def __init__(self, datetime, name, is_current_entry):
         self.datetime = datetime
@@ -12,8 +12,7 @@ class Entry:
         self.is_current_entry = is_current_entry
 
     def __str__(self):
-        return " ".join([self.datetime.strftime("%Y-%m-%d %H:%M"),
-                         self.name])
+        return " ".join([self.datetime.strftime("%Y-%m-%d %H:%M"), self.name])
 
     @staticmethod
     def from_string(string):

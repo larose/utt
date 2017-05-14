@@ -17,10 +17,9 @@ __version__ = '1.0.1'
 # They are added to the decorated test method and processed later
 # by the `ddt` class decorator.
 
-DATA_ATTR = '%values'      # store the data the test must run with
-FILE_ATTR = '%file_path'   # store the path to JSON file
-UNPACK_ATTR = '%unpack'    # remember that we have to unpack values
-
+DATA_ATTR = '%values'  # store the data the test must run with
+FILE_ATTR = '%file_path'  # store the path to JSON file
+UNPACK_ATTR = '%unpack'  # remember that we have to unpack values
 
 try:
     trivial_types = (type(None), bool, int, float, basestring)
@@ -52,9 +51,11 @@ def data(*values):
     Should be added to methods of instances of ``unittest.TestCase``.
 
     """
+
     def wrapper(func):
         setattr(func, DATA_ATTR, values)
         return func
+
     return wrapper
 
 
@@ -77,9 +78,11 @@ def file_data(value):
     test case, and values will be fed as test data.
 
     """
+
     def wrapper(func):
         setattr(func, FILE_ATTR, value)
         return func
+
     return wrapper
 
 
@@ -117,9 +120,11 @@ def feed_data(func, new_name, *args, **kwargs):
     This internal method decorator feeds the test data item to the test.
 
     """
+
     @wraps(func)
     def wrapper(self):
         return func(self, *args, **kwargs)
+
     wrapper.__name__ = new_name
     # Try to call format on the docstring
     if func.__doc__:

@@ -6,6 +6,7 @@ from .entry import Entry
 # PUBLIC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
 def add_entry(filename, new_entry):
     _create_directories_for_file(filename)
     entries = list(entries_from_file(filename))
@@ -14,6 +15,7 @@ def add_entry(filename, new_entry):
         last_entry = entries[-1]
         new_day = new_entry.datetime.date() != last_entry.datetime.date()
     _append_line_to_file(filename, str(new_entry), insert_blank_line=new_day)
+
 
 def entries_from_file(filename):
     try:
@@ -26,8 +28,8 @@ def entries_from_file(filename):
 
                 new_entry = Entry.from_string(string)
                 if new_entry is None:
-                    raise SyntaxError(
-                        "Invalid syntax at line %d: %s" % (i, string))
+                    raise SyntaxError("Invalid syntax at line %d: %s" %
+                                      (i, string))
 
                 if previous_entry and \
                    previous_entry.datetime > new_entry.datetime:
@@ -43,6 +45,7 @@ def entries_from_file(filename):
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 def _append_line_to_file(filename, string, insert_blank_line):
     try:
@@ -62,6 +65,7 @@ def _append_line_to_file(filename, string, insert_blank_line):
             file.write("\n")
         file.write(string)
         file.write("\n")
+
 
 def _create_directories_for_file(filename):
     try:
