@@ -12,31 +12,31 @@ clean:
 	rm -rf $(TMP)
 	rm -f $(INTEGRATION_DIR)/utt-*.tar.gz
 
-.PHONY: integration
-integration: integration-py2 integration-py3
-
-.PHONY: integration-py%
-integration-py%: integration-container-py%
-	docker run --rm -ti -v "$(CURDIR)/$(INTEGRATION_DIR):/utt:ro" $(CONTAINER_NAME) $(INTEGRATION_CMD)
-
-.PHONY: integration-container-py%
-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
-	docker build -t $(CONTAINER_NAME) -f $(INTEGRATION_DIR)/Dockerfile.py$* $(INTEGRATION_DIR)
-
 .PHONY: sdist
 sdist:
 	mkdir -p $(TMP)
 	python3 setup.py sdist --dist-dir $(TMP)
 
 .PHONY: test
-test: integration unit
+test: test-unit test-integration
 
-.PHONY: unit
-unit:
+.PHONY: test-integration
+test-integration: test-integration-py2 test-integration-py3
+
+.PHONY: test-integration-py%
+test-integration-py%: test-integration-container-py%
+	docker run --rm -ti -v "$(CURDIR)/$(INTEGRATION_DIR):/utt:ro" $(CONTAINER_NAME) $(INTEGRATION_CMD)
+
+.PHONY: test-integration-container-py%
+test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
+	docker build -t $(CONTAINER_NAME) -f $(INTEGRATION_DIR)/Dockerfile.py$* $(INTEGRATION_DIR)
+
+.PHONY: test-unit
+test-unit:
 	python3 -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 
 .PHONY: upload
-upload: unit integration
+upload: test-unit test-integration
 	python3 setup.py sdist --dist-dir $(TMP) upload
 
 $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz: sdist

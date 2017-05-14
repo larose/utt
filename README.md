@@ -347,29 +347,29 @@ Linux-centric. We use Makefile and Docker.
 
 To run the integration tests for Python 2 and Python 3:
 
-`$ make integration`
+`$ make test-integration`
 
 This will create two Docker containers, one for each version of
 Python, and run all the tests in `test/integration/Makefile`.
 
 To run the integration tests for Python 2 only:
 
-`$ make integration-py2`
+`$ make test-integration-py2`
 
 To run the integration tests for Python 3 only:
 
-`$ make integration-py3`
+`$ make test-integration-py3`
 
 To run a specific test:
 
-`$ make integration INTEGRATION_CMD=hello`
+`$ make test-integration INTEGRATION_CMD=hello`
 
 
 ### Unit tests
 
 To run the unit tests:
 
-`$ make unit`
+`$ make test-unit`
 
 
 ## Author
