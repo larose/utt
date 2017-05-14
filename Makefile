@@ -26,7 +26,7 @@ integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
 .PHONY: sdist
 sdist:
 	mkdir -p $(TMP)
-	python3 setup.py sdist --dist-dir $(TMP) --manifest $(TMP)/MANIFEST
+	python3 setup.py sdist --dist-dir $(TMP)
 
 .PHONY: test
 test: integration unit
@@ -37,7 +37,7 @@ unit:
 
 .PHONY: upload
 upload: unit integration
-	python3 setup.py sdist --dist-dir $(TMP) --manifest $(TMP)/MANIFEST upload
+	python3 setup.py sdist --dist-dir $(TMP) upload
 
 $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz: sdist
 	cp $(TMP)/utt-$(VERSION).tar.gz $@

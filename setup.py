@@ -1,4 +1,4 @@
-from distutils.core import setup
+from setuptools import setup
 import os
 
 description = "A simple command-line time tracking application"
@@ -35,4 +35,9 @@ setup(
     scripts=[os.path.join('bin', 'utt')],
     url="https://github.com/larose/utt",
     version=get_version(),
+    entry_points={
+        'console_scripts': [
+            'utt = utt.__main__:main',
+        ]
+    }
 )
