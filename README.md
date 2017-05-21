@@ -18,8 +18,7 @@ application written in Python.
 - [Development](#development)
     - [Integration tests](#integration-tests)
     - [Unit tests](#unit-tests)
-- [Author](#author)
-    - [Contributors](#contributors)
+- [Contributors](#contributors)
 - [License](#license)
 - [Website](#website)
 
@@ -372,15 +371,12 @@ To run the unit tests:
 `$ make test-unit`
 
 
-## Author
+## Contributors
 
-Mathieu Larose <mathieu@mathieularose.com>
-
-
-### Contributors
-
+- Mathieu Larose <mathieu@mathieularose.com>
 - David Munger <mungerd@gmail.com>
 - Paul Ivanov <pi@berkeley.edu>
+- Jason Stewart <support@eggplantsd.com>
 
 
 ## License
