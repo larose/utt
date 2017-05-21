@@ -36,7 +36,7 @@ setup(
     data_files=[(os.path.join('share', 'bash-completion', 'completions'),  (os.path.join('bash', 'utt'),))],
     url="https://github.com/larose/utt",
     version=get_version(),
-    install_requires=['argparse', 'argcomplete'],
+    install_requires=['argcomplete'],
     entry_points={
         'console_scripts': [
             'utt = utt.__main__:main',
