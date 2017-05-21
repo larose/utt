@@ -71,6 +71,7 @@ def utt_filename():
 def utt_debug_log():
     return os.path.join(user_data_dir(), 'debug.log')
 
+
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
