@@ -14,10 +14,7 @@ def execute(args):
 
 
 def _editor():
-    # Check $EDITOR first, since it is set to 'cat' for 'make test'.
-    # an interactive editor will interrupt the test if $visual is set
-    # and checked first.
-    return (os.environ.get("EDITOR") or os.environ.get("VISUAL", "vi"))
+    return (os.environ.get("VISUAL") or os.environ.get("EDITOR", "vi"))
 
 
 def _run_editor(editor, data_filename):
