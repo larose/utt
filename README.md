@@ -15,6 +15,7 @@ application written in Python.
 - [Usage](#usage)
     - [Activity](#activity)
     - [Report](#report)
+- [Bash completion](#bash-completion)
 - [Development](#development)
     - [Integration tests](#integration-tests)
     - [Unit tests](#unit-tests)
@@ -316,6 +317,22 @@ Working Time: 1h00 [8h00]
 Break   Time: 0h00 [0h30]
 
 ...
+```
+
+## Bash completion
+
+To enable bash completion for `utt`:
+
+Execute once:
+
+```
+$ activate-global-python-argcomplete --user
+```
+
+Then add the folllowing line to `~/.bashrc`:
+
+```
+eval "$(register-python-argcomplete utt)"
 ```
 
 
