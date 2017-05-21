@@ -1,3 +1,5 @@
+  * Add bash completion
+
 1.6 (2016-04-17)
 
   * Strech appends an entry instead of modifying the latest entry
