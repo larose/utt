@@ -25,7 +25,7 @@ sdist:
 test: test-unit test-integration
 
 .PHONY: test-integration
-test-integration: test-integration-py2 test-integration-py3
+test-integration: clean test-integration-py2 test-integration-py3
 
 .PHONY: test-integration-py%
 test-integration-py%: test-integration-container-py%
