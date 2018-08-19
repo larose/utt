@@ -3,6 +3,7 @@ import datetime
 import itertools
 
 from .activity import Activity
+from .cmd_hello import NAME as HELLO
 from .entry import Entry
 from .print_report import print_report
 from . import util
@@ -59,7 +60,9 @@ def execute(args):
     report_start_date = (
         report_date if args.from_date is None else args.from_date
     )
-    report_end_date = report_date if args.to_date is None else args.to_date
+    report_end_date = (
+        report_date if args.to_date is None else args.to_date
+    )
 
     if report_start_date == report_end_date:
         collect_from_date, collect_to_date = _week_dates(report_start_date)
@@ -69,13 +72,12 @@ def execute(args):
 
     collect_to_date = min(today, collect_to_date)
     collect_from_date = min(today, collect_from_date)
-
-    entries = _filter_and_group_entries(
-        collect_from_date, collect_to_date,
-        util.entries_from_file(args.data_filename))
+    entries = list(util.entries_from_file(args.data_filename))
     _add_current_entry(entries, args.now,
                        args.current_activity, args.no_current_activity)
-    activities = _activities_from_entries(entries)
+    activities = list(_collect_activities(
+        collect_from_date, collect_to_date, entries
+    ))
     print_report(report_start_date, report_end_date, activities)
 
 
@@ -89,54 +91,29 @@ DAY_NAMES = [
 ]
 
 
-def _activities_from_entries(entries_grouped_by_day):
-    activities_grouped_by_day = collections.defaultdict(list)
-
-    for date, entries in entries_grouped_by_day.items():
-        activities_grouped_by_day[date] = list(
-            _activities_from_entries_day(entries))
-
-    return activities_grouped_by_day
-
-
-def _activities_from_entries_day(entries):
-    return (Activity(entry_pair[0].datetime, entry_pair[1])
-            for entry_pair in _pairwise(entries))
+def _collect_activities(start_date, end_date, entries):
+    start_datetime = datetime.datetime(
+        start_date.year, start_date.month, start_date.day
+    )
+    end_datetime = datetime.datetime(
+        end_date.year, end_date.month, end_date.day, 23, 59, 59
+    )
+    activities = []
+    for entry_pair in _pairwise(entries):
+        activity = Activity(entry_pair[0].datetime, entry_pair[1]).clip(
+            start_datetime, end_datetime)
+        if (activity.duration > datetime.timedelta()
+                and activity.name.name != HELLO):
+            activities.append(activity)
+    return sorted(activities, key=lambda act: act.start)
 
 
 def _add_current_entry(entries, now,
                        current_activity_name,
                        disable_current_activity):
     today = now.date()
-    if today not in entries:
-        return
-
-    today_entries = entries[today]
-    if today_entries[-1].datetime < now and not disable_current_activity:
-        today_entries.append(Entry(now, current_activity_name, True))
-
-
-def _filter_and_group_entries(start_date, end_date, all_entries):
-    entries = list(
-        filter(
-            _make_range_filter_fn(start_date, end_date),
-            all_entries))
-
-    entries_grouped_by_day = collections.defaultdict(list)
-
-    for day, entries in itertools.groupby(
-            entries, key=lambda entry: entry.datetime.date()):
-        entries_grouped_by_day[day] = list(entries)
-
-    return entries_grouped_by_day
-
-
-def _make_range_filter_fn(start_date, end_date):
-    def filter_fn(entry):
-        date = entry.datetime.date()
-        return date >= start_date and date <= end_date
-
-    return filter_fn
+    if entries and entries[-1].datetime < now and not disable_current_activity:
+        entries.append(Entry(now, current_activity_name, True))
 
 
 def _pairwise(iterable):

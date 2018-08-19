@@ -9,11 +9,12 @@ from .activity import Activity
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-def print_report(report_date, activities):
-    _print_date_section(report_date, activities)
-    _print_projects_section(report_date, activities)
-    _print_activities_section(report_date, activities)
-    _print_details_section(report_date, activities)
+def print_report(start_date, end_date, activities):
+    _print_date_section(start_date, end_date, activities)
+    _print_projects_section(start_date, end_date, activities)
+    _print_activities_section(start_date, end_date, activities)
+    if start_date == end_date:
+        _print_details_section(start_date, activities)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -104,34 +105,37 @@ def _groupby_project(activities):
     return sorted(result, key=lambda result: result['project'].lower())
 
 
-def _print_activities_section(report_date, activities):
+def _print_activities_section(start_date, end_date, activities):
     print()
     print(_title('Activities'))
     print()
 
+    activities = _filter_activities_by_range(start_date, end_date, activities)
     names_work = _groupby_name(
-        list(
-            filter(lambda act: act.type == Activity.Type.WORK, activities[
-                report_date])))
-
+        _filter_activities_by_type(activities, Activity.Type.WORK)
+    )
     _print_dicts(names_work)
 
     print()
 
     names_break = _groupby_name(
-        list(
-            filter(lambda act: act.type == Activity.Type.BREAK, activities[
-                report_date])))
+        _filter_activities_by_type(activities, Activity.Type.BREAK)
+    )
     _print_dicts(names_break)
 
 
-def _print_date_section(report_date, activities):
+def _print_date_section(start_date, end_date, activities):
     print()
-    print(_title(_format_date(report_date)))
-    print()
+    date_str = _format_date(start_date)
+    if end_date != start_date:
+        date_str = " ".join([date_str, "to", _format_date(end_date)])
+    print(_title(date_str))
 
-    _print_time("Working Time", report_date, activities, Activity.Type.WORK)
-    _print_time("Break   Time", report_date, activities, Activity.Type.BREAK)
+    print()
+    _print_time(
+        "Working Time", start_date, end_date, activities, Activity.Type.WORK)
+    _print_time(
+        "Break   Time", start_date, end_date, activities, Activity.Type.BREAK)
 
 
 def _print_details_section(report_date, activities):
@@ -139,7 +143,9 @@ def _print_details_section(report_date, activities):
     print(_title('Details'))
     print()
 
-    for activity in activities[report_date]:
+    activities = _filter_activities_by_range(
+        report_date, report_date, activities)
+    for activity in activities:
         print("(%s) %s-%s %s" % (_format_duration(activity.duration),
                                  _format_time(activity.start),
                                  _format_time(activity.end), activity.name))
@@ -158,27 +164,30 @@ def _print_dicts(dcts):
         print(format_string.format(**dict(context, **dct)))
 
 
-def _print_projects_section(report_date, activities):
+def _print_projects_section(start_date, end_date, activities):
     print()
     print(_title('Projects'))
     print()
 
-    projects = _groupby_project(
-        list(
-            filter(lambda act: act.type == Activity.Type.WORK, activities[
-                report_date])))
+    activities = _filter_activities_by_range(start_date, end_date, activities)
 
+    projects = _groupby_project(
+        _filter_activities_by_type(activities, Activity.Type.WORK)
+    )
     _print_dicts(projects)
 
 
-def _print_time(name, report_date, activities, activity_type):
-    report_date_duration = _duration(
-        filter(lambda act: act.type == activity_type, activities[report_date]))
+def _print_time(name, start_date, end_date, activities, activity_type):
+    activities = _filter_activities_by_type(activities, activity_type)
+    ranged_activities = _filter_activities_by_range(
+        start_date, end_date, activities)
+
+    report_date_duration = _duration(ranged_activities)
 
     print("%s: %s" % (name, _format_duration(report_date_duration)), end='')
 
-    if activities[report_date]:
-        last_activity = activities[report_date][-1]
+    if ranged_activities:
+        last_activity = ranged_activities[-1]
         if last_activity.is_current_activity and \
            last_activity.type == activity_type:
             cur_duration = last_activity.duration
@@ -187,9 +196,11 @@ def _print_time(name, report_date, activities, activity_type):
                 (_format_duration(report_date_duration - cur_duration),
                  _format_duration(cur_duration)),
                 end='')
-
-    print(" [%s]" %
-          _format_duration_hours_only(_total_time(activities, activity_type)))
+    if start_date == end_date:
+        print(" [%s]" %
+              _format_duration_hours_only(_duration(activities)))
+    else:
+        print()
 
 
 def _title(text):
@@ -203,3 +214,45 @@ def _total_time(activities_grouped_by_day, activity_type):
             if activity.type == activity_type:
                 total_time += activity.duration
     return total_time
+
+
+def _filter_activities_by_range(start_date, end_date, activities):
+    """ Filter a list of Activity with the given range.
+
+    Parameters
+    ----------
+    start_date : datetime.date
+    end_date : datetime.date
+    activities : list of Activity
+
+    Returns
+    -------
+    filtered: list of Activity
+    """
+    delta = datetime.timedelta()
+    start_datetime = datetime.datetime(
+        start_date.year, start_date.month, start_date.day
+    )
+    end_datetime = datetime.datetime(
+        end_date.year, end_date.month, end_date.day, 23, 59, 59
+    )
+    return list(filter(
+        lambda act: act.clip(start_datetime, end_datetime).duration > delta,
+        activities
+    ))
+
+
+def _filter_activities_by_type(activities, activity_type):
+    """ Filter a list of Activity with the given activity type.
+
+    Parameters
+    ----------
+    activities : list of Activity
+    activity_type : str
+        An activity type defined in Activity.Type
+
+    Returns
+    -------
+    filtered: list of Activity
+    """
+    return list(filter(lambda act: act.type == activity_type, activities))
