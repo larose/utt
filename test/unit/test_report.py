@@ -41,7 +41,7 @@ def call_command(argv):
     mocked_stdout = mock.patch("sys.stdout", stdout)
     mocked_stderr = mock.patch("sys.stderr", stderr)
     try:
-        with mocked_stdout, mocked_argv:
+        with mocked_stdout, mocked_stderr, mocked_argv:
             main()
     except SystemExit as exc:
         exception = exc
