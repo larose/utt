@@ -226,14 +226,13 @@ def _filter_activities_by_range(start_date, end_date, activities):
     filtered: list of Activity
     """
     delta = datetime.timedelta()
-    start_datetime = datetime.datetime(start_date.year, start_date.month,
-                                       start_date.day)
-    end_datetime = datetime.datetime(end_date.year, end_date.month,
-                                     end_date.day, 23, 59, 59, 99999)
+    start_dt = datetime.datetime(start_date.year, start_date.month,
+                                 start_date.day)
+    end_dt = datetime.datetime(end_date.year, end_date.month, end_date.day, 23,
+                               59, 59, 99999)
     return list(
-        filter(
-            lambda act: act.clip(start_datetime, end_datetime).duration > delta,
-            activities))
+        filter(lambda act: act.clip(start_dt, end_dt).duration > delta,
+               activities))
 
 
 def _filter_activities_by_type(activities, activity_type):
