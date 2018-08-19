@@ -94,7 +94,7 @@ report-range: $(UTT)
 	@echo ">> REPORT-RANGE"
 
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
-	bash -c 'diff <(utt --now "2014-3-14 12:00" report --from 2014-3-14 --to 2014-03-19 --no-current-activity) data/utt-range.stdout'
+	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from 2014-3-15 --to 2014-03-19 --no-current-activity) data/utt-range.stdout'
 
 	@echo "<< REPORT-UPPERCASE"
 

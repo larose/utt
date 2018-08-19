@@ -30,14 +30,18 @@ def call_command(argv):
 
     Returns
     -------
-    content : str
+    stdout : str
         Content from the mocked stdout.
+    stderr : str
+        Content from the mocked stderr.
     exception : SystemExit or None
         If no error occurs, None is returned.
     """
     mocked_argv = mock.patch("sys.argv", ["utt"] + argv)
     stdout = StringIO()
+    stderr = StringIO()
     mocked_stdout = mock.patch("sys.stdout", stdout)
+    mocked_stderr = mock.patch("sys.stderr", stderr)
     try:
         with mocked_stdout, mocked_argv:
             main()
@@ -45,22 +49,26 @@ def call_command(argv):
         exception = exc
     else:
         exception = None
-    content = stdout.getvalue()
-    return content, exception
+    return stdout.getvalue(), stderr.getvalue(), exception
 
 
 class TestReport(unittest.TestCase):
 
     def test_report_range(self):
         argv = [
-            "report",
             "--data", DATA_FILENAME,
-            "--from", "2014-03-14",
+            "--now", "2014-3-19 18:30",
+            "report",
+            "--from", "2014-03-15",
             "--to", "2014-03-19",
+            "--no-current-activity",
         ]
-        content, exception = call_command(argv)
+        stdout, _, exception = call_command(argv)
+
+        with open(os.path.join(DATA_DIR, "utt-range.stdout"), "r") as f:
+            expected_content = f.read()
         self.assertIsNone(exception)
-        self.assertEqual(content, "")
+        self.assertEqual(stdout, expected_content)
 
     def test_report_wednesday(self):
         argv = [
@@ -69,10 +77,8 @@ class TestReport(unittest.TestCase):
             "report",
             "wednesday",
         ]
-        content, exception = call_command(argv)
-
+        stdout, _, exception = call_command(argv)
         with open(os.path.join(DATA_DIR, "utt-1.stdout"), "r") as f:
             expected_content = f.read()
-
         self.assertIsNone(exception)
-        self.assertEqual(content, expected_content)
+        self.assertEqual(stdout, expected_content)
