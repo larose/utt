@@ -42,6 +42,20 @@ class Activity:
         return Activity.Type.WORK
 
     def clip(self, start=None, end=None):
+        """ Return a new Activity with the start and end time clipped to the
+        given range.
+
+        Parameters
+        ----------
+        start : datetime.datetime
+            Start time to clip to (inclusive).
+        end : datetime.datetime
+            End time to clip to (inclusive).
+
+        Returns
+        -------
+        new_activity : Activity
+        """
         new_activity = copy.copy(self)
         if start is not None:
             new_activity.start = min(
