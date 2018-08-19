@@ -222,7 +222,8 @@ $ utt report monday
 If today is Wednesday, Feb 18, the report date is Monday, Feb 16.
 
 You can also specify a date range. All the activities will be aggregated for
-the given time period.
+the given time period. The date must be an absolute date formatted as
+"%Y-%m-%d".
 
 To report activities from 2013-07-01 00:00:00 to 2013-12-31 23:59:59 :
 ```
