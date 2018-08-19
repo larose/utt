@@ -58,10 +58,10 @@ class Activity:
         """
         new_activity = copy.copy(self)
         if start is not None:
-            new_activity.start = min(
-                new_activity.end, max(new_activity.start, start))
+            new_activity.start = min(new_activity.end,
+                                     max(new_activity.start, start))
         if end is not None:
-            new_activity.end = max(
-                new_activity.start, min(new_activity.end, end))
+            new_activity.end = max(new_activity.start,
+                                   min(new_activity.end, end))
         new_activity.duration = new_activity.end - new_activity.start
         return new_activity

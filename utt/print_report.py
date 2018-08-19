@@ -112,15 +112,13 @@ def _print_activities_section(start_date, end_date, activities):
 
     activities = _filter_activities_by_range(start_date, end_date, activities)
     names_work = _groupby_name(
-        _filter_activities_by_type(activities, Activity.Type.WORK)
-    )
+        _filter_activities_by_type(activities, Activity.Type.WORK))
     _print_dicts(names_work)
 
     print()
 
     names_break = _groupby_name(
-        _filter_activities_by_type(activities, Activity.Type.BREAK)
-    )
+        _filter_activities_by_type(activities, Activity.Type.BREAK))
     _print_dicts(names_break)
 
 
@@ -132,10 +130,10 @@ def _print_date_section(start_date, end_date, activities):
     print(_title(date_str))
 
     print()
-    _print_time(
-        "Working Time", start_date, end_date, activities, Activity.Type.WORK)
-    _print_time(
-        "Break   Time", start_date, end_date, activities, Activity.Type.BREAK)
+    _print_time("Working Time", start_date, end_date, activities,
+                Activity.Type.WORK)
+    _print_time("Break   Time", start_date, end_date, activities,
+                Activity.Type.BREAK)
 
 
 def _print_details_section(report_date, activities):
@@ -143,8 +141,8 @@ def _print_details_section(report_date, activities):
     print(_title('Details'))
     print()
 
-    activities = _filter_activities_by_range(
-        report_date, report_date, activities)
+    activities = _filter_activities_by_range(report_date, report_date,
+                                             activities)
     for activity in activities:
         print("(%s) %s-%s %s" % (_format_duration(activity.duration),
                                  _format_time(activity.start),
@@ -172,15 +170,14 @@ def _print_projects_section(start_date, end_date, activities):
     activities = _filter_activities_by_range(start_date, end_date, activities)
 
     projects = _groupby_project(
-        _filter_activities_by_type(activities, Activity.Type.WORK)
-    )
+        _filter_activities_by_type(activities, Activity.Type.WORK))
     _print_dicts(projects)
 
 
 def _print_time(name, start_date, end_date, activities, activity_type):
     activities = _filter_activities_by_type(activities, activity_type)
-    ranged_activities = _filter_activities_by_range(
-        start_date, end_date, activities)
+    ranged_activities = _filter_activities_by_range(start_date, end_date,
+                                                    activities)
 
     report_date_duration = _duration(ranged_activities)
 
@@ -197,8 +194,7 @@ def _print_time(name, start_date, end_date, activities, activity_type):
                  _format_duration(cur_duration)),
                 end='')
     if start_date == end_date:
-        print(" [%s]" %
-              _format_duration_hours_only(_duration(activities)))
+        print(" [%s]" % _format_duration_hours_only(_duration(activities)))
     else:
         print()
 
@@ -230,16 +226,14 @@ def _filter_activities_by_range(start_date, end_date, activities):
     filtered: list of Activity
     """
     delta = datetime.timedelta()
-    start_datetime = datetime.datetime(
-        start_date.year, start_date.month, start_date.day
-    )
-    end_datetime = datetime.datetime(
-        end_date.year, end_date.month, end_date.day, 23, 59, 59
-    )
-    return list(filter(
-        lambda act: act.clip(start_datetime, end_datetime).duration > delta,
-        activities
-    ))
+    start_datetime = datetime.datetime(start_date.year, start_date.month,
+                                       start_date.day)
+    end_datetime = datetime.datetime(end_date.year, end_date.month,
+                                     end_date.day, 23, 59, 59)
+    return list(
+        filter(
+            lambda act: act.clip(start_datetime, end_datetime).duration > delta,
+            activities))
 
 
 def _filter_activities_by_type(activities, activity_type):

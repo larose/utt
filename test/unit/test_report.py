@@ -53,14 +53,17 @@ def call_command(argv):
 
 
 class TestReport(unittest.TestCase):
-
     def test_report_range(self):
         argv = [
-            "--data", DATA_FILENAME,
-            "--now", "2014-3-19 18:30",
+            "--data",
+            DATA_FILENAME,
+            "--now",
+            "2014-3-19 18:30",
             "report",
-            "--from", "2014-03-15",
-            "--to", "2014-03-19",
+            "--from",
+            "2014-03-15",
+            "--to",
+            "2014-03-19",
             "--no-current-activity",
         ]
         stdout, _, exception = call_command(argv)
@@ -72,8 +75,10 @@ class TestReport(unittest.TestCase):
 
     def test_report_wednesday(self):
         argv = [
-            "--data", DATA_FILENAME,
-            "--now", "2014-3-19 18:30",
+            "--data",
+            DATA_FILENAME,
+            "--now",
+            "2014-3-19 18:30",
             "report",
             "wednesday",
         ]

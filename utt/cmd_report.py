@@ -36,18 +36,14 @@ def add_args(parser):
         default=None,
         dest="from_date",
         type=_parse_absolute_date,
-        help="Specify an inclusive start date to report",
-    )
+        help="Specify an inclusive start date to report", )
 
     parser.add_argument(
         "--to",
         default=None,
         dest="to_date",
         type=_parse_absolute_date,
-        help=(
-            "Specify an inclusive end date to report. "
-        ),
-    )
+        help=("Specify an inclusive end date to report. "), )
 
 
 def execute(args):
@@ -57,12 +53,9 @@ def execute(args):
     else:
         report_date = _parse_date(args.now, args.report_date)
 
-    report_start_date = (
-        report_date if args.from_date is None else args.from_date
-    )
-    report_end_date = (
-        report_date if args.to_date is None else args.to_date
-    )
+    report_start_date = (report_date
+                         if args.from_date is None else args.from_date)
+    report_end_date = (report_date if args.to_date is None else args.to_date)
 
     if report_start_date == report_end_date:
         collect_from_date, collect_to_date = _week_dates(report_start_date)
@@ -73,11 +66,10 @@ def execute(args):
     collect_to_date = min(today, collect_to_date)
     collect_from_date = min(today, collect_from_date)
     entries = list(util.entries_from_file(args.data_filename))
-    _add_current_entry(entries, args.now,
-                       args.current_activity, args.no_current_activity)
-    activities = list(_collect_activities(
-        collect_from_date, collect_to_date, entries
-    ))
+    _add_current_entry(entries, args.now, args.current_activity,
+                       args.no_current_activity)
+    activities = list(
+        _collect_activities(collect_from_date, collect_to_date, entries))
     print_report(report_start_date, report_end_date, activities)
 
 
@@ -92,24 +84,21 @@ DAY_NAMES = [
 
 
 def _collect_activities(start_date, end_date, entries):
-    start_datetime = datetime.datetime(
-        start_date.year, start_date.month, start_date.day
-    )
-    end_datetime = datetime.datetime(
-        end_date.year, end_date.month, end_date.day, 23, 59, 59
-    )
+    start_datetime = datetime.datetime(start_date.year, start_date.month,
+                                       start_date.day)
+    end_datetime = datetime.datetime(end_date.year, end_date.month,
+                                     end_date.day, 23, 59, 59)
     activities = []
     for entry_pair in _pairwise(entries):
         activity = Activity(entry_pair[0].datetime, entry_pair[1]).clip(
             start_datetime, end_datetime)
-        if (activity.duration > datetime.timedelta()
-                and activity.name.name != HELLO):
+        if (activity.duration > datetime.timedelta() and
+                activity.name.name != HELLO):
             activities.append(activity)
     return sorted(activities, key=lambda act: act.start)
 
 
-def _add_current_entry(entries, now,
-                       current_activity_name,
+def _add_current_entry(entries, now, current_activity_name,
                        disable_current_activity):
     today = now.date()
     if entries and entries[-1].datetime < now and not disable_current_activity:
