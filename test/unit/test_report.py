@@ -64,11 +64,11 @@ class TestReport(unittest.TestCase):
             "2014-03-19",
             "--no-current-activity",
         ]
-        stdout, _, exception = call_command(argv)
+        stdout, stderr, exception = call_command(argv)
 
         with open(os.path.join(DATA_DIR, "utt-range.stdout"), "r") as f:
             expected_content = f.read()
-        self.assertIsNone(exception)
+        self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
 
     def test_report_wednesday(self):
@@ -80,8 +80,8 @@ class TestReport(unittest.TestCase):
             "report",
             "wednesday",
         ]
-        stdout, _, exception = call_command(argv)
+        stdout, stderr, exception = call_command(argv)
         with open(os.path.join(DATA_DIR, "utt-1.stdout"), "r") as f:
             expected_content = f.read()
-        self.assertIsNone(exception)
+        self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
