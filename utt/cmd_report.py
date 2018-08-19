@@ -87,7 +87,7 @@ def _collect_activities(start_date, end_date, entries):
     start_datetime = datetime.datetime(start_date.year, start_date.month,
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
-                                     end_date.day, 23, 59, 59)
+                                     end_date.day, 23, 59, 59, 99999)
     activities = []
     for entry_pair in _pairwise(entries):
         activity = Activity(entry_pair[0].datetime, entry_pair[1]).clip(
