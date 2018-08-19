@@ -229,7 +229,7 @@ def _filter_activities_by_range(start_date, end_date, activities):
     start_datetime = datetime.datetime(start_date.year, start_date.month,
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
-                                     end_date.day, 23, 59, 59)
+                                     end_date.day, 23, 59, 59, 99999)
     return list(
         filter(
             lambda act: act.clip(start_datetime, end_datetime).duration > delta,
