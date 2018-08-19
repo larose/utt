@@ -30,20 +30,53 @@ def add_args(parser):
         default=False,
         help="Do not display the current activity")
 
+    parser.add_argument(
+        "--from",
+        default=None,
+        dest="from_date",
+        type=_parse_absolute_date,
+        help="Specify an inclusive start date to report",
+    )
+
+    parser.add_argument(
+        "--to",
+        default=None,
+        dest="to_date",
+        type=_parse_absolute_date,
+        help=(
+            "Specify an inclusive end date to report. "
+        ),
+    )
+
 
 def execute(args):
-    report_date = None
+    today = args.now.date()
     if args.report_date is None:
-        report_date = args.now.date()
+        report_date = today
     else:
         report_date = _parse_date(args.now, args.report_date)
 
+    report_start_date = (
+        report_date if args.from_date is None else args.from_date
+    )
+    report_end_date = report_date if args.to_date is None else args.to_date
+
+    if report_start_date == report_end_date:
+        collect_from_date, collect_to_date = _week_dates(report_start_date)
+    else:
+        collect_from_date = report_start_date
+        collect_to_date = report_end_date
+
+    collect_to_date = min(today, collect_to_date)
+    collect_from_date = min(today, collect_from_date)
+
     entries = _filter_and_group_entries(
-        report_date, util.entries_from_file(args.data_filename))
-    _add_current_entry(report_date, entries[report_date], args.now,
+        collect_from_date, collect_to_date,
+        util.entries_from_file(args.data_filename))
+    _add_current_entry(entries, args.now,
                        args.current_activity, args.no_current_activity)
     activities = _activities_from_entries(entries)
-    print_report(report_date, activities)
+    print_report(report_start_date, report_end_date, activities)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -71,20 +104,22 @@ def _activities_from_entries_day(entries):
             for entry_pair in _pairwise(entries))
 
 
-def _add_current_entry(report_date, entries, now, current_activity_name,
+def _add_current_entry(entries, now,
+                       current_activity_name,
                        disable_current_activity):
     today = now.date()
-    if report_date == today and entries and entries[-1].datetime < now and \
-            not disable_current_activity:
-        entries.append(Entry(now, current_activity_name, True))
+    if today not in entries:
+        return
+
+    today_entries = entries[today]
+    if today_entries[-1].datetime < now and not disable_current_activity:
+        today_entries.append(Entry(now, current_activity_name, True))
 
 
-def _filter_and_group_entries(report_date, all_entries):
-    week_start_date, week_end_date = _week_dates(report_date)
-
+def _filter_and_group_entries(start_date, end_date, all_entries):
     entries = list(
         filter(
-            _make_range_filter_fn(week_start_date, week_end_date),
+            _make_range_filter_fn(start_date, end_date),
             all_entries))
 
     entries_grouped_by_day = collections.defaultdict(list)
