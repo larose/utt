@@ -1,4 +1,3 @@
-import collections
 import datetime
 import itertools
 
@@ -100,7 +99,6 @@ def _collect_activities(start_date, end_date, entries):
 
 def _add_current_entry(entries, now, current_activity_name,
                        disable_current_activity):
-    today = now.date()
     if entries and entries[-1].datetime < now and not disable_current_activity:
         entries.append(Entry(now, current_activity_name, True))
 
