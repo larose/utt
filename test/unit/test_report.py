@@ -104,6 +104,25 @@ class TestReport(unittest.TestCase):
         self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
 
+    def test_report_overnight_activity_already_ignored(self):
+        data_filename = os.path.join(DATA_DIR, "utt-overnight.log")
+        argv = [
+            "--data",
+            data_filename,
+            "--now",
+            "2014-3-19 18:30",
+            "report",
+            "2014-03-18",
+            "--no-current-activity",
+        ]
+
+        stdout, stderr, exception = call_command(argv)
+        with open(os.path.join(DATA_DIR, "utt-overnight-2.stdout"), "r") as f:
+            expected_content = f.read()
+
+        self.assertIsNone(exception, stderr)
+        self.assertEqual(stdout, expected_content)
+
     def test_report_single_day_in_the_past(self):
         data_filename = os.path.join(DATA_DIR, "utt-upper-case.log")
         argv = [
