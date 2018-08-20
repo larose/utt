@@ -101,17 +101,16 @@ def _collect_activities(start_date, end_date, entries):
         if next_entry.name == HELLO:
             continue
 
-        activity = Activity(prev_entry.datetime, next_entry)
-        # For preserving existing behaviour, skip activities spanning
-        # over midnights
-        if (prev_entry.datetime.date() != next_entry.datetime.date() and
-                activity.type != Activity.Type.IGNORED):
-            ignored_overnights.append(activity)
-            continue
-
-        activity = activity.clip(start_datetime, end_datetime)
+        full_activity = Activity(prev_entry.datetime, next_entry)
+        activity = full_activity.clip(start_datetime, end_datetime)
         if activity.duration > datetime.timedelta():
-            activities.append(activity)
+            # For preserving existing behaviour, skip activities spanning
+            # over midnights
+            if (prev_entry.datetime.date() != next_entry.datetime.date() and
+                    activity.type != Activity.Type.IGNORED):
+                ignored_overnights.append(full_activity)
+            else:
+                activities.append(activity)
 
     return sorted(activities, key=lambda act: act.start), ignored_overnights
 
