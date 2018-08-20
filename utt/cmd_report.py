@@ -67,8 +67,16 @@ def execute(args):
     entries = list(util.entries_from_file(args.data_filename))
     _add_current_entry(entries, args.now, args.current_activity,
                        args.no_current_activity)
-    activities = list(
-        _collect_activities(collect_from_date, collect_to_date, entries))
+    activities, ignored_overnights = (_collect_activities(
+        collect_from_date, collect_to_date, entries))
+
+    if ignored_overnights:
+        print("WARN: Ignored {} overnight {}, total time: {}".format(
+            len(ignored_overnights),
+            "activities" if len(ignored_overnights) > 1 else "activity",
+            sum((act.duration for act in ignored_overnights),
+                datetime.timedelta())))
+
     print_report(report_start_date, report_end_date, activities)
 
 
@@ -87,14 +95,24 @@ def _collect_activities(start_date, end_date, entries):
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
                                      end_date.day, 23, 59, 59, 99999)
+    ignored_overnights = []
     activities = []
-    for entry_pair in _pairwise(entries):
-        activity = Activity(entry_pair[0].datetime, entry_pair[1]).clip(
-            start_datetime, end_datetime)
-        if (activity.duration > datetime.timedelta() and
-                activity.name.name != HELLO):
+    for prev_entry, next_entry in _pairwise(entries):
+        if next_entry.name == HELLO:
+            continue
+
+        activity = Activity(prev_entry.datetime, next_entry)
+        # For preserving existing behaviour, skip activities spanning
+        # over midnights
+        if prev_entry.datetime.date() != next_entry.datetime.date():
+            ignored_overnights.append(activity)
+            continue
+
+        activity = activity.clip(start_datetime, end_datetime)
+        if activity.duration > datetime.timedelta():
             activities.append(activity)
-    return sorted(activities, key=lambda act: act.start)
+
+    return sorted(activities, key=lambda act: act.start), ignored_overnights
 
 
 def _add_current_entry(entries, now, current_activity_name,
