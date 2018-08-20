@@ -9,7 +9,8 @@ from .activity import Activity
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-def print_report(start_date, end_date, activities):
+def print_report(start_date, end_date, activities, ignored_overnights):
+    _print_ignored_overnights(ignored_overnights)
     _print_date_section(start_date, end_date, activities)
     _print_projects_section(start_date, end_date, activities)
     _print_activities_section(start_date, end_date, activities)
@@ -160,6 +161,13 @@ def _print_dicts(dcts):
     context = {'projects_max_length': projects_max_length}
     for dct in dcts:
         print(format_string.format(**dict(context, **dct)))
+
+
+def _print_ignored_overnights(activities):
+    if activities:
+        print("WARN: Ignored {} overnight {}, total time: {}".format(
+            len(activities), "activities" if len(activities) > 1 else
+            "activity", _format_duration(_duration(activities))))
 
 
 def _print_projects_section(start_date, end_date, activities):

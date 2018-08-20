@@ -70,14 +70,8 @@ def execute(args):
     activities, ignored_overnights = (_collect_activities(
         collect_from_date, collect_to_date, entries))
 
-    if ignored_overnights:
-        print("WARN: Ignored {} overnight {}, total time: {}".format(
-            len(ignored_overnights), "activities"
-            if len(ignored_overnights) > 1 else "activity",
-            sum((act.duration for act in ignored_overnights),
-                datetime.timedelta())))
-
-    print_report(report_start_date, report_end_date, activities)
+    print_report(report_start_date, report_end_date, activities,
+                 ignored_overnights)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
