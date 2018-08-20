@@ -10,7 +10,7 @@ from .activity import Activity
 
 
 def print_report(start_date, end_date, activities, ignored_overnights):
-    _print_ignored_overnights(ignored_overnights)
+    _print_ignored_overnights(start_date, end_date, ignored_overnights)
     _print_date_section(start_date, end_date, activities)
     _print_projects_section(start_date, end_date, activities)
     _print_activities_section(start_date, end_date, activities)
@@ -163,7 +163,8 @@ def _print_dicts(dcts):
         print(format_string.format(**dict(context, **dct)))
 
 
-def _print_ignored_overnights(activities):
+def _print_ignored_overnights(start_date, end_date, activities):
+    activities = _filter_activities_by_range(start_date, end_date, activities)
     if activities:
         print("WARN: Ignored {} overnight {}, total time: {}".format(
             len(activities), "activities" if len(activities) > 1 else
