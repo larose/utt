@@ -100,7 +100,7 @@ class TestReport(unittest.TestCase):
         stdout, stderr, exception = call_command(argv)
         with open(os.path.join(DATA_DIR, "utt-overnight.stdout"), "r") as f:
             expected_content = f.read()
-        print(stdout)
+
         self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
 
