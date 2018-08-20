@@ -85,3 +85,45 @@ class TestReport(unittest.TestCase):
             expected_content = f.read()
         self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
+
+    def test_report_overnight_activity_ignored(self):
+        data_filename = os.path.join(DATA_DIR, "utt-overnight.log")
+        argv = [
+            "--data",
+            data_filename,
+            "--now",
+            "2014-3-19 18:30",
+            "report",
+            "2014-03-14",
+        ]
+
+        stdout, stderr, exception = call_command(argv)
+        with open(os.path.join(DATA_DIR, "utt-overnight.stdout"), "r") as f:
+            expected_content = f.read()
+        self.assertIsNone(exception, stderr)
+        self.assertEqual(stdout, expected_content)
+
+    def test_report_single_day_in_the_past(self):
+        data_filename = os.path.join(DATA_DIR, "utt-upper-case.log")
+        argv = [
+            "--data",
+            data_filename,
+            "--now",
+            "2014-3-19 18:30",
+            "report",
+            "2014-03-14",
+        ]
+
+        stdout, stderr, exception = call_command(argv)
+        with open(os.path.join(DATA_DIR, "utt-upper-case.stdout"), "r") as f:
+            expected_content = f.read()
+
+        self.assertIsNone(exception, stderr)
+        first_line, rest = stdout.split("\n", 1)
+
+        # This ignored activity comes from current activity
+        self.assertEqual(
+            first_line,
+            "WARN: Ignored 1 overnight activity, total time: 5 days, 8:00:00")
+
+        self.assertEqual(rest, expected_content)
