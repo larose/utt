@@ -125,6 +125,6 @@ class TestReport(unittest.TestCase):
         # This ignored activity comes from current activity
         self.assertEqual(
             first_line,
-            "WARN: Ignored 1 overnight activity, total time: 5 days, 8:00:00")
+            "WARN: Ignored 1 overnight activity, total time: 5 days, 8h00")
 
         self.assertEqual(rest, expected_content)
