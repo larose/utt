@@ -72,8 +72,8 @@ def execute(args):
 
     if ignored_overnights:
         print("WARN: Ignored {} overnight {}, total time: {}".format(
-            len(ignored_overnights),
-            "activities" if len(ignored_overnights) > 1 else "activity",
+            len(ignored_overnights), "activities"
+            if len(ignored_overnights) > 1 else "activity",
             sum((act.duration for act in ignored_overnights),
                 datetime.timedelta())))
 
