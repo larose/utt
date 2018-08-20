@@ -104,7 +104,8 @@ def _collect_activities(start_date, end_date, entries):
         activity = Activity(prev_entry.datetime, next_entry)
         # For preserving existing behaviour, skip activities spanning
         # over midnights
-        if prev_entry.datetime.date() != next_entry.datetime.date():
+        if (prev_entry.datetime.date() != next_entry.datetime.date() and
+                activity.type != Activity.Type.IGNORED):
             ignored_overnights.append(activity)
             continue
 
