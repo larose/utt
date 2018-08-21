@@ -143,3 +143,25 @@ class TestReport(unittest.TestCase):
 
         self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
+
+    def test_report_overnight_activity_with_range(self):
+        data_filename = os.path.join(DATA_DIR, "utt-overnight.log")
+        argv = [
+            "--data",
+            data_filename,
+            "--now",
+            "2014-3-19 18:30",
+            "report",
+            "--from",
+            "2014-03-14",
+            "--to",
+            "2014-03-18",
+        ]
+
+        stdout, stderr, exception = call_command(argv)
+        outfile = os.path.join(DATA_DIR, "utt-overnight-range.stdout")
+        with open(outfile, "r") as f:
+            expected_content = f.read()
+
+        self.assertIsNone(exception, stderr)
+        self.assertEqual(stdout, expected_content)
