@@ -2,7 +2,7 @@ UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 .PHONY: all
-all: add edit hello stretch report-1 report-dayname report-uppercase report-range report-overnight version
+all: add edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight version
 
 $(UTT):
 	$(PIP) install utt-*.tar.gz
@@ -78,6 +78,17 @@ report-dayname: $(UTT)
 	utt --now "2015-2-16 12:00" report thursday | grep ^- | head -n 1 | diff data/report/dayname -
 
 	@echo "<< REPORT-DAYNAME"
+
+.PHONY: report-no-current-activity
+report-no-current-activity:
+	@echo
+	@echo ">> REPORT-NO-CURRENT-ACTIVITY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-no-current-activity.log $(UTT_DATA_FILENAME)
+	bash -c 'diff <(utt --now "2018-08-21 20:00" report 2018-08-20) data/utt-no-current-activity.stdout'
+
+	@echo "<< REPORT-NO-CURRENT-ACTIVITY"
 
 .PHONY: report-uppercase
 report-uppercase: $(UTT)
