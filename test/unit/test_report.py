@@ -139,11 +139,4 @@ class TestReport(unittest.TestCase):
             expected_content = f.read()
 
         self.assertIsNone(exception, stderr)
-        first_line, rest = stdout.split("\n", 1)
-
-        # This ignored activity comes from current activity
-        self.assertEqual(
-            first_line,
-            "WARN: Ignored 1 overnight activity, total time: 5 days, 8h00")
-
-        self.assertEqual(rest, expected_content)
+        self.assertEqual(stdout, expected_content)

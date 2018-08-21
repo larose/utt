@@ -66,7 +66,8 @@ def execute(args):
     collect_from_date = min(today, collect_from_date)
     entries = list(util.entries_from_file(args.data_filename))
     _add_current_entry(entries, args.now, args.current_activity,
-                       args.no_current_activity)
+                       args.no_current_activity, report_start_date,
+                       report_end_date)
     activities, ignored_overnights = (_collect_activities(
         collect_from_date, collect_to_date, entries))
 
@@ -110,8 +111,11 @@ def _collect_activities(start_date, end_date, entries):
 
 
 def _add_current_entry(entries, now, current_activity_name,
-                       disable_current_activity):
-    if entries and entries[-1].datetime < now and not disable_current_activity:
+                       disable_current_activity, report_start_date,
+                       report_end_date):
+    today = now.date()
+    if (today >= report_start_date and today <= report_end_date and entries and
+            entries[-1].datetime < now and not disable_current_activity):
         entries.append(Entry(now, current_activity_name, True))
 
 
