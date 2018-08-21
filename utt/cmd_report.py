@@ -68,11 +68,9 @@ def execute(args):
     _add_current_entry(entries, args.now, args.current_activity,
                        args.no_current_activity, report_start_date,
                        report_end_date)
-    activities, ignored_overnights = (_collect_activities(
-        collect_from_date, collect_to_date, entries))
-
-    print_report(report_start_date, report_end_date, activities,
-                 ignored_overnights)
+    activities = _collect_activities(collect_from_date, collect_to_date,
+                                     entries)
+    print_report(report_start_date, report_end_date, activities)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -90,7 +88,6 @@ def _collect_activities(start_date, end_date, entries):
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
                                      end_date.day, 23, 59, 59, 99999)
-    ignored_overnights = []
     activities = []
     for prev_entry, next_entry in _pairwise(entries):
         if next_entry.name == HELLO:
@@ -99,15 +96,9 @@ def _collect_activities(start_date, end_date, entries):
         full_activity = Activity(prev_entry.datetime, next_entry)
         activity = full_activity.clip(start_datetime, end_datetime)
         if activity.duration > datetime.timedelta():
-            # For preserving existing behaviour, skip activities spanning
-            # over midnights
-            if (prev_entry.datetime.date() != next_entry.datetime.date() and
-                    activity.type != Activity.Type.IGNORED):
-                ignored_overnights.append(full_activity)
-            else:
-                activities.append(activity)
+            activities.append(activity)
 
-    return sorted(activities, key=lambda act: act.start), ignored_overnights
+    return sorted(activities, key=lambda act: act.start)
 
 
 def _add_current_entry(entries, now, current_activity_name,

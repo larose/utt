@@ -9,8 +9,7 @@ from .activity import Activity
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-def print_report(start_date, end_date, activities, ignored_overnights):
-    _print_ignored_overnights(start_date, end_date, ignored_overnights)
+def print_report(start_date, end_date, activities):
     _print_date_section(start_date, end_date, activities)
     _print_projects_section(start_date, end_date, activities)
     _print_activities_section(start_date, end_date, activities)
@@ -111,7 +110,7 @@ def _print_activities_section(start_date, end_date, activities):
     print(_title('Activities'))
     print()
 
-    activities = _filter_activities_by_range(start_date, end_date, activities)
+    activities = _clip_activities_by_range(start_date, end_date, activities)
     names_work = _groupby_name(
         _filter_activities_by_type(activities, Activity.Type.WORK))
     _print_dicts(names_work)
@@ -142,8 +141,8 @@ def _print_details_section(report_date, activities):
     print(_title('Details'))
     print()
 
-    activities = _filter_activities_by_range(report_date, report_date,
-                                             activities)
+    activities = _clip_activities_by_range(report_date, report_date,
+                                           activities)
     for activity in activities:
         print("(%s) %s-%s %s" % (_format_duration(activity.duration),
                                  _format_time(activity.start),
@@ -164,7 +163,7 @@ def _print_dicts(dcts):
 
 
 def _print_ignored_overnights(start_date, end_date, activities):
-    activities = _filter_activities_by_range(start_date, end_date, activities)
+    activities = _clip_activities_by_range(start_date, end_date, activities)
     if activities:
         print("WARN: Ignored {} overnight {}, total time: {}".format(
             len(activities), "activities" if len(activities) > 1 else
@@ -176,7 +175,7 @@ def _print_projects_section(start_date, end_date, activities):
     print(_title('Projects'))
     print()
 
-    activities = _filter_activities_by_range(start_date, end_date, activities)
+    activities = _clip_activities_by_range(start_date, end_date, activities)
 
     projects = _groupby_project(
         _filter_activities_by_type(activities, Activity.Type.WORK))
@@ -185,8 +184,8 @@ def _print_projects_section(start_date, end_date, activities):
 
 def _print_time(name, start_date, end_date, activities, activity_type):
     activities = _filter_activities_by_type(activities, activity_type)
-    ranged_activities = _filter_activities_by_range(start_date, end_date,
-                                                    activities)
+    ranged_activities = _clip_activities_by_range(start_date, end_date,
+                                                  activities)
 
     report_date_duration = _duration(ranged_activities)
 
@@ -221,8 +220,9 @@ def _total_time(activities_grouped_by_day, activity_type):
     return total_time
 
 
-def _filter_activities_by_range(start_date, end_date, activities):
-    """ Filter a list of Activity with the given range.
+def _clip_activities_by_range(start_date, end_date, activities):
+    """ Clip a list of Activity with the given range, remove activities
+    which have zero durations
 
     Parameters
     ----------
@@ -232,16 +232,19 @@ def _filter_activities_by_range(start_date, end_date, activities):
 
     Returns
     -------
-    filtered: list of Activity
+    clipped: list of Activity
     """
     delta = datetime.timedelta()
     start_dt = datetime.datetime(start_date.year, start_date.month,
                                  start_date.day)
     end_dt = datetime.datetime(end_date.year, end_date.month, end_date.day, 23,
                                59, 59, 99999)
-    return list(
-        filter(lambda act: act.clip(start_dt, end_dt).duration > delta,
-               activities))
+    new_activities = []
+    for activity in activities:
+        clipped = activity.clip(start_dt, end_dt)
+        if clipped.duration > delta:
+            new_activities.append(clipped)
+    return new_activities
 
 
 def _filter_activities_by_type(activities, activity_type):

@@ -51,6 +51,9 @@ def call_command(argv):
 
 
 class TestReport(unittest.TestCase):
+    def setUp(self):
+        self.maxDiff = None
+
     def test_report_range(self):
         argv = [
             "--data",
@@ -86,7 +89,7 @@ class TestReport(unittest.TestCase):
         self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
 
-    def test_report_overnight_activity_ignored(self):
+    def test_report_overnight_activity_without_current_activity(self):
         data_filename = os.path.join(DATA_DIR, "utt-overnight.log")
         argv = [
             "--data",
