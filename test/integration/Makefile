@@ -2,7 +2,7 @@ UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 .PHONY: all
-all: add edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight version
+all: add edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight report-overnight-range version
 
 $(UTT):
 	$(PIP) install utt-*.tar.gz
@@ -117,6 +117,16 @@ report-overnight: $(UTT)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report "2014-03-14") data/utt-overnight.stdout'
 
 	@echo "<< REPORT-OVERNIGHT"
+
+
+report-overnight-range: $(UTT)
+	@echo
+	@echo ">> REPORT-OVERNIGHT-RANGE"
+
+	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
+	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from "2014-03-14" --to "2014-03-18") data/utt-overnight-range.stdout'
+
+	@echo "<< REPORT-OVERNIGHT-RANGE"
 
 .PHONY: version
 version: $(UTT)
