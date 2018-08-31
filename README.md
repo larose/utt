@@ -399,10 +399,11 @@ To run the unit tests:
 
 ## Contributors
 
-- Mathieu Larose <mathieu@mathieularose.com>
-- David Munger <mungerd@gmail.com>
-- Paul Ivanov <pi@berkeley.edu>
-- Jason Stewart <support@eggplantsd.com>
+- Mathieu Larose <<mathieu@mathieularose.com>>
+- David Munger <<mungerd@gmail.com>>
+- Paul Ivanov <<pi@berkeley.edu>>
+- Jason Stewart <<support@eggplantsd.com>>
+- Kit Choi <<kit@kychoi.org>>
 
 
 ## License
