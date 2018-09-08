@@ -52,7 +52,7 @@ def _parse_args(parser, modules):
     parser.add_argument(
         "--now",
         dest="now",
-        default=datetime.datetime.today(),
+        default=util.localize(datetime.datetime.today()),
         type=util.parse_datetime)
     subparsers = parser.add_subparsers(dest="command")
     handlers = {}
