@@ -59,7 +59,7 @@ def localize(dt):
     Returns
     -------
     datetime : datetime.datetime
-        Timezone-aware datetime for with the local timezone.
+        Timezone-aware datetime for the local timezone.
         If failed to obtain a local timezone, UTC is assumed.
 
     Raises
