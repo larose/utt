@@ -71,8 +71,9 @@ def localize(dt):
     try:
         # Avoid global cache in tzlocal
         tz = tzlocal.reload_localzone()
-    except pytz.UnknownTimeZoneError:
-        warnings.warn("Unable to obtain local timezone. Assume UTC.")
+    except pytz.UnknownTimeZoneError as exc:
+        warnings.warn("Unable to obtain local timezone. Assume UTC. "
+                      "Error: {}".format(str(exc)))
         return pytz.UTC.localize(dt)
 
     # This may raise fail if the time is ambiguous or does not exist for the
