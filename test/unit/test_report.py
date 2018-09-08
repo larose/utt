@@ -11,6 +11,8 @@ try:
 except ImportError:
     from io import StringIO
 
+import pytz
+
 from utt.__main__ import main
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), "../integration/data")
@@ -175,3 +177,23 @@ class TestReport(unittest.TestCase):
         ]
         _, stderr, exception = call_command(argv)
         self.assertIsNone(exception, stderr)
+
+    def test_report_with_unknown_timezone(self):
+        argv = [
+            "--data",
+            DATA_FILENAME,
+            "--now",
+            "2014-3-19 18:30",
+            "report",
+            "wednesday",
+        ]
+        mocked_tz = mock.patch(
+            "tzlocal.reload_localzone",
+            side_effect=pytz.UnknownTimeZoneError, )
+        with mocked_tz:
+            stdout, stderr, exception = call_command(argv)
+
+        with open(os.path.join(DATA_DIR, "utt-1.stdout"), "r") as f:
+            expected_content = f.read()
+        self.assertIsNone(exception, stderr)
+        self.assertEqual(stdout, expected_content)
