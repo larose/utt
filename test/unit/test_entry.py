@@ -34,8 +34,7 @@ VALID_ENTRIES = [
         'tz': pytz.timezone("Australia/Sydney"),
     },
     {
-        'name':
-        "2014-07-23  10:30  +work",  # daylight saving is on, UTC-04:00
+        'name': "2014-07-23  10:30  +work",  # daylight saving is on, UTC-04:00
         'expected_utc': datetime.datetime(2014, 7, 23, 14, 30),
         'expected_name': "+work",
         'tz': pytz.timezone("US/Eastern"),
