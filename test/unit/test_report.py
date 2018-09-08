@@ -165,3 +165,13 @@ class TestReport(unittest.TestCase):
 
         self.assertIsNone(exception, stderr)
         self.assertEqual(stdout, expected_content)
+
+    def test_report_with_default_now(self):
+        # Smoke test to ensure running report without --now is fine
+        argv = [
+            "--data",
+            DATA_FILENAME,
+            "report",
+        ]
+        _, stderr, exception = call_command(argv)
+        self.assertIsNone(exception, stderr)
