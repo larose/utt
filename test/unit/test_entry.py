@@ -35,6 +35,13 @@ VALID_ENTRIES = [
     },
     {
         'name':
+        "2014-07-23  10:30  +work",  # daylight saving is on, UTC-04:00
+        'expected_utc': datetime.datetime(2014, 7, 23, 14, 30),
+        'expected_name': "+work",
+        'tz': pytz.timezone("US/Eastern"),
+    },
+    {
+        'name':
         "2014-11-23  10:30  -work",  # daylight saving is off, UTC-05:00
         'expected_utc': datetime.datetime(2014, 11, 23, 15, 30),
         'expected_name': "-work",
