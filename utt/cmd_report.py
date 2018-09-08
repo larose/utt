@@ -88,6 +88,8 @@ def _collect_activities(start_date, end_date, entries):
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
                                      end_date.day, 23, 59, 59, 99999)
+    start_datetime = util.localize(start_datetime)
+    end_datetime = util.localize(end_datetime)
     activities = []
     for prev_entry, next_entry in _pairwise(entries):
         if next_entry.name == HELLO:
