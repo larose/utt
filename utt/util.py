@@ -1,8 +1,10 @@
 import errno
 import os
 import datetime
+import warnings
 
-from .entry import Entry
+import pytz
+import tzlocal
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC
@@ -20,6 +22,8 @@ def add_entry(filename, new_entry):
 
 
 def entries_from_file(filename):
+    # Avoid import cycle
+    from .entry import Entry
     try:
         with open(filename) as text:
             previous_entry = None
@@ -44,8 +48,41 @@ def entries_from_file(filename):
         pass
 
 
+def localize(dt):
+    """ Given a naive datetime, localize it with the machine local timezone.
+
+    Parameters
+    ----------
+    dt : datetime.datetime
+        Naive datetime.
+
+    Returns
+    -------
+    datetime : datetime.datetime
+        Timezone-aware datetime for with the local timezone.
+        If failed to obtain a local timezone, UTC is assumed.
+
+    Raises
+    ------
+    pytz.InvalidTimeError
+        If the given datetime is ambiguous or does not exist for the local
+        time zone,
+    """
+    try:
+        # Avoid global cache in tzlocal
+        tz = tzlocal.reload_localzone()
+    except pytz.UnknownTimeZoneError:
+        warnings.warn("Unable to obtain local timezone. Assume UTC.")
+        return pytz.UTC.localize(dt)
+
+    # This may raise fail if the time is ambiguous or does not exist for the
+    # local timezone
+    return tz.localize(dt, is_dst=None)
+
+
 def parse_datetime(datetimestring):
-    return datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M")
+    return localize(
+        datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M"))
 
 
 def utt_touch_path(szPath):
