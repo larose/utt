@@ -69,8 +69,7 @@ def localize(dt):
         time zone,
     """
     try:
-        # Avoid global cache in tzlocal
-        tz = tzlocal.reload_localzone()
+        tz = tzlocal.get_localzone()
     except pytz.UnknownTimeZoneError as exc:
         warnings.warn("Unable to obtain local timezone. Assume UTC. "
                       "Error: {}".format(str(exc)))

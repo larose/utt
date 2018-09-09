@@ -188,7 +188,7 @@ class TestReport(unittest.TestCase):
             "wednesday",
         ]
         mocked_tz = mock.patch(
-            "tzlocal.reload_localzone",
+            "tzlocal.get_localzone",
             side_effect=pytz.UnknownTimeZoneError, )
         with mocked_tz:
             stdout, stderr, exception = call_command(argv)
