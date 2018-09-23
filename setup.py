@@ -38,7 +38,6 @@ setup(
     version=get_version(),
     install_requires=[
         'argcomplete',
-        'python_dateutil',
         'pytz',
         'tzlocal',
     ],

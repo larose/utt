@@ -39,7 +39,7 @@ test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
 .PHONY: test-unit
 test-unit:
 	python3 -m venv --clear $(PY3_VENV)
-	$(PY3_VENV)/bin/pip3 install argcomplete python_dateutil pytz tzlocal
+	$(PY3_VENV)/bin/pip3 install argcomplete pytz tzlocal
 	$(PY3_VENV)/bin/python3 -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 	rm -rf $(PY3_VENV)
 
