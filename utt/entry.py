@@ -1,8 +1,8 @@
 import datetime
 import re
 
-from dateutil.parser import parse
 import pytz
+from .tzoffset import TimezoneOffset
 from .util import localize
 
 
@@ -37,10 +37,13 @@ class Entry:
             return None
 
         date_str = groupdict['date']
-        if 'timezone' in groupdict:
-            date_str += groupdict['timezone'].replace(':', '')
+        date = datetime.datetime.strptime(date_str, "%Y-%m-%d %H:%M")
 
-        date = parse(date_str)
+        if 'timezone' in groupdict:
+            tz_str = groupdict['timezone']
+            date_str += tz_str
+            tzinfo = TimezoneOffset.from_string(tz_str)
+            date = date.replace(tzinfo=tzinfo)
 
         if date.utcoffset() is None:
             try:
