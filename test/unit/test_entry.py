@@ -22,6 +22,18 @@ VALID_ENTRIES = [
         'tz': pytz.timezone("GMT"),
     },
     {
+        'name': "2014-1-23  10:30+0930  travel",
+        'expected_utc': datetime.datetime(2014, 1, 23, 1, 00),
+        'expected_name': "travel",
+        'tz': pytz.timezone("Europe/London"),
+    },
+    {
+        'name': "2014-1-23  10:30-0930 -work",
+        'expected_utc': datetime.datetime(2014, 1, 23, 20, 00),
+        'expected_name': "-work",
+        'tz': pytz.timezone("Singapore"),
+    },
+    {
         'name': "2014-1-23  10:30+01:00  break**",
         'expected_utc': datetime.datetime(2014, 1, 23, 9, 30),
         'expected_name': "break**",
