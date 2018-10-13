@@ -7,8 +7,7 @@ description = "A simple command-line time tracking application"
 long_description = (
     "Ultimate Time Tracker (utt) is a simple command-line time tracking "
     "application. It is intented for people who need to report their time on "
-    "another system and want a preliminary time sheet."
-)
+    "another system and want a preliminary time sheet.")
 
 setup(
     author="Mathieu Larose",
@@ -17,8 +16,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Programming Language :: Python",
-        "Topic :: Office/Business",
+        "Programming Language :: Python", "Topic :: Office/Business",
         "Topic :: Utilities"
     ],
     keywords="time tracking",
@@ -28,7 +26,8 @@ setup(
     name='utt',
     packages=find_packages(),
     scripts=[os.path.join('bin', 'utt')],
-    data_files=[(os.path.join('share', 'bash-completion', 'completions'),  (os.path.join('bash', 'utt'),))],
+    data_files=[(os.path.join('share', 'bash-completion', 'completions'),
+                 (os.path.join('bash', 'utt'), ))],
     url="https://github.com/larose/utt",
     version=utt.__version__,
     install_requires=[
@@ -36,9 +35,6 @@ setup(
         'pytz',
         'tzlocal',
     ],
-    entry_points={
-        'console_scripts': [
-            'utt = utt.__main__:main',
-        ]
-    }
-)
+    entry_points={'console_scripts': [
+        'utt = utt.__main__:main',
+    ]})

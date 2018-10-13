@@ -24,8 +24,7 @@ def main():
         'Ultimate Time Tracker (utt) is a simple command-line time tracking application written in Python.'
     )
 
-    handlers = _parse_args(
-        parser, [add, edit, hello, stretch, report])
+    handlers = _parse_args(parser, [add, edit, hello, stretch, report])
     parser.add_argument(
         '--version',
         action='version',
