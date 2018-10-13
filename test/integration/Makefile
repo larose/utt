@@ -5,7 +5,7 @@ UTT = /usr/local/bin/utt
 all: add edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight report-overnight-range report-change-timezone version
 
 $(UTT):
-	$(PIP) install utt-*.tar.gz
+	$(PIP) install utt-*.whl
 
 .PHONY: add
 add: $(UTT)

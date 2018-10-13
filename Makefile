@@ -1,7 +1,5 @@
 INTEGRATION_DIR = test/integration
 UNIT_DIR = test/unit
-TMP = tmp
-PY3_VENV = tmp/test-venv-py3
 CONTAINER_NAME = utt-integration-py$*
 VERSION := $(shell python3 setup.py --version)
 
@@ -10,17 +8,22 @@ all:
 
 .PHONY: clean
 clean:
-	rm -rf $(TMP)
+	rm -rf build
+	rm -rf dist
 	rm -f $(INTEGRATION_DIR)/utt-*.tar.gz
+	rm -f $(INTEGRATION_DIR)/utt-*.whl
 
 .PHONY: format
 format:
 	pipenv run yapf utt test -ir
 
+.PHONY: bdist_wheel
+bdist_wheel:
+	pipenv run python setup.py bdist_wheel --universal
+
 .PHONY: sdist
 sdist:
-	mkdir -p $(TMP)
-	python3 setup.py sdist --dist-dir $(TMP)
+	pipenv run python setup.py sdist
 
 .PHONY: test
 test: test-unit test-integration
@@ -33,19 +36,23 @@ test-integration-py%: test-integration-container-py%
 	docker run --rm -ti -v "$(CURDIR)/$(INTEGRATION_DIR):/utt:ro" $(CONTAINER_NAME) $(INTEGRATION_CMD)
 
 .PHONY: test-integration-container-py%
-test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz
+test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
 	docker build -t $(CONTAINER_NAME) -f $(INTEGRATION_DIR)/Dockerfile.py$* $(INTEGRATION_DIR)
 
 .PHONY: test-unit
 test-unit:
-	python3 -m venv --clear $(PY3_VENV)
-	$(PY3_VENV)/bin/pip3 install argcomplete pytz tzlocal
-	$(PY3_VENV)/bin/python3 -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
-	rm -rf $(PY3_VENV)
+	pipenv run python -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 
 .PHONY: upload
 upload: test-unit test-integration
-	python3 setup.py sdist --dist-dir $(TMP) upload
+	pipenv run python setup.py sdist bdist_wheel --universal upload
+
+.PHONY: upload-test
+upload-test: test-unit test-integration
+	pipenv run python setup.py sdist bdist_wheel --universal upload --repository https://test.pypi.org/legacy/
 
 $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz: sdist
-	cp $(TMP)/utt-$(VERSION).tar.gz $@
+	cp dist/utt-$(VERSION).tar.gz $@
+
+$(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl: bdist_wheel
+	cp dist/utt-$(VERSION)-py2.py3-none-any.whl $@

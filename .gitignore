@@ -1,6 +1,9 @@
 *~
 *.swp
 *.pyc
-utt.egg-info/
+build
+dist
 test/integration/utt-*.tar.gz
+test/integration/utt-*.whl
 tmp
+utt.egg-info/
