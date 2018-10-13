@@ -44,12 +44,12 @@ test-unit:
 	pipenv run python -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
 
 .PHONY: upload
-upload: test-unit test-integration
-	pipenv run python setup.py sdist bdist_wheel --universal upload
+upload: clean test-unit test-integration
+	pipenv run twine upload --username mathieularose dist/*
 
 .PHONY: upload-test
-upload-test: test-unit test-integration
-	pipenv run python setup.py sdist bdist_wheel --universal upload --repository https://test.pypi.org/legacy/
+upload-test: clean test-unit test-integration
+	pipenv run twine upload --username mathieularose --repository-url https://test.pypi.org/legacy/ dist/*
 
 $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz: sdist
 	cp dist/utt-$(VERSION).tar.gz $@
