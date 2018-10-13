@@ -26,9 +26,9 @@ class Activity:
 
     def __str__(self):
         return "Activity(" + ", ".join(
-            map(str, [
-                self.name, self.start, self.end, self.duration, self.type
-            ])) + ")"
+            map(str,
+                [self.name, self.start, self.end, self.duration, self.type
+                 ])) + ")"
 
     def __repr__(self):
         return self.__str__()

@@ -107,8 +107,8 @@ def _add_current_entry(entries, now, current_activity_name,
                        disable_current_activity, report_start_date,
                        report_end_date):
     today = now.date()
-    if (today >= report_start_date and today <= report_end_date and entries and
-            entries[-1].datetime < now and not disable_current_activity):
+    if (today >= report_start_date and today <= report_end_date and entries
+            and entries[-1].datetime < now and not disable_current_activity):
         entries.append(Entry(now, current_activity_name, True))
 
 

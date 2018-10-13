@@ -34,8 +34,8 @@ def entries_from_file(filename):
 
                 new_entry = Entry.from_string(string)
                 if new_entry is None:
-                    raise SyntaxError("Invalid syntax at line %d: %s" %
-                                      (i, string))
+                    raise SyntaxError(
+                        "Invalid syntax at line %d: %s" % (i, string))
 
                 if previous_entry and \
                    previous_entry.datetime > new_entry.datetime:

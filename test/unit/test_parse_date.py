@@ -8,8 +8,8 @@ VALID_ENTRIES = [
                                                                    9)),
     ("tuesday", datetime.datetime(2015, 2, 11, 7, 0), datetime.date(
         2015, 2, 10)),
-    ("wednesday", datetime.datetime(2015, 2, 11, 7, 0), datetime.date(
-        2015, 2, 11)),
+    ("wednesday", datetime.datetime(2015, 2, 11, 7, 0),
+     datetime.date(2015, 2, 11)),
     ("thursday", datetime.datetime(2015, 2, 11, 7, 0), datetime.date(
         2015, 2, 5)),
     ("friday", datetime.datetime(2015, 2, 11, 7, 0), datetime.date(2015, 2,

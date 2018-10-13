@@ -69,8 +69,8 @@ def _groupby_name(activities):
         result.append({
             'duration':
             _format_duration(
-                sum((act.duration
-                     for act in activities), datetime.timedelta())),
+                sum((act.duration for act in activities),
+                    datetime.timedelta())),
             'project':
             project,
             'name':
@@ -92,8 +92,8 @@ def _groupby_project(activities):
         result.append({
             'duration':
             _format_duration(
-                sum((act.duration
-                     for act in activities), datetime.timedelta())),
+                sum((act.duration for act in activities),
+                    datetime.timedelta())),
             'project':
             project,
             'name':
@@ -167,8 +167,9 @@ def _print_ignored_overnights(start_date, end_date, activities):
     activities = _clip_activities_by_range(start_date, end_date, activities)
     if activities:
         print("WARN: Ignored {} overnight {}, total time: {}".format(
-            len(activities), "activities" if len(activities) > 1 else
-            "activity", _format_duration(_duration(activities))))
+            len(activities),
+            "activities" if len(activities) > 1 else "activity",
+            _format_duration(_duration(activities))))
 
 
 def _print_projects_section(start_date, end_date, activities):
