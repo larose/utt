@@ -1,7 +1,7 @@
 import datetime
 import ddt
 import unittest
-from utt.cmd_report import _parse_date
+from utt.commands.report import _parse_date
 
 VALID_ENTRIES = [
     ("monday", datetime.datetime(2015, 2, 11, 7, 0), datetime.date(2015, 2,

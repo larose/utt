@@ -3,7 +3,7 @@ import datetime
 import itertools
 
 from .activity import Activity
-from .util import localize
+from ...util import localize
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC

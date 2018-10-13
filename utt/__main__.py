@@ -5,7 +5,7 @@ import os
 import argparse
 import argcomplete
 
-from . import cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report
+from .commands import add, edit, hello, stretch, report
 from .__version__ import version
 from . import util
 
@@ -25,7 +25,7 @@ def main():
     )
 
     handlers = _parse_args(
-        parser, [cmd_add, cmd_edit, cmd_hello, cmd_stretch, cmd_report])
+        parser, [add, edit, hello, stretch, report])
     parser.add_argument(
         '--version',
         action='version',

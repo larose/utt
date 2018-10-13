@@ -1,5 +1,5 @@
-from . import util
-from .entry import Entry
+from .. import util
+from ..entry import Entry
 
 import os
 import logging

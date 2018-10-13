@@ -1,5 +1,5 @@
-from . import util
-from .entry import Entry
+from .. import util
+from ..entry import Entry
 
 NAME = 'hello'
 DESCRIPTION = 'Say \'hello\' when you arrive in the morning...'

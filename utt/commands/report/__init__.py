@@ -2,10 +2,10 @@ import datetime
 import itertools
 
 from .activity import Activity
-from .cmd_hello import NAME as HELLO
-from .entry import Entry
+from ..hello import NAME as HELLO
+from ...entry import Entry
 from .print_report import print_report
-from . import util
+from ... import util
 
 NAME = 'report'
 DESCRIPTION = 'Summarize tasks for given time period'

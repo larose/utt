@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
-from . import util
-from .entry import Entry
+from .. import util
+from ..entry import Entry
 
 NAME = 'stretch'
 DESCRIPTION = 'Stretch the latest task to the current time'

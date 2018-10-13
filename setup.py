@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 import utt
 
@@ -26,7 +26,7 @@ setup(
     description=description,
     long_description=long_description,
     name='utt',
-    packages=['utt'],
+    packages=find_packages(),
     scripts=[os.path.join('bin', 'utt')],
     data_files=[(os.path.join('share', 'bash-completion', 'completions'),  (os.path.join('bash', 'utt'),))],
     url="https://github.com/larose/utt",
