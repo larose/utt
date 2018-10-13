@@ -57,10 +57,11 @@ def _parse_args(parser, modules):
     handlers = {}
 
     for module in modules:
+        command = module.Command()
         sub_parse = subparsers.add_parser(
-            module.NAME, description=module.DESCRIPTION)
-        module.add_args(sub_parse)
-        handlers[module.NAME] = module.execute
+            command.NAME, description=command.DESCRIPTION)
+        command.add_args(sub_parse)
+        handlers[command.NAME] = command
 
     return handlers
 

@@ -4,8 +4,21 @@ from ..entry import Entry
 import os
 import logging
 
-NAME = 'add'
-DESCRIPTION = 'Add a completed task'
+
+class AddCommand:
+    NAME = 'add'
+    DESCRIPTION = 'Add a completed task'
+
+    def add_args(self, parser):
+        parser.add_argument(
+            "name",
+            help="completed task description").completer = acbd_completer
+
+    def __call__(self, args):
+        util.add_entry(args.data_filename, Entry(args.now, args.name, False))
+
+
+Command = AddCommand
 
 
 def acdb_search(path_db, prefix):
@@ -38,12 +51,3 @@ def acbd_completer(**kwargs):
         logging.debug("acbd_completer", exc_info=True)
 
     return ["ERROR:_SEE_%s_FOR_DETAILS" % (util.utt_debug_log())]
-
-
-def add_args(parser):
-    parser.add_argument(
-        "name", help="completed task description").completer = acbd_completer
-
-
-def execute(args):
-    util.add_entry(args.data_filename, Entry(args.now, args.name, False))

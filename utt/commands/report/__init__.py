@@ -2,80 +2,75 @@ import datetime
 import itertools
 
 from .activity import Activity
-from ..hello import NAME as HELLO
+from .. import hello
 from ...entry import Entry
 from .print_report import print_report
 from ... import util
 
-NAME = 'report'
-DESCRIPTION = 'Summarize tasks for given time period'
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# PUBLIC
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+class ReportCommand:
+    NAME = 'report'
+    DESCRIPTION = 'Summarize tasks for given time period'
 
+    def add_args(self, parser):
+        parser.add_argument("report_date", metavar="date", type=str, nargs='?')
 
-def add_args(parser):
-    parser.add_argument("report_date", metavar="date", type=str, nargs='?')
+        parser.add_argument(
+            "--current-activity",
+            default='-- Current Activity --',
+            type=str,
+            help="Set the current activity")
 
-    parser.add_argument(
-        "--current-activity",
-        default='-- Current Activity --',
-        type=str,
-        help="Set the current activity")
+        parser.add_argument(
+            "--no-current-activity",
+            action='store_true',
+            default=False,
+            help="Do not display the current activity")
 
-    parser.add_argument(
-        "--no-current-activity",
-        action='store_true',
-        default=False,
-        help="Do not display the current activity")
+        parser.add_argument(
+            "--from",
+            default=None,
+            dest="from_date",
+            type=_parse_absolute_date,
+            help="Specify an inclusive start date to report.")
 
-    parser.add_argument(
-        "--from",
-        default=None,
-        dest="from_date",
-        type=_parse_absolute_date,
-        help="Specify an inclusive start date to report.")
+        parser.add_argument(
+            "--to",
+            default=None,
+            dest="to_date",
+            type=_parse_absolute_date,
+            help="Specify an inclusive end date to report.")
 
-    parser.add_argument(
-        "--to",
-        default=None,
-        dest="to_date",
-        type=_parse_absolute_date,
-        help="Specify an inclusive end date to report.")
+    def __call__(self, args):
+        today = args.now.date()
+        if args.report_date is None:
+            report_date = today
+        else:
+            report_date = _parse_date(args.now, args.report_date)
 
+        report_start_date = (report_date
+                             if args.from_date is None else args.from_date)
+        report_end_date = (report_date
+                           if args.to_date is None else args.to_date)
 
-def execute(args):
-    today = args.now.date()
-    if args.report_date is None:
-        report_date = today
-    else:
-        report_date = _parse_date(args.now, args.report_date)
+        if report_start_date == report_end_date:
+            collect_from_date, collect_to_date = _week_dates(report_start_date)
+        else:
+            collect_from_date = report_start_date
+            collect_to_date = report_end_date
 
-    report_start_date = (report_date
-                         if args.from_date is None else args.from_date)
-    report_end_date = (report_date if args.to_date is None else args.to_date)
-
-    if report_start_date == report_end_date:
-        collect_from_date, collect_to_date = _week_dates(report_start_date)
-    else:
-        collect_from_date = report_start_date
-        collect_to_date = report_end_date
-
-    collect_to_date = min(today, collect_to_date)
-    collect_from_date = min(today, collect_from_date)
-    entries = list(util.entries_from_file(args.data_filename))
-    _add_current_entry(entries, args.now, args.current_activity,
-                       args.no_current_activity, report_start_date,
-                       report_end_date)
-    activities = _collect_activities(collect_from_date, collect_to_date,
-                                     entries)
-    print_report(report_start_date, report_end_date, activities)
+        collect_to_date = min(today, collect_to_date)
+        collect_from_date = min(today, collect_from_date)
+        entries = list(util.entries_from_file(args.data_filename))
+        _add_current_entry(entries, args.now, args.current_activity,
+                           args.no_current_activity, report_start_date,
+                           report_end_date)
+        activities = _collect_activities(collect_from_date, collect_to_date,
+                                         entries)
+        print_report(report_start_date, report_end_date, activities)
 
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# PRIVATE
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Command = ReportCommand
 
 DAY_NAMES = [
     "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY",
@@ -92,7 +87,7 @@ def _collect_activities(start_date, end_date, entries):
     end_datetime = util.localize(end_datetime)
     activities = []
     for prev_entry, next_entry in _pairwise(entries):
-        if next_entry.name == HELLO:
+        if next_entry.name == hello.HelloCommand.NAME:
             continue
 
         full_activity = Activity(prev_entry.datetime, next_entry)

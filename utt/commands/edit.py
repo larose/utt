@@ -1,16 +1,19 @@
 import os
 import subprocess
 
-NAME = 'edit'
-DESCRIPTION = 'Edit task log using your system\'s default editor'
+
+class EditCommand:
+    NAME = 'edit'
+    DESCRIPTION = 'Edit task log using your system\'s default editor'
+
+    def add_args(self, parser):
+        pass
+
+    def __call__(self, args):
+        _run_editor(_editor(), args.data_filename)
 
 
-def add_args(parser):
-    pass
-
-
-def execute(args):
-    _run_editor(_editor(), args.data_filename)
+Command = EditCommand
 
 
 def _editor():
