@@ -1,5 +1,6 @@
 from setuptools import setup
 import os
+import utt
 
 description = "A simple command-line time tracking application"
 
@@ -8,12 +9,6 @@ long_description = (
     "application. It is intented for people who need to report their time on "
     "another system and want a preliminary time sheet."
 )
-
-def get_version():
-    for line in open('utt/__version__.py'):
-        if 'version' in line:
-            return line.split('=')[1].strip(' \n\'"')
-    raise Error("No version")
 
 setup(
     author="Mathieu Larose",
@@ -35,7 +30,7 @@ setup(
     scripts=[os.path.join('bin', 'utt')],
     data_files=[(os.path.join('share', 'bash-completion', 'completions'),  (os.path.join('bash', 'utt'),))],
     url="https://github.com/larose/utt",
-    version=get_version(),
+    version=utt.__version__,
     install_requires=[
         'argcomplete',
         'pytz',
