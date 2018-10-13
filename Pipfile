@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+argcomplete = "==1.9.4"
+pytz = "==2018.5"
+tzlocal = "==1.5.1"
+
+[dev-packages]
+yapf = "==0.24.0"
+
+[requires]
+python_version = "3.6"

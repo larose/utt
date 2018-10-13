@@ -15,7 +15,7 @@ clean:
 
 .PHONY: format
 format:
-	PYTHONPATH=lib python3 lib/yapf utt test -ir
+	pipenv run yapf utt test -ir
 
 .PHONY: sdist
 sdist:
