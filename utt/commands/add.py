@@ -5,17 +5,28 @@ import os
 import logging
 
 
+class AddHandler:
+    def __init__(self, args, data_filename, now):
+        self._args = args
+        self._data_filename = data_filename
+        self._now = now
+
+    def __call__(self):
+        util.add_entry(self._data_filename,
+                       Entry(self._now, self._args.name, False))
+
+
 class AddCommand:
     NAME = 'add'
     DESCRIPTION = 'Add a completed task'
 
-    def add_args(self, parser):
+    Handler = AddHandler
+
+    @staticmethod
+    def add_args(parser):
         parser.add_argument(
             "name",
             help="completed task description").completer = acbd_completer
-
-    def __call__(self, args):
-        util.add_entry(args.data_filename, Entry(args.now, args.name, False))
 
 
 Command = AddCommand

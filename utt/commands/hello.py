@@ -2,15 +2,25 @@ from .. import util
 from ..entry import Entry
 
 
+class HelloHandler:
+    def __init__(self, args, data_filename, now):
+        self._args = args
+        self._data_filename = data_filename
+        self._now = now
+
+    def __call__(self):
+        util.add_entry(self._data_filename, Entry(self._now, 'hello', False))
+
+
 class HelloCommand:
     NAME = 'hello'
     DESCRIPTION = 'Say \'hello\' when you arrive in the morning...'
 
-    def add_args(self, parser):
-        pass
+    Handler = HelloHandler
 
-    def __call__(self, args):
-        util.add_entry(args.data_filename, Entry(args.now, 'hello', False))
+    @staticmethod
+    def add_args(parser):
+        pass
 
 
 Command = HelloCommand

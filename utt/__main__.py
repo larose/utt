@@ -1,30 +1,34 @@
 import datetime
 import sys
-import logging
 import os
 import argparse
 import argcomplete
 
-from .commands import add, edit, hello, stretch, report
-from .__version__ import version
 from . import util
+from . import ioc
+from .__version__ import version
+from .commands import add, edit, hello, stretch, report
+from .data_dirname import data_dirname
+from .data_filename import data_filename
+from .now import now
+from .timezone_config import timezone_config
+
+COMMAND_MODULES = [add, edit, hello, stretch, report]
 
 
-def main():
-
-    logging.basicConfig(
-        filename=util.utt_debug_log(),
-        level=logging.DEBUG,
-        format='%(asctime)s %(message)s',
-        datefmt='%m/%d/%Y %I:%M:%S %p')
-
+def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
         description=
         'Ultimate Time Tracker (utt) is a simple command-line time tracking application written in Python.'
     )
 
-    handlers = _parse_args(parser, [add, edit, hello, stretch, report])
+    argcomplete.autocomplete(parser, append_space=False)
+
+    parser.add_argument("--data", dest="data_filename")
+
+    parser.add_argument("--now", dest="now", type=util.parse_datetime)
+
     parser.add_argument(
         '--version',
         action='version',
@@ -32,38 +36,32 @@ def main():
             ["utt {version}".format(version=version),
              "Python " + sys.version]))
 
+    subparsers = parser.add_subparsers(dest="command")
+
+    for module in COMMAND_MODULES:
+        command = module.Command
+        sub_parser = subparsers.add_parser(
+            command.NAME, description=command.DESCRIPTION)
+        command.add_args(sub_parser)
+
+    return parser.parse_args()
+
+
+def main():
     if len(sys.argv) == 1:
         sys.argv.append('--help')
 
-    argcomplete.autocomplete(parser, append_space=False)
+    container = ioc.Container()
+    container.args = parse_args
+    container.data_dirname = data_dirname
+    container.data_filename = data_filename
+    container.now = now
+    container.timezone_config = timezone_config
 
-    args = parser.parse_args()
+    for module in COMMAND_MODULES:
+        setattr(container, module.Command.NAME, module.Command.Handler)
 
-    handler = handlers.get(args.command)
-
-    if handler:
-        handler(args)
-
-
-def _parse_args(parser, modules):
-    parser.add_argument(
-        "--data", dest="data_filename", default=util.utt_filename())
-    parser.add_argument(
-        "--now",
-        dest="now",
-        default=util.localize(datetime.datetime.today()),
-        type=util.parse_datetime)
-    subparsers = parser.add_subparsers(dest="command")
-    handlers = {}
-
-    for module in modules:
-        command = module.Command()
-        sub_parse = subparsers.add_parser(
-            command.NAME, description=command.DESCRIPTION)
-        command.add_args(sub_parse)
-        handlers[command.NAME] = command
-
-    return handlers
+    getattr(container, container.args.command)()
 
 
 if __name__ == '__main__':

@@ -8,11 +8,52 @@ from .print_report import print_report
 from ... import util
 
 
+class ReportHandler:
+    def __init__(self, args, data_filename, now):
+        self._args = args
+        self._data_filename = data_filename
+        self._now = now
+
+    def __call__(self):
+        args = self._args
+        data_filename = self._data_filename
+
+        today = self._now.date()
+        if args.report_date is None:
+            report_date = today
+        else:
+            report_date = _parse_date(self._now, args.report_date)
+
+        report_start_date = (report_date
+                             if args.from_date is None else args.from_date)
+        report_end_date = (report_date
+                           if args.to_date is None else args.to_date)
+
+        if report_start_date == report_end_date:
+            collect_from_date, collect_to_date = _week_dates(report_start_date)
+        else:
+            collect_from_date = report_start_date
+            collect_to_date = report_end_date
+
+        collect_to_date = min(today, collect_to_date)
+        collect_from_date = min(today, collect_from_date)
+        entries = list(util.entries_from_file(data_filename))
+        _add_current_entry(entries, self._now, args.current_activity,
+                           args.no_current_activity, report_start_date,
+                           report_end_date)
+        activities = _collect_activities(collect_from_date, collect_to_date,
+                                         entries)
+        print_report(report_start_date, report_end_date, activities)
+
+
 class ReportCommand:
     NAME = 'report'
     DESCRIPTION = 'Summarize tasks for given time period'
 
-    def add_args(self, parser):
+    Handler = ReportHandler
+
+    @staticmethod
+    def add_args(parser):
         parser.add_argument("report_date", metavar="date", type=str, nargs='?')
 
         parser.add_argument(
@@ -40,34 +81,6 @@ class ReportCommand:
             dest="to_date",
             type=_parse_absolute_date,
             help="Specify an inclusive end date to report.")
-
-    def __call__(self, args):
-        today = args.now.date()
-        if args.report_date is None:
-            report_date = today
-        else:
-            report_date = _parse_date(args.now, args.report_date)
-
-        report_start_date = (report_date
-                             if args.from_date is None else args.from_date)
-        report_end_date = (report_date
-                           if args.to_date is None else args.to_date)
-
-        if report_start_date == report_end_date:
-            collect_from_date, collect_to_date = _week_dates(report_start_date)
-        else:
-            collect_from_date = report_start_date
-            collect_to_date = report_end_date
-
-        collect_to_date = min(today, collect_to_date)
-        collect_from_date = min(today, collect_from_date)
-        entries = list(util.entries_from_file(args.data_filename))
-        _add_current_entry(entries, args.now, args.current_activity,
-                           args.no_current_activity, report_start_date,
-                           report_end_date)
-        activities = _collect_activities(collect_from_date, collect_to_date,
-                                         entries)
-        print_report(report_start_date, report_end_date, activities)
 
 
 Command = ReportCommand

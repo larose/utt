@@ -81,8 +81,7 @@ def localize(dt):
 
 
 def parse_datetime(datetimestring):
-    return localize(
-        datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M"))
+    return datetime.datetime.strptime(datetimestring, "%Y-%m-%d %H:%M")
 
 
 def utt_touch_path(szPath):
@@ -93,20 +92,6 @@ def utt_touch_path(szPath):
             raise
 
     return szPath
-
-
-def user_data_dir():
-    szPath = os.getenv('XDG_DATA_HOME', os.path.expanduser("~/.local/share"))
-    szPath = os.path.join(szPath, 'utt')
-    return utt_touch_path(szPath)
-
-
-def utt_filename():
-    return os.path.join(user_data_dir(), 'utt.log')
-
-
-def utt_debug_log():
-    return os.path.join(user_data_dir(), 'debug.log')
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
