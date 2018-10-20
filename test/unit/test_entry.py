@@ -2,11 +2,7 @@ import datetime
 import ddt
 import pytz
 import unittest
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-from utt.entry import Entry
+from utt.entry_parser import EntryParser
 
 VALID_ENTRIES = [
     {
@@ -64,29 +60,25 @@ INVALID_ENTRIES = [("", ), ("2014-", ), ("2014-1-1", ), ("9:15", ),
                    ("2015-1-1 9:15", ), ("2014-03-23 An activity", )]
 
 
+class MockTimezoneConfig:
+    def __init__(self, local_timezone):
+        self._local_timezone = local_timezone
+
+    def local_timezone(self):
+        return self._local_timezone
+
+
 @ddt.ddt
 class ValidEntry(unittest.TestCase):
     @ddt.data(*VALID_ENTRIES)
     @ddt.unpack
     def test(self, name, expected_utc, expected_name, tz):
-        with mock.patch("tzlocal.get_localzone", return_value=tz):
-            entry = Entry.from_string(name)
-        expected_datetime = tz.fromutc(expected_utc)
+        timezone_config = MockTimezoneConfig(tz)
+        entry_parser = EntryParser(timezone_config)
+        entry = entry_parser.parse(name)
+        expected_datetime = tz.fromutc(expected_utc).replace(tzinfo=None)
         self.assertEqual(entry.datetime, expected_datetime)
         self.assertEqual(entry.name, expected_name)
-
-    def test_invalid_time(self):
-        tz = pytz.timezone("US/Eastern")
-        entry_str = "2002-04-07 02:30 practice"
-        with self.assertRaises(pytz.NonExistentTimeError) as exc_cm:
-            with mock.patch("tzlocal.get_localzone", return_value=tz):
-                Entry.from_string(entry_str)
-
-        # The user should be notified which entry is problematic
-        # then they can fix it with a timezone offset
-        self.assertEqual(
-            str(exc_cm.exception),
-            "'2002-04-07 02:30' is not a valid time for the local time zone.")
 
 
 @ddt.ddt
@@ -94,5 +86,7 @@ class InvalidEntry(unittest.TestCase):
     @ddt.data(*INVALID_ENTRIES)
     @ddt.unpack
     def test(self, text):
-        entry = Entry.from_string(text)
+        timezone_config = MockTimezoneConfig(None)
+        entry_parser = EntryParser(timezone_config)
+        entry = entry_parser.parse(text)
         self.assertIsNone(entry)

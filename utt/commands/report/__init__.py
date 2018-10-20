@@ -9,14 +9,13 @@ from ... import util
 
 
 class ReportHandler:
-    def __init__(self, args, data_filename, now):
+    def __init__(self, args, log_repo, now):
         self._args = args
-        self._data_filename = data_filename
         self._now = now
+        self._log_repo = log_repo
 
     def __call__(self):
         args = self._args
-        data_filename = self._data_filename
 
         today = self._now.date()
         if args.report_date is None:
@@ -37,7 +36,7 @@ class ReportHandler:
 
         collect_to_date = min(today, collect_to_date)
         collect_from_date = min(today, collect_from_date)
-        entries = list(util.entries_from_file(data_filename))
+        entries = list(self._log_repo.entries())
         _add_current_entry(entries, self._now, args.current_activity,
                            args.no_current_activity, report_start_date,
                            report_end_date)
@@ -96,8 +95,8 @@ def _collect_activities(start_date, end_date, entries):
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
                                      end_date.day, 23, 59, 59, 99999)
-    start_datetime = util.localize(start_datetime)
-    end_datetime = util.localize(end_datetime)
+    start_datetime = start_datetime
+    end_datetime = end_datetime
     activities = []
     for prev_entry, next_entry in _pairwise(entries):
         if next_entry.name == hello.HelloCommand.NAME:

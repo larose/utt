@@ -32,6 +32,7 @@ setup(
     version=utt.__version__,
     install_requires=[
         'argcomplete',
+        'python_dateutil',
         'pytz',
         'tzlocal',
     ],

@@ -8,8 +8,10 @@ from . import util
 from . import ioc
 from .__version__ import version
 from .commands import add, edit, hello, stretch, report
+from .entry_parser import EntryParser
 from .data_dirname import data_dirname
 from .data_filename import data_filename
+from .log_repo import LogRepo
 from .now import now
 from .timezone_config import timezone_config
 
@@ -55,7 +57,9 @@ def main():
     container.args = parse_args
     container.data_dirname = data_dirname
     container.data_filename = data_filename
+    container.entry_parser = EntryParser
     container.now = now
+    container.log_repo = LogRepo
     container.timezone_config = timezone_config
 
     for module in COMMAND_MODULES:

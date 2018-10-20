@@ -3,7 +3,6 @@ import datetime
 import itertools
 
 from .activity import Activity
-from ...util import localize
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC
@@ -239,10 +238,10 @@ def _clip_activities_by_range(start_date, end_date, activities):
     delta = datetime.timedelta()
     start_dt = datetime.datetime(start_date.year, start_date.month,
                                  start_date.day)
-    start_dt = localize(start_dt)
+    start_dt = start_dt
     end_dt = datetime.datetime(end_date.year, end_date.month, end_date.day, 23,
                                59, 59, 99999)
-    end_dt = localize(end_dt)
+    end_dt = end_dt
     new_activities = []
     for activity in activities:
         clipped = activity.clip(start_dt, end_dt)
