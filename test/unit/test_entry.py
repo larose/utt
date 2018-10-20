@@ -60,21 +60,12 @@ INVALID_ENTRIES = [("", ), ("2014-", ), ("2014-1-1", ), ("9:15", ),
                    ("2015-1-1 9:15", ), ("2014-03-23 An activity", )]
 
 
-class MockTimezoneConfig:
-    def __init__(self, local_timezone):
-        self._local_timezone = local_timezone
-
-    def local_timezone(self):
-        return self._local_timezone
-
-
 @ddt.ddt
 class ValidEntry(unittest.TestCase):
     @ddt.data(*VALID_ENTRIES)
     @ddt.unpack
     def test(self, name, expected_utc, expected_name, tz):
-        timezone_config = MockTimezoneConfig(tz)
-        entry_parser = EntryParser(timezone_config)
+        entry_parser = EntryParser(tz)
         entry = entry_parser.parse(name)
         expected_datetime = tz.fromutc(expected_utc).replace(tzinfo=None)
         self.assertEqual(entry.datetime, expected_datetime)
@@ -86,7 +77,6 @@ class InvalidEntry(unittest.TestCase):
     @ddt.data(*INVALID_ENTRIES)
     @ddt.unpack
     def test(self, text):
-        timezone_config = MockTimezoneConfig(None)
-        entry_parser = EntryParser(timezone_config)
+        entry_parser = EntryParser(pytz.timezone("US/Pacific"))
         entry = entry_parser.parse(text)
         self.assertIsNone(entry)

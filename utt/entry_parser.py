@@ -12,8 +12,8 @@ without_tz = re.compile(
 
 
 class EntryParser:
-    def __init__(self, timezone_config):
-        self._timezone_config = timezone_config
+    def __init__(self, local_timezone):
+        self._local_timezone = local_timezone
 
     def parse(self, string):
         match_wo_tz = without_tz.match(string)
@@ -32,7 +32,7 @@ class EntryParser:
         if 'timezone' in groupdict:
             date_str += groupdict['timezone'].replace(':', '')
             date = parse(date_str)
-            date = date.astimezone(self._timezone_config.local_timezone())
+            date = date.astimezone(self._local_timezone)
             date = date.replace(tzinfo=None)
         else:
             date = parse(date_str)
