@@ -1,5 +1,4 @@
 import os
-from . import ioc
 
 
 def data_filename(args, data_dirname):
