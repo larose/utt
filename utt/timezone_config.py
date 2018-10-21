@@ -9,4 +9,3 @@ class TimezoneConfig:
 def timezone_config(config):
     enabled = config.getboolean('timezone', 'enabled')
     return TimezoneConfig(enabled)
-

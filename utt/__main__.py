@@ -9,7 +9,7 @@ import dateutil.tz
 from . import util
 from . import ioc
 from .__version__ import version
-from .commands import add, edit, hello, stretch, report
+from . import commands
 from .entry_parser import EntryParser
 from .data_dirname import data_dirname
 from .data_filename import data_filename
@@ -22,7 +22,10 @@ from .config_filename import config_filename
 from .config import config
 from .default_config import DefaultConfig
 
-COMMAND_MODULES = [add, edit, hello, stretch, report]
+COMMAND_MODULES = [
+    commands.add, commands.config, commands.edit, commands.hello,
+    commands.stretch, commands.report
+]
 
 TIMEZONE_OFFSET_REGEX = re.compile(
     "(?P<sign>[+-]{0,1})(?P<hours>\d{2}):{0,1}(?P<minutes>\d{2})")
@@ -101,9 +104,10 @@ def main():
     container.timezone_config = timezone_config
 
     for module in COMMAND_MODULES:
-        setattr(container, module.Command.NAME, module.Command.Handler)
+        setattr(container, 'command/{}'.format(module.Command.NAME),
+                module.Command.Handler)
 
-    getattr(container, container.args.command)()
+    getattr(container, 'command/{}'.format(container.args.command))()
 
 
 if __name__ == '__main__':
