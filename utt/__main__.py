@@ -4,6 +4,7 @@ import os
 import argparse
 import argcomplete
 import re
+import dateutil.tz
 
 from . import util
 from . import ioc
@@ -19,7 +20,9 @@ from .local_timezone import local_timezone
 
 COMMAND_MODULES = [add, edit, hello, stretch, report]
 
-TIMEZONE_OFFSET_REGEX = re.compile("(?P<sign>[+-]{0,1})(?P<hours>\d{2}):{0,1}(?P<minutes>\d{2})")
+TIMEZONE_OFFSET_REGEX = re.compile(
+    "(?P<sign>[+-]{0,1})(?P<hours>\d{2}):{0,1}(?P<minutes>\d{2})")
+
 
 def parse_timezone_offset(string):
     match = TIMEZONE_OFFSET_REGEX.match(string)
@@ -29,14 +32,12 @@ def parse_timezone_offset(string):
     groupdict = match.groupdict()
 
     delta = datetime.timedelta(
-        hours=int(groupdict['hours']),
-        minutes=int(groupdict['minutes'])
-    )
+        hours=int(groupdict['hours']), minutes=int(groupdict['minutes']))
 
     if groupdict['sign'] == '-':
         delta = -delta
 
-    timezone = datetime.timezone(delta)
+    timezone = dateutil.tz.tzoffset(None, int(delta.total_seconds()))
 
     return timezone
 
@@ -54,7 +55,10 @@ def parse_args():
 
     parser.add_argument("--now", dest="now", type=util.parse_datetime)
 
-    parser.add_argument("--timezone-offset", dest="timezone_offset", type=parse_timezone_offset)
+    parser.add_argument(
+        "--timezone-offset",
+        dest="timezone_offset",
+        type=parse_timezone_offset)
 
     parser.add_argument(
         '--version',

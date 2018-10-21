@@ -4,10 +4,12 @@ from .entry import Entry
 
 
 class LogRepo:
-    def __init__(self, data_filename, timezone_config, entry_parser):
+    def __init__(self, data_filename, timezone_config, entry_parser,
+                 local_timezone):
         self._data_filename = data_filename
         self._timezone_config = timezone_config
         self._entry_parser = entry_parser
+        self._local_timezone = local_timezone
 
     def append_entry(self, new_entry):
         _create_directories_for_file(self._data_filename)
@@ -17,6 +19,10 @@ class LogRepo:
         if entries:
             last_entry = entries[-1]
             new_day = new_entry.datetime.date() != last_entry.datetime.date()
+
+        if self._timezone_config.enabled():
+            new_entry.datetime = new_entry.datetime.replace(
+                tzinfo=self._local_timezone)
 
         _append_line_to_file(
             self._data_filename, str(new_entry), insert_blank_line=new_day)

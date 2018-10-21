@@ -34,7 +34,6 @@ setup(
         'argcomplete',
         'python_dateutil',
         'pytz',
-        'tzlocal',
     ],
     entry_points={'console_scripts': [
         'utt = utt.__main__:main',

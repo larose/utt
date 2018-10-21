@@ -6,4 +6,4 @@ def now(args, timezone_config):
     if args.now:
         return args.now
 
-    return datetime.datetime.today()
+    return datetime.datetime.now()
