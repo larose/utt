@@ -21,8 +21,8 @@ class LogRepo:
             new_day = new_entry.datetime.date() != last_entry.datetime.date()
 
         if self._timezone_config.enabled():
-            new_entry.datetime = new_entry.datetime.replace(
-                tzinfo=self._local_timezone)
+            new_entry.datetime = self._local_timezone.localize(
+                new_entry.datetime)
 
         _append_line_to_file(
             self._data_filename, str(new_entry), insert_blank_line=new_day)
