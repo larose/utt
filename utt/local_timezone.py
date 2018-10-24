@@ -1,14 +1,11 @@
 import calendar
 import dateutil.tz
 import time
+import tzlocal
 
 
 def local_timezone(args, now):
-    if args.timezone_offset:
-        return args.timezone_offset
+    if args.timezone:
+        return args.timezone
 
-    local_time = time.localtime()
-    offset_seconds = calendar.timegm(local_time) - \
-        calendar.timegm(time.gmtime(time.mktime(local_time)))
-
-    return dateutil.tz.tzoffset(None, offset_seconds)
+    return tzlocal.get_localzone()

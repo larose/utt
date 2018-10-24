@@ -5,6 +5,7 @@ import argparse
 import argcomplete
 import re
 import dateutil.tz
+import pytz
 
 from . import util
 from . import ioc
@@ -27,27 +28,6 @@ COMMAND_MODULES = [
     commands.stretch, commands.report
 ]
 
-TIMEZONE_OFFSET_REGEX = re.compile(
-    "(?P<sign>[+-]{0,1})(?P<hours>\d{2}):{0,1}(?P<minutes>\d{2})")
-
-
-def parse_timezone_offset(string):
-    match = TIMEZONE_OFFSET_REGEX.match(string)
-    if match is None:
-        raise Exception("Invalid timezone offset {}".format(string))
-
-    groupdict = match.groupdict()
-
-    delta = datetime.timedelta(
-        hours=int(groupdict['hours']), minutes=int(groupdict['minutes']))
-
-    if groupdict['sign'] == '-':
-        delta = -delta
-
-    timezone = dateutil.tz.tzoffset(None, int(delta.total_seconds()))
-
-    return timezone
-
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -62,10 +42,7 @@ def parse_args():
 
     parser.add_argument("--now", dest="now", type=util.parse_datetime)
 
-    parser.add_argument(
-        "--timezone-offset",
-        dest="timezone_offset",
-        type=parse_timezone_offset)
+    parser.add_argument("--timezone", dest="timezone", type=pytz.timezone)
 
     parser.add_argument(
         '--version',

@@ -36,6 +36,8 @@ class EntryParser:
             date = date.replace(tzinfo=None)
         else:
             date = parse(date_str)
+            date = self._local_timezone.localize(date)
+            date = date.replace(tzinfo=None)
 
         name = match.groupdict()['name']
         return Entry(date, name, False)
