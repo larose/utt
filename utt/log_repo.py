@@ -28,7 +28,7 @@ class LogRepo:
         try:
             return self._parse_file()
         except IOError:
-            pass
+            return []
 
     def _parse_file(self):
         with open(self._data_filename) as log_file:
