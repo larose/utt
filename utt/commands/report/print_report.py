@@ -217,15 +217,6 @@ def _title(text):
     return '{:-^80}'.format(' ' + text + ' ')
 
 
-def _total_time(activities_grouped_by_day, activity_type):
-    total_time = datetime.timedelta()
-    for activities_ in activities_grouped_by_day.values():
-        for activity in activities_:
-            if activity.type == activity_type:
-                total_time += activity.duration
-    return total_time
-
-
 def _clip_activities_by_range(start_date, end_date, activities):
     """ Clip a list of Activity with the given range, remove activities
     which have zero durations
