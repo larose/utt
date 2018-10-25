@@ -1,6 +1,8 @@
 import errno
+import copy
 import os
-from .entry import Entry
+
+from .log_parser import parse_log
 
 
 class LogRepo:
@@ -13,47 +15,29 @@ class LogRepo:
 
     def append_entry(self, new_entry):
         _create_directories_for_file(self._data_filename)
-        entries = list(self.entries())
-        new_day = False
-
-        if entries:
-            last_entry = entries[-1]
-            new_day = new_entry.datetime.date() != last_entry.datetime.date()
-
-        if self._timezone_config.enabled():
-            new_entry.datetime = self._local_timezone.localize(
-                new_entry.datetime)
-
+        entries = self.entries()
+        insert_new_line_before = _insert_new_line(entries, new_entry)
+        new_entry = _localize(self._timezone_config, self._local_timezone,
+                              new_entry)
         _append_line_to_file(
-            self._data_filename, str(new_entry), insert_blank_line=new_day)
+            self._data_filename,
+            str(new_entry),
+            insert_new_line_before=insert_new_line_before)
 
     def entries(self):
         try:
-            with open(self._data_filename) as text:
-                previous_entry = None
-                for i, string in enumerate((string.strip() for string in text),
-                                           1):
-                    # Ignore empty strings
-                    if not string:
-                        continue
-
-                    new_entry = self._entry_parser.parse(string)
-                    if new_entry is None:
-                        raise SyntaxError(
-                            "Invalid syntax at line %d: %s" % (i, string))
-
-                    if previous_entry and \
-                       previous_entry.datetime > new_entry.datetime:
-                        raise Exception(
-                            "Error line %d. Not in chronological order: %s > %s"
-                            % (i, previous_entry, new_entry))
-                    previous_entry = new_entry
-                    yield new_entry
+            return self._parse_file()
         except IOError:
             pass
 
+    def _parse_file(self):
+        with open(self._data_filename) as log_file:
+            lines = list(enumerate(log_file, 1))
 
-def _append_line_to_file(filename, string, insert_blank_line):
+        return list(parse_log(lines, self._entry_parser))
+
+
+def _append_line_to_file(filename, line, insert_new_line_before):
     try:
         with open(filename, 'rb+') as file:
             file.seek(-1, os.SEEK_END)
@@ -67,9 +51,9 @@ def _append_line_to_file(filename, string, insert_blank_line):
     with open(filename, 'a') as file:
         if prepend_new_line:
             file.write("\n")
-        if insert_blank_line:
+        if insert_new_line_before:
             file.write("\n")
-        file.write(string)
+        file.write(line)
         file.write("\n")
 
 
@@ -80,3 +64,20 @@ def _create_directories_for_file(filename):
         # If the exception is errno.EEXIST, we ignore it
         if err.errno != errno.EEXIST:
             raise
+
+
+def _insert_new_line(entries, new_entry):
+    if not entries:
+        return False
+
+    last_entry = entries[-1]
+    return last_entry.datetime.date() != new_entry.datetime.date()
+
+
+def _localize(timezone_config, local_timezone, new_entry):
+    if not timezone_config.enabled():
+        return new_entry
+
+    new_entry = copy.deepcopy(new_entry)
+    new_entry.datetime = local_timezone.localize(new_entry.datetime)
+    return new_entry
