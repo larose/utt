@@ -14,6 +14,8 @@ yapf = "==0.24.0"
 setuptools = "==40.4.3"
 wheel = "==0.32.1"
 twine = "==1.12.1"
+pytest = "==3.9.2"
+ddt = "==1.2.0"
 
 [requires]
 python_version = "3.6"

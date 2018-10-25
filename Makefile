@@ -41,7 +41,7 @@ test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEG
 
 .PHONY: test-unit
 test-unit:
-	pipenv run python -munittest discover -s $(UNIT_DIR) $(TESTOPTS)
+	pipenv run pytest -v test/unit
 
 .PHONY: upload
 upload: clean test-unit test-integration
