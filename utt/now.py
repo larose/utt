@@ -1,5 +1,4 @@
 import datetime
-from . import util
 
 
 def now(args, timezone_config):
