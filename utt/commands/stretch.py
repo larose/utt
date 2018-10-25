@@ -10,7 +10,7 @@ class StretchHandler:
 
     def __call__(self):
         entries = list(self._log_repo.entries())
-        if len(entries) == 0:
+        if not entries:
             raise Exception("No entry to stretch")
         latest_entry = entries[-1]
         new_entry = Entry(self._now, latest_entry.name, False)

@@ -21,6 +21,10 @@ format:
 bdist_wheel:
 	pipenv run python setup.py bdist_wheel --universal
 
+.PHONY: lint
+lint:
+	pipenv run pylint utt test
+
 .PHONY: sdist
 sdist:
 	pipenv run python setup.py sdist

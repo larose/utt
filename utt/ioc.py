@@ -9,17 +9,17 @@ class Class:
 
     def __call__(self, values):
         if not self._called:
-            arg_names = inspect.getargspec(self._cls.__init__).args
+            arg_names = inspect.getargspec(self._cls.__init__).args  # pylint: disable=deprecated-method
 
             args = []
             for name in arg_names[1:]:
                 value = values[name](values)
                 args.append(value)
 
-            self._cache_value = self._cls(*args)
+            self._cached_value = self._cls(*args)
             self._called = True
 
-        return self._cache_value
+        return self._cached_value
 
 
 class Function:
@@ -30,17 +30,17 @@ class Function:
 
     def __call__(self, values):
         if not self._called:
-            arg_names = inspect.getargspec(self._fn).args
+            arg_names = inspect.getargspec(self._fn).args  # pylint: disable=deprecated-method
 
             args = []
             for name in arg_names:
                 value = values[name](values)
                 args.append(value)
 
-            self._cache_value = self._fn(*args)
+            self._cached_value = self._fn(*args)
             self._called = True
 
-        return self._cache_value
+        return self._cached_value
 
 
 class Value:
@@ -51,6 +51,7 @@ class Value:
         return self._value
 
 
+# pylint: disable=too-many-instance-attributes,useless-object-inheritance
 class Container(object):
     def __init__(self):
         super(Container, self).__setattr__('_values', {})

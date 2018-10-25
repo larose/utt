@@ -109,6 +109,7 @@ def _collect_activities(start_date, end_date, entries):
     return sorted(activities, key=lambda act: act.start)
 
 
+# pylint: disable=too-many-arguments
 def _add_current_entry(entries, now, current_activity_name,
                        disable_current_activity, report_start_date,
                        report_end_date):
@@ -118,6 +119,7 @@ def _add_current_entry(entries, now, current_activity_name,
         entries.append(Entry(now, current_activity_name, True))
 
 
+# pylint: disable=invalid-name
 def _pairwise(iterable):
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = itertools.tee(iterable)

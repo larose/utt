@@ -1,19 +1,18 @@
-import argcomplete
 import argparse
 import datetime
-import pytz
 import sys
+import argcomplete
+import pytz
 
-from .commands import command_modules
-from .__version__ import version
+from .commands import COMMAND_MODULES
+from .__version__ import VERSION
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description=
-        'Ultimate Time Tracker (utt) is a simple command-line time tracking application written in Python.'
-    )
+        description='Ultimate Time Tracker (utt) is a simple command-line time'
+        ' tracking application written in Python.')
 
     argcomplete.autocomplete(parser, append_space=False)
 
@@ -27,12 +26,12 @@ def parse_args():
         '--version',
         action='version',
         version="\n".join(
-            ["utt {version}".format(version=version),
+            ["utt {version}".format(version=VERSION),
              "Python " + sys.version]))
 
     subparsers = parser.add_subparsers(dest="command")
 
-    for module in command_modules:
+    for module in COMMAND_MODULES:
         command = module.Command
         sub_parser = subparsers.add_parser(
             command.NAME, description=command.DESCRIPTION)

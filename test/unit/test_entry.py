@@ -1,7 +1,7 @@
 import datetime
+import unittest
 import ddt
 import pytz
-import unittest
 from utt.entry_parser import EntryParser
 
 VALID_ENTRIES = [
@@ -64,6 +64,7 @@ INVALID_ENTRIES = [("", ), ("2014-", ), ("2014-1-1", ), ("9:15", ),
 class ValidEntry(unittest.TestCase):
     @ddt.data(*VALID_ENTRIES)
     @ddt.unpack
+    # pylint: disable=invalid-name
     def test(self, name, expected_utc, expected_name, tz):
         entry_parser = EntryParser(tz)
         entry = entry_parser.parse(name)

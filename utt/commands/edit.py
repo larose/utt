@@ -26,7 +26,7 @@ Command = EditCommand
 
 
 def _editor():
-    return (os.environ.get("VISUAL") or os.environ.get("EDITOR", "vi"))
+    return os.environ.get("VISUAL") or os.environ.get("EDITOR", "vi")
 
 
 def _run_editor(editor, data_filename):

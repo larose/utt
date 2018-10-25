@@ -5,4 +5,4 @@ from . import hello
 from . import report
 from . import stretch
 
-command_modules = [add, config, edit, hello, report, stretch]
+COMMAND_MODULES = [add, config, edit, hello, report, stretch]

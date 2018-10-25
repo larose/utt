@@ -1,10 +1,7 @@
-import calendar
-import dateutil.tz
-import time
 import tzlocal
 
 
-def local_timezone(args, now):
+def local_timezone(args):
     if args.timezone:
         return args.timezone
 

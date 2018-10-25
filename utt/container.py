@@ -1,5 +1,5 @@
 from . import ioc
-from .commands import command_modules
+from .commands import COMMAND_MODULES
 from .entry_parser import EntryParser
 from .data_dirname import data_dirname
 from .data_filename import data_filename
@@ -13,20 +13,20 @@ from .config import config
 from .default_config import DefaultConfig
 from .parse_args import parse_args
 
-container = ioc.Container()
-container.args = parse_args
-container.config = config
-container.config_dirname = config_dirname
-container.config_filename = config_filename
-container.data_dirname = data_dirname
-container.data_filename = data_filename
-container.default_config = DefaultConfig
-container.entry_parser = EntryParser
-container.now = now
-container.local_timezone = local_timezone
-container.log_repo = LogRepo
-container.timezone_config = timezone_config
+CONTAINER = ioc.Container()
+CONTAINER.args = parse_args
+CONTAINER.config = config
+CONTAINER.config_dirname = config_dirname
+CONTAINER.config_filename = config_filename
+CONTAINER.data_dirname = data_dirname
+CONTAINER.data_filename = data_filename
+CONTAINER.default_config = DefaultConfig
+CONTAINER.entry_parser = EntryParser
+CONTAINER.now = now
+CONTAINER.local_timezone = local_timezone
+CONTAINER.log_repo = LogRepo
+CONTAINER.timezone_config = timezone_config
 
-for module in command_modules:
-    setattr(container, 'command/{}'.format(module.Command.NAME),
+for module in COMMAND_MODULES:
+    setattr(CONTAINER, 'command/{}'.format(module.Command.NAME),
             module.Command.Handler)

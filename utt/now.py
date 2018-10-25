@@ -1,7 +1,7 @@
 import datetime
 
 
-def now(args, timezone_config):
+def now(args):
     if args.now:
         return args.now
 

@@ -1,4 +1,4 @@
 def config(config_filename, default_config):
-    config = default_config()
-    config.read(config_filename)
-    return config
+    conf = default_config()
+    conf.read(config_filename)
+    return conf

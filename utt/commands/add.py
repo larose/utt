@@ -1,8 +1,5 @@
 from ..entry import Entry
 
-import os
-import logging
-
 
 class AddHandler:
     def __init__(self, args, data_filename, now, log_repo):

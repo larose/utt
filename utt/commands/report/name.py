@@ -2,7 +2,7 @@ import re
 
 
 class Name:
-    NAME_REGEX = re.compile("(?P<project>[^\s:]+):\s(?P<task>.*)")
+    NAME_REGEX = re.compile(r"(?P<project>[^\s:]+):\s(?P<task>.*)")
 
     def __init__(self, name):
         self.name = name

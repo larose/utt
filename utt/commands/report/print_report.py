@@ -26,13 +26,15 @@ def _duration(activities):
     return sum((act.duration for act in activities), datetime.timedelta())
 
 
+# pylint: disable=redefined-outer-name
 def _format_date(datetime):
     return datetime.strftime(
         "%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))
 
 
+# pylint: disable=invalid-name
 def _format_duration(duration):
-    mm, ss = divmod(duration.seconds, 60)
+    mm, _ = divmod(duration.seconds, 60)
     hh, mm = divmod(mm, 60)
     s = "%dh%02d" % (hh, mm)
     if duration.days:
@@ -45,13 +47,14 @@ def _format_duration(duration):
 
 
 def _format_duration_hours_only(duration):
-    mm, ss = divmod(duration.seconds, 60)
+    mm, _ = divmod(duration.seconds, 60)
     hh, mm = divmod(mm, 60)
     hh += duration.days * 24
     s = "%dh%02d" % (hh, mm)
     return s
 
 
+# pylint: disable=redefined-outer-name
 def _format_time(datetime):
     return datetime.strftime("%H:%M")
 
@@ -62,7 +65,8 @@ def _groupby_name(activities):
 
     result = []
     sorted_activities = sorted(activities, key=key)
-    for name, activities in itertools.groupby(sorted_activities, key):
+    # pylint: disable=redefined-argument-from-local
+    for _, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
         project = activities[0].name.project
         result.append({
@@ -86,6 +90,7 @@ def _groupby_project(activities):
 
     result = []
     sorted_activities = sorted(activities, key=key)
+    # pylint: disable=redefined-argument-from-local
     for project, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
         result.append({
