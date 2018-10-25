@@ -1,6 +1,7 @@
 *~
 *.swp
 *.pyc
+.coverage
 build
 dist
 test/integration/utt-*.tar.gz
