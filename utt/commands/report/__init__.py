@@ -5,7 +5,6 @@ from .activity import Activity
 from .. import hello
 from ...entry import Entry
 from .print_report import print_report
-from ... import util
 
 
 class ReportHandler:
