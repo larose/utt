@@ -1,7 +1,7 @@
 import sys
 
 from . import ioc
-from . import commands
+from .commands import command_modules
 from .entry_parser import EntryParser
 from .data_dirname import data_dirname
 from .data_filename import data_filename
@@ -14,11 +14,6 @@ from .config_filename import config_filename
 from .config import config
 from .default_config import DefaultConfig
 from .parse_args import parse_args
-
-COMMAND_MODULES = [
-    commands.add, commands.config, commands.edit, commands.hello,
-    commands.stretch, commands.report
-]
 
 
 def main():
@@ -39,7 +34,7 @@ def main():
     container.log_repo = LogRepo
     container.timezone_config = timezone_config
 
-    for module in COMMAND_MODULES:
+    for module in command_modules:
         setattr(container, 'command/{}'.format(module.Command.NAME),
                 module.Command.Handler)
 

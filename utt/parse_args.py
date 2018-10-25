@@ -4,13 +4,8 @@ import datetime
 import pytz
 import sys
 
-from . import commands
+from .commands import command_modules
 from .__version__ import version
-
-COMMAND_MODULES = [
-    commands.add, commands.config, commands.edit, commands.hello,
-    commands.stretch, commands.report
-]
 
 
 def parse_args():
@@ -37,7 +32,7 @@ def parse_args():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    for module in COMMAND_MODULES:
+    for module in command_modules:
         command = module.Command
         sub_parser = subparsers.add_parser(
             command.NAME, description=command.DESCRIPTION)
