@@ -13,7 +13,7 @@ class ReportHandler:
         self._args = args
         self._now = now
         self._log_repo = log_repo
-        self._output = sys.stdout
+        self.output = sys.stdout
 
     def __call__(self):
         args = self._args
@@ -44,7 +44,7 @@ class ReportHandler:
         activities = _collect_activities(collect_from_date, collect_to_date,
                                          entries)
         print_report(report_start_date, report_end_date, activities,
-                     self._output)
+                     self.output)
 
 
 class ReportCommand:

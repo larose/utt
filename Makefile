@@ -45,7 +45,7 @@ test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEG
 
 .PHONY: test-unit
 test-unit:
-	pipenv run pytest --verbose --cov=utt test/unit
+	pipenv run pytest --verbose --verbose --cov=utt test/unit
 
 .PHONY: upload
 upload: clean test-unit test-integration
