@@ -9,12 +9,12 @@ from .activity import Activity
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-def print_report(start_date, end_date, activities):
-    _print_date_section(start_date, end_date, activities)
-    _print_projects_section(start_date, end_date, activities)
-    _print_activities_section(start_date, end_date, activities)
+def print_report(start_date, end_date, activities, output):
+    _print_date_section(start_date, end_date, activities, output)
+    _print_projects_section(start_date, end_date, activities, output)
+    _print_activities_section(start_date, end_date, activities, output)
     if start_date == end_date:
-        _print_details_section(start_date, activities)
+        _print_details_section(start_date, activities, output)
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -110,53 +110,55 @@ def _groupby_project(activities):
     return sorted(result, key=lambda result: result['project'].lower())
 
 
-def _print_activities_section(start_date, end_date, activities):
-    print()
-    print(_title('Activities'))
-    print()
+def _print_activities_section(start_date, end_date, activities, output):
+    print(file=output)
+    print(_title('Activities'), file=output)
+    print(file=output)
 
     activities = _clip_activities_by_range(start_date, end_date, activities)
     names_work = _groupby_name(
         _filter_activities_by_type(activities, Activity.Type.WORK))
-    _print_dicts(names_work)
+    _print_dicts(names_work, output)
 
-    print()
+    print(file=output)
 
     names_break = _groupby_name(
         _filter_activities_by_type(activities, Activity.Type.BREAK))
-    _print_dicts(names_break)
+    _print_dicts(names_break, output)
 
 
-def _print_date_section(start_date, end_date, activities):
-    print()
+def _print_date_section(start_date, end_date, activities, output):
+    print(file=output)
     date_str = _format_date(start_date)
     if end_date != start_date:
         date_str = " ".join([date_str, "to", _format_date(end_date)])
-    print(_title(date_str))
+    print(_title(date_str), file=output)
 
-    print()
+    print(file=output)
     _print_time("Working Time", start_date, end_date, activities,
-                Activity.Type.WORK)
+                Activity.Type.WORK, output)
     _print_time("Break   Time", start_date, end_date, activities,
-                Activity.Type.BREAK)
+                Activity.Type.BREAK, output)
 
 
-def _print_details_section(report_date, activities):
-    print()
-    print(_title('Details'))
-    print()
+def _print_details_section(report_date, activities, output):
+    print(file=output)
+    print(_title('Details'), file=output)
+    print(file=output)
 
     activities = _clip_activities_by_range(report_date, report_date,
                                            activities)
     for activity in activities:
-        print("(%s) %s-%s %s" % (_format_duration(activity.duration),
-                                 _format_time(activity.start),
-                                 _format_time(activity.end), activity.name))
+        print(
+            "(%s) %s-%s %s" % (_format_duration(activity.duration),
+                               _format_time(activity.start),
+                               _format_time(activity.end), activity.name),
+            file=output)
 
-    print()
+    print(file=output)
 
 
-def _print_dicts(dcts):
+def _print_dicts(dcts, output):
     format_string = "({duration}) {project:<{projects_max_length}}: {name}"
 
     projects = (dct['project'] for dct in dcts)
@@ -164,38 +166,33 @@ def _print_dicts(dcts):
         itertools.chain([0], (len(project) for project in projects)))
     context = {'projects_max_length': projects_max_length}
     for dct in dcts:
-        print(format_string.format(**dict(context, **dct)))
+        print(format_string.format(**dict(context, **dct)), file=output)
 
 
-def _print_ignored_overnights(start_date, end_date, activities):
-    activities = _clip_activities_by_range(start_date, end_date, activities)
-    if activities:
-        print("WARN: Ignored {} overnight {}, total time: {}".format(
-            len(activities),
-            "activities" if len(activities) > 1 else "activity",
-            _format_duration(_duration(activities))))
-
-
-def _print_projects_section(start_date, end_date, activities):
-    print()
-    print(_title('Projects'))
-    print()
+def _print_projects_section(start_date, end_date, activities, output):
+    print(file=output)
+    print(_title('Projects'), file=output)
+    print(file=output)
 
     activities = _clip_activities_by_range(start_date, end_date, activities)
 
     projects = _groupby_project(
         _filter_activities_by_type(activities, Activity.Type.WORK))
-    _print_dicts(projects)
+    _print_dicts(projects, output)
 
 
-def _print_time(name, start_date, end_date, activities, activity_type):
+# pylint: disable=too-many-arguments
+def _print_time(name, start_date, end_date, activities, activity_type, output):
     activities = _filter_activities_by_type(activities, activity_type)
     ranged_activities = _clip_activities_by_range(start_date, end_date,
                                                   activities)
 
     report_date_duration = _duration(ranged_activities)
 
-    print("%s: %s" % (name, _format_duration(report_date_duration)), end='')
+    print(
+        "%s: %s" % (name, _format_duration(report_date_duration)),
+        end='',
+        file=output)
 
     if ranged_activities:
         last_activity = ranged_activities[-1]
@@ -206,11 +203,14 @@ def _print_time(name, start_date, end_date, activities, activity_type):
                 " (%s + %s)" %
                 (_format_duration(report_date_duration - cur_duration),
                  _format_duration(cur_duration)),
-                end='')
+                end='',
+                file=output)
     if start_date == end_date:
-        print(" [%s]" % _format_duration_hours_only(_duration(activities)))
+        print(
+            " [%s]" % _format_duration_hours_only(_duration(activities)),
+            file=output)
     else:
-        print()
+        print(file=output)
 
 
 def _title(text):

@@ -1,5 +1,6 @@
 import datetime
 import itertools
+import sys
 
 from .activity import Activity
 from .. import hello
@@ -12,6 +13,7 @@ class ReportHandler:
         self._args = args
         self._now = now
         self._log_repo = log_repo
+        self._output = sys.stdout
 
     def __call__(self):
         args = self._args
@@ -41,7 +43,8 @@ class ReportHandler:
                            report_end_date)
         activities = _collect_activities(collect_from_date, collect_to_date,
                                          entries)
-        print_report(report_start_date, report_end_date, activities)
+        print_report(report_start_date, report_end_date, activities,
+                     self._output)
 
 
 class ReportCommand:
