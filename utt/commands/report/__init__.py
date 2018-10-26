@@ -3,6 +3,8 @@ import sys
 
 from ...activity import Activity
 from .print_report import print_report
+from .common import clip_activities_by_range, filter_activities_by_type
+from .summary_section import SummaryModel
 
 
 class ReportHandler:
@@ -42,7 +44,9 @@ class ReportHandler:
             _filter_activities_by_range(activities, collect_from_date,
                                         collect_to_date))
 
-        print_report(report_start_date, report_end_date, activities,
+        report = Report(activities, report_start_date, report_end_date)
+
+        print_report(report, report_start_date, report_end_date, activities,
                      self.output)
 
 
@@ -154,3 +158,8 @@ def _week_dates(date):
     week_start_date = date + datetime.timedelta(-date.weekday())
     week_end_date = date + datetime.timedelta(6 - date.weekday())
     return week_start_date, week_end_date
+
+
+class Report:
+    def __init__(self, activities, start_date, end_date):
+        self.summary_model = SummaryModel(activities, start_date, end_date)

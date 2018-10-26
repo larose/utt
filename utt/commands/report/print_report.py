@@ -3,14 +3,17 @@ import datetime
 import itertools
 
 from ...activity import Activity
+from .common import clip_activities_by_range, filter_activities_by_type
+from .summary_section import SummaryView
+from . import formatter
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-def print_report(start_date, end_date, activities, output):
-    _print_date_section(start_date, end_date, activities, output)
+def print_report(report, start_date, end_date, activities, output):
+    SummaryView(report.summary_model).render(output)
     _print_projects_section(start_date, end_date, activities, output)
     _print_activities_section(start_date, end_date, activities, output)
     if start_date == end_date:
@@ -20,38 +23,6 @@ def print_report(start_date, end_date, activities, output):
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PRIVATE
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
-def _duration(activities):
-    return sum((act.duration for act in activities), datetime.timedelta())
-
-
-# pylint: disable=redefined-outer-name
-def _format_date(datetime):
-    return datetime.strftime(
-        "%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))
-
-
-# pylint: disable=invalid-name
-def _format_duration(duration):
-    mm, _ = divmod(duration.seconds, 60)
-    hh, mm = divmod(mm, 60)
-    s = "%dh%02d" % (hh, mm)
-    if duration.days:
-
-        def plural(n):
-            return n, abs(n) != 1 and "s" or ""
-
-        s = ("%d day%s, " % plural(duration.days)) + s
-    return s
-
-
-def _format_duration_hours_only(duration):
-    mm, _ = divmod(duration.seconds, 60)
-    hh, mm = divmod(mm, 60)
-    hh += duration.days * 24
-    s = "%dh%02d" % (hh, mm)
-    return s
 
 
 # pylint: disable=redefined-outer-name
@@ -71,7 +42,7 @@ def _groupby_name(activities):
         project = activities[0].name.project
         result.append({
             'duration':
-            _format_duration(
+            formatter.format_duration(
                 sum((act.duration for act in activities),
                     datetime.timedelta())),
             'project':
@@ -95,7 +66,7 @@ def _groupby_project(activities):
         activities = list(activities)
         result.append({
             'duration':
-            _format_duration(
+            formatter.format_duration(
                 sum((act.duration for act in activities),
                     datetime.timedelta())),
             'project':
@@ -112,45 +83,30 @@ def _groupby_project(activities):
 
 def _print_activities_section(start_date, end_date, activities, output):
     print(file=output)
-    print(_title('Activities'), file=output)
+    print(formatter.title('Activities'), file=output)
     print(file=output)
 
-    activities = _clip_activities_by_range(start_date, end_date, activities)
+    activities = clip_activities_by_range(start_date, end_date, activities)
     names_work = _groupby_name(
-        _filter_activities_by_type(activities, Activity.Type.WORK))
+        filter_activities_by_type(activities, Activity.Type.WORK))
     _print_dicts(names_work, output)
 
     print(file=output)
 
     names_break = _groupby_name(
-        _filter_activities_by_type(activities, Activity.Type.BREAK))
+        filter_activities_by_type(activities, Activity.Type.BREAK))
     _print_dicts(names_break, output)
-
-
-def _print_date_section(start_date, end_date, activities, output):
-    print(file=output)
-    date_str = _format_date(start_date)
-    if end_date != start_date:
-        date_str = " ".join([date_str, "to", _format_date(end_date)])
-    print(_title(date_str), file=output)
-
-    print(file=output)
-    _print_time("Working Time", start_date, end_date, activities,
-                Activity.Type.WORK, output)
-    _print_time("Break   Time", start_date, end_date, activities,
-                Activity.Type.BREAK, output)
 
 
 def _print_details_section(report_date, activities, output):
     print(file=output)
-    print(_title('Details'), file=output)
+    print(formatter.title('Details'), file=output)
     print(file=output)
 
-    activities = _clip_activities_by_range(report_date, report_date,
-                                           activities)
+    activities = clip_activities_by_range(report_date, report_date, activities)
     for activity in activities:
         print(
-            "(%s) %s-%s %s" % (_format_duration(activity.duration),
+            "(%s) %s-%s %s" % (formatter.format_duration(activity.duration),
                                _format_time(activity.start),
                                _format_time(activity.end), activity.name),
             file=output)
@@ -171,90 +127,11 @@ def _print_dicts(dcts, output):
 
 def _print_projects_section(start_date, end_date, activities, output):
     print(file=output)
-    print(_title('Projects'), file=output)
+    print(formatter.title('Projects'), file=output)
     print(file=output)
 
-    activities = _clip_activities_by_range(start_date, end_date, activities)
+    activities = clip_activities_by_range(start_date, end_date, activities)
 
     projects = _groupby_project(
-        _filter_activities_by_type(activities, Activity.Type.WORK))
+        filter_activities_by_type(activities, Activity.Type.WORK))
     _print_dicts(projects, output)
-
-
-# pylint: disable=too-many-arguments
-def _print_time(name, start_date, end_date, activities, activity_type, output):
-    activities = _filter_activities_by_type(activities, activity_type)
-    ranged_activities = _clip_activities_by_range(start_date, end_date,
-                                                  activities)
-
-    report_date_duration = _duration(ranged_activities)
-
-    print(
-        "%s: %s" % (name, _format_duration(report_date_duration)),
-        end='',
-        file=output)
-
-    if ranged_activities:
-        last_activity = ranged_activities[-1]
-        if last_activity.is_current_activity and \
-           last_activity.type == activity_type:
-            cur_duration = last_activity.duration
-            print(
-                " (%s + %s)" %
-                (_format_duration(report_date_duration - cur_duration),
-                 _format_duration(cur_duration)),
-                end='',
-                file=output)
-    if start_date == end_date:
-        print(
-            " [%s]" % _format_duration_hours_only(_duration(activities)),
-            file=output)
-    else:
-        print(file=output)
-
-
-def _title(text):
-    return '{:-^80}'.format(' ' + text + ' ')
-
-
-def _clip_activities_by_range(start_date, end_date, activities):
-    """ Clip a list of Activity with the given range, remove activities
-    which have zero durations
-
-    Parameters
-    ----------
-    start_date : datetime.date
-    end_date : datetime.date
-    activities : list of Activity
-
-    Returns
-    -------
-    clipped: list of Activity
-    """
-    delta = datetime.timedelta()
-    start_dt = datetime.datetime(start_date.year, start_date.month,
-                                 start_date.day)
-    end_dt = datetime.datetime(end_date.year, end_date.month, end_date.day, 23,
-                               59, 59, 99999)
-    new_activities = []
-    for activity in activities:
-        clipped = activity.clip(start_dt, end_dt)
-        if clipped.duration > delta:
-            new_activities.append(clipped)
-    return new_activities
-
-
-def _filter_activities_by_type(activities, activity_type):
-    """ Filter a list of Activity with the given activity type.
-
-    Parameters
-    ----------
-    activities : list of Activity
-    activity_type : str
-        An activity type defined in Activity.Type
-
-    Returns
-    -------
-    filtered: list of Activity
-    """
-    return list(filter(lambda act: act.type == activity_type, activities))
