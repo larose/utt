@@ -1,11 +1,8 @@
 # pylint: disable=redefined-outer-name
 
 import datetime
-import io
-
 import pytest
-
-from utt.commands.report import ReportHandler
+import utt.report
 from utt.entry import Entry
 from utt.activities import Activities
 
@@ -25,77 +22,6 @@ class InMemoryEntries:
 
     def __call__(self):
         return self._entries
-
-
-@pytest.fixture
-def expected_output_single_day():
-    return """
----------------------- Wednesday, Mar 19, 2014 (week 12) -----------------------
-
-Working Time: 7h30 (5h30 + 2h00) [8h45]
-Break   Time: 1h00 [1h00]
-
------------------------------------ Projects -----------------------------------
-
-(3h00)     : -- Current Activity --, hard work
-(0h30) A   : z-8
-(3h15) asd : A-526
-(0h45) qwer: a-9, b-73, C-123
-
----------------------------------- Activities ----------------------------------
-
-(2h00)     : -- Current Activity --
-(1h00)     : hard work
-(0h30) A   : z-8
-(3h15) asd : A-526
-(0h15) qwer: a-9
-(0h15) qwer: b-73
-(0h15) qwer: C-123
-
-(1h00) : lunch**
-
------------------------------------ Details ------------------------------------
-
-(3h00) 09:00-12:00 asd: A-526
-(1h00) 12:00-13:00 lunch**
-(1h00) 13:00-14:00 hard work
-(0h15) 14:00-14:15 qwer: b-73
-(0h15) 14:15-14:30 asd: A-526
-(0h15) 14:30-14:45 qwer: C-123
-(0h15) 14:45-15:00 qwer: a-9
-(1h00) 15:00-16:00 black out ***
-(0h30) 16:00-16:30 A: z-8
-(2h00) 16:30-18:30 -- Current Activity --
-
-"""
-
-
-@pytest.fixture
-def expected_output_range():
-    return """
----- Saturday, Mar 15, 2014 (week 11) to Wednesday, Mar 19, 2014 (week 12) -----
-
-Working Time: 6h45
-Break   Time: 1h00
-
------------------------------------ Projects -----------------------------------
-
-(2h15)     : hard work
-(0h30) A   : z-8
-(3h15) asd : A-526
-(0h45) qwer: a-9, b-73, C-123
-
----------------------------------- Activities ----------------------------------
-
-(2h15)     : hard work
-(0h30) A   : z-8
-(3h15) asd : A-526
-(0h15) qwer: a-9
-(0h15) qwer: b-73
-(0h15) qwer: C-123
-
-(1h00) : lunch**
-"""
 
 
 @pytest.fixture()
@@ -130,25 +56,33 @@ def activities(entries):
     return Activities(entries)
 
 
-def test_range(args, activities, expected_output_range):
+def test_range(args, activities):
     now = datetime.datetime(2014, 3, 19, 18, 30)
 
     args.from_date = datetime.date(2014, 3, 15)
     args.to_date = datetime.date(2014, 3, 19)
     args.no_current_activity = True
 
-    actual_output = io.StringIO()
-    report_handler = ReportHandler(args, now, activities)
-    report_handler.output = actual_output
-    report_handler()
-    assert expected_output_range == actual_output.getvalue()
+    actual_report = utt.report.report(args, now, activities)
+    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
+        hours=6, minutes=45)
+    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
+        hours=6, minutes=45)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
+        hours=1)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
+        hours=1)
 
 
-def test_single_day(args, activities, expected_output_single_day):
+def test_single_day(args, activities):
     now = datetime.datetime(2014, 3, 19, 18, 30)
 
-    actual_output = io.StringIO()
-    report_handler = ReportHandler(args, now, activities)
-    report_handler.output = actual_output
-    report_handler()
-    assert expected_output_single_day == actual_output.getvalue()
+    actual_report = utt.report.report(args, now, activities)
+    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
+        hours=7, minutes=30)
+    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
+        hours=8, minutes=45)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
+        hours=1)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
+        hours=1)

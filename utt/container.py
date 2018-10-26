@@ -1,3 +1,5 @@
+import sys
+
 from . import ioc
 from .commands import COMMAND_MODULES
 from .entry_parser import EntryParser
@@ -14,6 +16,7 @@ from .default_config import DefaultConfig
 from .parse_args import parse_args
 from .entries import Entries
 from .activities import Activities
+from .report import report
 
 CONTAINER = ioc.Container()
 CONTAINER.activities = Activities
@@ -27,8 +30,10 @@ CONTAINER.data_filename = data_filename
 CONTAINER.default_config = DefaultConfig
 CONTAINER.entries = Entries
 CONTAINER.entry_parser = EntryParser
-CONTAINER.now = now
 CONTAINER.local_timezone = local_timezone
+CONTAINER.now = now
+CONTAINER.output = sys.stdout
+CONTAINER.report = report
 CONTAINER.timezone_config = timezone_config
 
 for module in COMMAND_MODULES:

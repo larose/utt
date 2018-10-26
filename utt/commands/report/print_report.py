@@ -12,7 +12,11 @@ from . import formatter
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-def print_report(report, start_date, end_date, activities, output):
+def print_report(report, output):
+    start_date = report.start_date
+    end_date = report.end_date
+    activities = report.activities
+
     SummaryView(report.summary_model).render(output)
     _print_projects_section(start_date, end_date, activities, output)
     _print_activities_section(start_date, end_date, activities, output)
