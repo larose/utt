@@ -2,7 +2,7 @@ from __future__ import print_function
 import datetime
 import itertools
 
-from .activity import Activity
+from ...activity import Activity
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # PUBLIC

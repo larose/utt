@@ -7,6 +7,7 @@ import pytest
 
 from utt.commands.report import ReportHandler
 from utt.entry import Entry
+from utt.activities import Activities
 
 
 class Args:
@@ -18,11 +19,11 @@ class Args:
         self.to_date = None
 
 
-class InMemoryLogRepo:
+class InMemoryEntries:
     def __init__(self, entries):
         self._entries = entries
 
-    def entries(self):
+    def __call__(self):
         return self._entries
 
 
@@ -104,7 +105,7 @@ def args():
 
 @pytest.fixture()
 def entries():
-    return [
+    entry_list = [
         Entry(datetime.datetime(2014, 3, 14, 8, 0), "hello", False),
         Entry(datetime.datetime(2014, 3, 14, 9, 0), "hard work", False),
         Entry(datetime.datetime(2014, 3, 17, 9, 0), "hello", False),
@@ -121,13 +122,15 @@ def entries():
         Entry(datetime.datetime(2014, 3, 19, 16, 30), "A: z-8", False),
     ]
 
+    return InMemoryEntries(entry_list)
+
 
 @pytest.fixture()
-def log_repo(entries):
-    return InMemoryLogRepo(entries)
+def activities(entries):
+    return Activities(entries)
 
 
-def test_range(args, log_repo, expected_output_range):
+def test_range(args, activities, expected_output_range):
     now = datetime.datetime(2014, 3, 19, 18, 30)
 
     args.from_date = datetime.date(2014, 3, 15)
@@ -135,17 +138,17 @@ def test_range(args, log_repo, expected_output_range):
     args.no_current_activity = True
 
     actual_output = io.StringIO()
-    report_handler = ReportHandler(args, log_repo, now)
+    report_handler = ReportHandler(args, now, activities)
     report_handler.output = actual_output
     report_handler()
     assert expected_output_range == actual_output.getvalue()
 
 
-def test_single_day(args, log_repo, expected_output_single_day):
+def test_single_day(args, activities, expected_output_single_day):
     now = datetime.datetime(2014, 3, 19, 18, 30)
 
     actual_output = io.StringIO()
-    report_handler = ReportHandler(args, log_repo, now)
+    report_handler = ReportHandler(args, now, activities)
     report_handler.output = actual_output
     report_handler()
     assert expected_output_single_day == actual_output.getvalue()

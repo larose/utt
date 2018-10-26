@@ -2,14 +2,14 @@ from ..entry import Entry
 
 
 class AddHandler:
-    def __init__(self, args, data_filename, now, log_repo):
+    def __init__(self, args, data_filename, now, add_entry):
         self._args = args
         self._data_filename = data_filename
         self._now = now
-        self._log_repo = log_repo
+        self._add_entry = add_entry
 
     def __call__(self):
-        self._log_repo.append_entry(Entry(self._now, self._args.name, False))
+        self._add_entry(Entry(self._now, self._args.name, False))
 
 
 class AddCommand:

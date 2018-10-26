@@ -3,18 +3,19 @@ from ..entry import Entry
 
 
 class StretchHandler:
-    def __init__(self, args, now, log_repo):
+    def __init__(self, args, now, add_entry, entries):
         self._args = args
         self._now = now
-        self._log_repo = log_repo
+        self._add_entry = add_entry
+        self._entries = entries
 
     def __call__(self):
-        entries = list(self._log_repo.entries())
+        entries = self._entries()
         if not entries:
             raise Exception("No entry to stretch")
         latest_entry = entries[-1]
         new_entry = Entry(self._now, latest_entry.name, False)
-        self._log_repo.append_entry(new_entry)
+        self._add_entry(new_entry)
         print("stretched " + str(latest_entry))
         print("        → " + str(new_entry))
 

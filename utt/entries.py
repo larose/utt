@@ -1,4 +1,25 @@
-def parse_log(lines, entry_parser):
+class Entries:
+    def __init__(self, data_filename, timezone_config, entry_parser,
+                 local_timezone):
+        self._data_filename = data_filename
+        self._timezone_config = timezone_config
+        self._entry_parser = entry_parser
+        self._local_timezone = local_timezone
+
+    def __call__(self):
+        try:
+            return self._parse_file()
+        except IOError:
+            return []
+
+    def _parse_file(self):
+        with open(self._data_filename) as log_file:
+            lines = list(enumerate(log_file, 1))
+
+        return list(_parse_log(lines, self._entry_parser))
+
+
+def _parse_log(lines, entry_parser):
     previous_entry = None
     for line_number, line in lines:
         parsed_line = _parse_line(previous_entry, line_number, line.strip(),

@@ -1,33 +1,29 @@
 import datetime
-import itertools
 import sys
 
-from .activity import Activity
-from .. import hello
+from ...activity import Activity
 from ...entry import Entry
 from .print_report import print_report
 
 
 class ReportHandler:
-    def __init__(self, args, log_repo, now):
+    def __init__(self, args, now, activities):
         self._args = args
         self._now = now
-        self._log_repo = log_repo
+        self._activities = activities
         self.output = sys.stdout
 
     def __call__(self):
-        args = self._args
-
         today = self._now.date()
-        if args.report_date is None:
+        if self._args.report_date is None:
             report_date = today
         else:
-            report_date = _parse_date(self._now, args.report_date)
+            report_date = _parse_date(self._now, self._args.report_date)
 
-        report_start_date = (report_date
-                             if args.from_date is None else args.from_date)
-        report_end_date = (report_date
-                           if args.to_date is None else args.to_date)
+        report_start_date = (report_date if self._args.from_date is None else
+                             self._args.from_date)
+        report_end_date = (report_date if self._args.to_date is None else
+                           self._args.to_date)
 
         if report_start_date == report_end_date:
             collect_from_date, collect_to_date = _week_dates(report_start_date)
@@ -37,12 +33,16 @@ class ReportHandler:
 
         collect_to_date = min(today, collect_to_date)
         collect_from_date = min(today, collect_from_date)
-        entries = list(self._log_repo.entries())
-        _add_current_entry(entries, self._now, args.current_activity,
-                           args.no_current_activity, report_start_date,
-                           report_end_date)
-        activities = _collect_activities(collect_from_date, collect_to_date,
-                                         entries)
+
+        activities = self._activities()
+        _add_current_activity(
+            activities, self._now, self._args.current_activity,
+            self._args.no_current_activity, report_start_date, report_end_date)
+
+        activities = list(
+            _filter_activities_by_range(activities, collect_from_date,
+                                        collect_to_date))
+
         print_report(report_start_date, report_end_date, activities,
                      self.output)
 
@@ -92,41 +92,34 @@ DAY_NAMES = [
 ]
 
 
-def _collect_activities(start_date, end_date, entries):
+def _filter_activities_by_range(activities, start_date, end_date):
     start_datetime = datetime.datetime(start_date.year, start_date.month,
                                        start_date.day)
     end_datetime = datetime.datetime(end_date.year, end_date.month,
                                      end_date.day, 23, 59, 59, 99999)
 
-    activities = []
-    for prev_entry, next_entry in _pairwise(entries):
-        if next_entry.name == hello.HelloCommand.NAME:
-            continue
-
-        full_activity = Activity(prev_entry.datetime, next_entry)
+    for full_activity in activities:
         activity = full_activity.clip(start_datetime, end_datetime)
         if activity.duration > datetime.timedelta():
-            activities.append(activity)
-
-    return sorted(activities, key=lambda act: act.start)
+            yield activity
 
 
 # pylint: disable=too-many-arguments
-def _add_current_entry(entries, now, current_activity_name,
-                       disable_current_activity, report_start_date,
-                       report_end_date):
+def _add_current_activity(activities, now, current_activity_name,
+                          disable_current_activity, report_start_date,
+                          report_end_date):
+
+    if not activities or disable_current_activity:
+        return
+
     today = now.date()
-    if (today >= report_start_date and today <= report_end_date and entries
-            and entries[-1].datetime < now and not disable_current_activity):
-        entries.append(Entry(now, current_activity_name, True))
+    report_is_today = today == report_start_date and today == report_end_date
+    now_is_after_last_activity = activities[-1].end < now
 
-
-# pylint: disable=invalid-name
-def _pairwise(iterable):
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    a, b = itertools.tee(iterable)
-    next(b, None)
-    return zip(a, b)
+    if report_is_today and now_is_after_last_activity:
+        activities.append(
+            Activity(activities[-1].end, Entry(now, current_activity_name,
+                                               True)))
 
 
 def _parse_absolute_date(datestring):

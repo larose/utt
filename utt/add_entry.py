@@ -2,20 +2,18 @@ import errno
 import copy
 import os
 
-from .log_parser import parse_log
 
-
-class LogRepo:
-    def __init__(self, data_filename, timezone_config, entry_parser,
+class AddEntry:
+    def __init__(self, data_filename, timezone_config, entries,
                  local_timezone):
         self._data_filename = data_filename
         self._timezone_config = timezone_config
-        self._entry_parser = entry_parser
         self._local_timezone = local_timezone
+        self._entries = entries
 
-    def append_entry(self, new_entry):
+    def __call__(self, new_entry):
         _create_directories_for_file(self._data_filename)
-        entries = self.entries()
+        entries = self._entries()
         insert_new_line_before = _insert_new_line(entries, new_entry)
         new_entry = _localize(self._timezone_config, self._local_timezone,
                               new_entry)
@@ -23,18 +21,6 @@ class LogRepo:
             self._data_filename,
             str(new_entry),
             insert_new_line_before=insert_new_line_before)
-
-    def entries(self):
-        try:
-            return self._parse_file()
-        except IOError:
-            return []
-
-    def _parse_file(self):
-        with open(self._data_filename) as log_file:
-            lines = list(enumerate(log_file, 1))
-
-        return list(parse_log(lines, self._entry_parser))
 
 
 def _append_line_to_file(filename, line, insert_new_line_before):

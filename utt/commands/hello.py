@@ -2,13 +2,13 @@ from ..entry import Entry
 
 
 class HelloHandler:
-    def __init__(self, args, now, log_repo):
+    def __init__(self, args, now, add_entry):
         self._args = args
         self._now = now
-        self._log_repo = log_repo
+        self._add_entry = add_entry
 
     def __call__(self):
-        self._log_repo.append_entry(Entry(self._now, 'hello', False))
+        self._add_entry(Entry(self._now, 'hello', False))
 
 
 class HelloCommand:
