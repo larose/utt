@@ -14,8 +14,6 @@ def parse_args():
         description='Ultimate Time Tracker (utt) is a simple command-line time'
         ' tracking application written in Python.')
 
-    argcomplete.autocomplete(parser, append_space=False)
-
     parser.add_argument("--data", dest="data_filename")
 
     parser.add_argument("--now", dest="now", type=parse_datetime)
@@ -37,6 +35,7 @@ def parse_args():
             command.NAME, description=command.DESCRIPTION)
         command.add_args(sub_parser)
 
+    argcomplete.autocomplete(parser, append_space=False)
     return parser.parse_args()
 
 

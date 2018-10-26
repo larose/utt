@@ -2,7 +2,7 @@ UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 .PHONY: all
-all: add edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight report-overnight-range report-change-timezone version
+all: add completion edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight report-overnight-range report-change-timezone version
 
 $(UTT):
 	$(PIP) install utt-*.whl
@@ -21,6 +21,18 @@ add: $(UTT)
 	bash -c 'diff $(UTT_DATA_FILENAME) data/add/utt.log'
 
 	@echo "<< ADD"
+
+.PHONY: completion
+completion: $(UTT)
+	@echo
+	@echo ">> COMPLETION"
+
+	head -c 1024 `which utt` | grep "PYTHON_ARGCOMPLETE_OK"
+	activate-global-python-argcomplete
+	bash --login -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete_global utt && echo $${COMPREPLY[@]}) <(echo -h --help --data --now --timezone --version add config edit hello report stretch)'
+
+	@echo "<< COMPLETION"
+
 
 .PHONY: edit
 edit: $(UTT)

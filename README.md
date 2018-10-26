@@ -330,20 +330,24 @@ Break   Time: 0h00 [0h30]
 
 ## Bash completion
 
-To enable bash completion for `utt`:
+`utt` uses [argcomplete](https://github.com/kislyuk/argcomplete) to
+provide bash completion.
 
-Execute once:
+First, make sure
+[`bash-completion`](https://github.com/scop/bash-completion) is
+installed:
+
+- Fedora: `$ sudo dnf install bash-completion`
+- Ubuntu: `$ sudo apt-get install bash-completion`
+
+
+Then execute:
 
 ```
-$ activate-global-python-argcomplete --user
+$ sudo activate-global-python-argcomplete
 ```
 
-Then add the folllowing line to `~/.bashrc`:
-
-```
-eval "$(register-python-argcomplete utt)"
-```
-
+Finally, start a new shell or execute `source /etc/profile`.
 
 ## Development
 
