@@ -17,25 +17,31 @@ from .parse_args import parse_args
 from .entries import Entries
 from .activities import Activities
 from .report import report
+from .entry_lines import EntryLines
 
-CONTAINER = ioc.Container()
-CONTAINER.activities = Activities
-CONTAINER.add_entry = AddEntry
-CONTAINER.args = parse_args
-CONTAINER.config = config
-CONTAINER.config_dirname = config_dirname
-CONTAINER.config_filename = config_filename
-CONTAINER.data_dirname = data_dirname
-CONTAINER.data_filename = data_filename
-CONTAINER.default_config = DefaultConfig
-CONTAINER.entries = Entries
-CONTAINER.entry_parser = EntryParser
-CONTAINER.local_timezone = local_timezone
-CONTAINER.now = now
-CONTAINER.output = sys.stdout
-CONTAINER.report = report
-CONTAINER.timezone_config = timezone_config
 
-for module in COMMAND_MODULES:
-    setattr(CONTAINER, 'command/{}'.format(module.Command.NAME),
-            module.Command.Handler)
+def create_container():
+    container = ioc.Container()
+    container.activities = Activities
+    container.add_entry = AddEntry
+    container.args = parse_args
+    container.config = config
+    container.config_dirname = config_dirname
+    container.config_filename = config_filename
+    container.data_dirname = data_dirname
+    container.data_filename = data_filename
+    container.default_config = DefaultConfig
+    container.entries = Entries
+    container.entry_parser = EntryParser
+    container.entry_lines = EntryLines
+    container.local_timezone = local_timezone
+    container.now = now
+    container.output = sys.stdout
+    container.report = report
+    container.timezone_config = timezone_config
+
+    for module in COMMAND_MODULES:
+        setattr(container, 'command/{}'.format(module.Command.NAME),
+                module.Command.Handler)
+
+    return container

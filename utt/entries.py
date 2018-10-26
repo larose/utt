@@ -1,22 +1,11 @@
 class Entries:
-    def __init__(self, data_filename, timezone_config, entry_parser,
-                 local_timezone):
-        self._data_filename = data_filename
+    def __init__(self, entry_lines, timezone_config, entry_parser):
+        self._entry_lines = entry_lines
         self._timezone_config = timezone_config
         self._entry_parser = entry_parser
-        self._local_timezone = local_timezone
 
     def __call__(self):
-        try:
-            return self._parse_file()
-        except IOError:
-            return []
-
-    def _parse_file(self):
-        with open(self._data_filename) as log_file:
-            lines = list(enumerate(log_file, 1))
-
-        return list(_parse_log(lines, self._entry_parser))
+        return list(_parse_log(self._entry_lines(), self._entry_parser))
 
 
 def _parse_log(lines, entry_parser):

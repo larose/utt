@@ -1,14 +1,16 @@
 import sys
 
-from .container import CONTAINER
+from .container import create_container
 
 
 def main():
     if len(sys.argv) == 1:
         sys.argv.append('--help')
 
+    container = create_container()
+
     # pylint: disable=no-member
-    getattr(CONTAINER, 'command/{}'.format(CONTAINER.args.command))()
+    getattr(container, 'command/{}'.format(container.args.command))()
 
 
 if __name__ == '__main__':
