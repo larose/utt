@@ -16,7 +16,8 @@ class Activities:
             if next_entry.name == hello.HelloCommand.NAME:
                 continue
 
-            activity = Activity(prev_entry.datetime, next_entry)
+            activity = Activity(next_entry.name, prev_entry.datetime,
+                                next_entry.datetime, False)
             yield activity
 
 

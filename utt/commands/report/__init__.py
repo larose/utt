@@ -2,7 +2,6 @@ import datetime
 import sys
 
 from ...activity import Activity
-from ...entry import Entry
 from .print_report import print_report
 
 
@@ -118,8 +117,7 @@ def _add_current_activity(activities, now, current_activity_name,
 
     if report_is_today and now_is_after_last_activity:
         activities.append(
-            Activity(activities[-1].end, Entry(now, current_activity_name,
-                                               True)))
+            Activity(current_activity_name, activities[-1].end, now, True))
 
 
 def _parse_absolute_date(datestring):
