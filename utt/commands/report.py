@@ -1,6 +1,6 @@
 import datetime
 
-from .print_report import print_report
+from ..report.print_report import print_report
 
 
 class ReportHandler:

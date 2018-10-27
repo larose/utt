@@ -1,7 +1,7 @@
 from __future__ import print_function
 import datetime
 
-from ...activity import Activity
+from ..activity import Activity
 from .common import clip_activities_by_range, filter_activities_by_type
 from . import formatter
 

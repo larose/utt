@@ -1,4 +1,17 @@
+from __future__ import print_function
 import datetime
+import itertools
+
+
+def print_dicts(dcts, output):
+    format_string = "({duration}) {project:<{projects_max_length}}: {name}"
+
+    projects = (dct['project'] for dct in dcts)
+    projects_max_length = max(
+        itertools.chain([0], (len(project) for project in projects)))
+    context = {'projects_max_length': projects_max_length}
+    for dct in dcts:
+        print(format_string.format(**dict(context, **dct)), file=output)
 
 
 def clip_activities_by_range(start_date, end_date, activities):
