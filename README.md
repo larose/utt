@@ -17,8 +17,6 @@ application written in Python.
     - [Report](#report)
 - [Bash completion](#bash-completion)
 - [Development](#development)
-    - [Integration tests](#integration-tests)
-    - [Unit tests](#unit-tests)
 - [Contributors](#contributors)
 - [License](#license)
 - [Website](#website)
@@ -351,54 +349,62 @@ Finally, start a new shell or execute `source /etc/profile`.
 
 ## Development
 
-utt is written in Python and comptatible with both Python 2 and Python
-3.
+### Dependencies
 
-Directory layout:
+- Python 3
+- [Make](https://www.gnu.org/software/make/)
+- [Pipenv](https://pipenv.readthedocs.io/en/latest/)
+- [Docker](https://www.docker.com/)
 
-- `bin/utt`: executable file
-- `test/integration`: [integration tests](#integration-tests)
-- `test/unit`: [unit tests](#unit-tests)
-- `utt`: source code
+### Format code
 
+To format code:
+
+`$ make format`
+
+
+### Lint
+
+To lint code:
+
+`$ make lint`
 
 ### Executing `utt` from source
 
-To execute `utt` from source:
+To run `utt` from local source:
 
-`./run`
+`$ pipenv run ./run`
 
+### Tests
 
-### Integration tests
+To execute unit and integration tests:
 
-Although utt is cross-platform, the test environment is
-Linux-centric. We use Makefile and Docker.
+`$ make test`
 
-To run the integration tests for Python 2 and Python 3:
+#### Unit Tests
+
+`$ make test-unit`
+
+#### Integration tests
+
+To run integration tests for Python 2 and Python 3:
 
 `$ make test-integration`
 
 This will create two Docker containers, one for each version of
 Python, and run all the tests in `test/integration/Makefile`.
 
-To run the integration tests for Python 2 only:
+To run integration tests for Python 2 only:
 
 `$ make test-integration-py2`
 
-To run the integration tests for Python 3 only:
+To run integration tests for Python 3 only:
 
 `$ make test-integration-py3`
 
 To run a specific test:
 
 `$ make test-integration INTEGRATION_CMD=hello`
-
-
-### Unit tests
-
-To run the unit tests:
-
-`$ make test-unit`
 
 
 ## Contributors
