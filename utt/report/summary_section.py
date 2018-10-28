@@ -7,17 +7,20 @@ from . import formatter
 
 
 class WorkingBreakTime:
-    def __init__(self, activity_type, activities, start_date, end_date):
+    # pylint: disable=too-many-arguments
+    def __init__(self, activity_type, activities, start_date, end_date,
+                 local_timezone):
         self.activity_type = activity_type
 
         self.total_duration = _duration(
-            clip_activities_by_range(start_date, end_date, activities))
+            clip_activities_by_range(start_date, end_date, activities,
+                                     local_timezone))
 
         self.weekly_duration = _duration(activities)
 
 
 class SummaryModel:
-    def __init__(self, activities, start_date, end_date):
+    def __init__(self, activities, start_date, end_date, local_timezone):
         self.start_date = start_date
         self.end_date = end_date
 
@@ -26,16 +29,19 @@ class SummaryModel:
         break_activities = filter_activities_by_type(activities,
                                                      Activity.Type.BREAK)
 
-        self.working_time = WorkingBreakTime(
-            Activity.Type.WORK, working_activities, start_date, end_date)
-        self.break_time = WorkingBreakTime(
-            Activity.Type.BREAK, break_activities, start_date, end_date)
+        self.working_time = WorkingBreakTime(Activity.Type.WORK,
+                                             working_activities, start_date,
+                                             end_date, local_timezone)
+        self.break_time = WorkingBreakTime(Activity.Type.BREAK,
+                                           break_activities, start_date,
+                                           end_date, local_timezone)
 
-        self.current_activity = self._current_activity(activities)
+        self.current_activity = self._current_activity(activities,
+                                                       local_timezone)
 
-    def _current_activity(self, activities):
+    def _current_activity(self, activities, local_timezone):
         activities = clip_activities_by_range(self.start_date, self.end_date,
-                                              activities)
+                                              activities, local_timezone)
 
         if not activities:
             return None

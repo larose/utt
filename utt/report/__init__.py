@@ -4,7 +4,7 @@ from ..activity import Activity
 from .model import Report
 
 
-def report(args, now, activities):
+def report(args, now, activities, local_timezone):
     today = now.date()
     if args.report_date is None:
         report_date = today
@@ -31,9 +31,10 @@ def report(args, now, activities):
 
     activities_ = list(
         _filter_activities_by_range(activities_, collect_from_date,
-                                    collect_to_date))
+                                    collect_to_date, local_timezone))
 
-    return Report(activities_, report_start_date, report_end_date)
+    return Report(activities_, report_start_date, report_end_date,
+                  local_timezone)
 
 
 DAY_NAMES = [
@@ -42,11 +43,13 @@ DAY_NAMES = [
 ]
 
 
-def _filter_activities_by_range(activities, start_date, end_date):
-    start_datetime = datetime.datetime(start_date.year, start_date.month,
-                                       start_date.day)
-    end_datetime = datetime.datetime(end_date.year, end_date.month,
-                                     end_date.day, 23, 59, 59, 99999)
+def _filter_activities_by_range(activities, start_date, end_date,
+                                local_timezone):
+    start_datetime = local_timezone.localize(
+        datetime.datetime(start_date.year, start_date.month, start_date.day))
+    end_datetime = local_timezone.localize(
+        datetime.datetime(end_date.year, end_date.month, end_date.day, 23, 59,
+                          59, 99999))
 
     for full_activity in activities:
         activity = full_activity.clip(start_datetime, end_datetime)

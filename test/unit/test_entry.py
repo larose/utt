@@ -68,7 +68,7 @@ class ValidEntry(unittest.TestCase):
     def test(self, name, expected_utc, expected_name, tz):
         entry_parser = EntryParser(tz)
         entry = entry_parser.parse(name)
-        expected_datetime = tz.fromutc(expected_utc).replace(tzinfo=None)
+        expected_datetime = tz.fromutc(expected_utc)
         self.assertEqual(entry.datetime, expected_datetime)
         self.assertEqual(entry.name, expected_name)
 

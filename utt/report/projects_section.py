@@ -8,8 +8,9 @@ from ..activity import Activity
 
 
 class ProjectsModel:
-    def __init__(self, activities, start_date, end_date):
-        activities = clip_activities_by_range(start_date, end_date, activities)
+    def __init__(self, activities, start_date, end_date, local_timezone):
+        activities = clip_activities_by_range(start_date, end_date, activities,
+                                              local_timezone)
 
         self.projects = _groupby_project(
             filter_activities_by_type(activities, Activity.Type.WORK))

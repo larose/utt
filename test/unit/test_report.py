@@ -2,6 +2,7 @@
 
 import datetime
 import pytest
+import pytz
 import utt.report
 from utt.entry import Entry
 from utt.activities import Activities
@@ -30,7 +31,12 @@ def args():
 
 
 @pytest.fixture()
-def entries():
+def local_timezone():
+    return pytz.timezone('America/Montreal')
+
+
+@pytest.fixture()
+def entries(local_timezone):
     entry_list = [
         Entry(datetime.datetime(2014, 3, 14, 8, 0), "hello", False),
         Entry(datetime.datetime(2014, 3, 14, 9, 0), "hard work", False),
@@ -48,6 +54,9 @@ def entries():
         Entry(datetime.datetime(2014, 3, 19, 16, 30), "A: z-8", False),
     ]
 
+    for entry in entry_list:
+        entry.datetime = entry.datetime.astimezone(local_timezone)
+
     return InMemoryEntries(entry_list)
 
 
@@ -56,14 +65,14 @@ def activities(entries):
     return Activities(entries)
 
 
-def test_range(args, activities):
-    now = datetime.datetime(2014, 3, 19, 18, 30)
+def test_range(args, activities, local_timezone):
+    now = datetime.datetime(2014, 3, 19, 18, 30).astimezone(local_timezone)
 
     args.from_date = datetime.date(2014, 3, 15)
     args.to_date = datetime.date(2014, 3, 19)
     args.no_current_activity = True
 
-    actual_report = utt.report.report(args, now, activities)
+    actual_report = utt.report.report(args, now, activities, local_timezone)
     assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
         hours=6, minutes=45)
     assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
@@ -74,10 +83,10 @@ def test_range(args, activities):
         hours=1)
 
 
-def test_single_day(args, activities):
-    now = datetime.datetime(2014, 3, 19, 18, 30)
+def test_single_day(args, activities, local_timezone):
+    now = datetime.datetime(2014, 3, 19, 18, 30).astimezone(local_timezone)
 
-    actual_report = utt.report.report(args, now, activities)
+    actual_report = utt.report.report(args, now, activities, local_timezone)
     assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
         hours=7, minutes=30)
     assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
