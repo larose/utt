@@ -1,7 +1,7 @@
-from .summary_section import SummaryView
-from .projects_section import ProjectsView
 from .activities_section import ActivitiesView
 from .details_section import DetailsView
+from .projects_section import ProjectsView
+from .summary_section import SummaryView
 
 
 class ReportView:

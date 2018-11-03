@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ee5a5f8ff072ac6ee58741f0437d81dcc879b2616d9c477b2329c89b61c8c368"
+            "sha256": "f683b0b08832b5f91af644d029f44bc7b66386049d0c8eafd5231d9a0880f14d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -160,12 +160,6 @@
             ],
             "version": "==0.14"
         },
-        "future": {
-            "hashes": [
-                "sha256:e39ced1ab767b5936646cedba8bcce582398233d6a627067d4c6a454c90cfedb"
-            ],
-            "version": "==0.16.0"
-        },
         "idna": {
             "hashes": [
                 "sha256:156a6814fb5ac1fc6850fb002e0852d56c0c8d2531923a51032d1b70760e186e",
@@ -179,6 +173,7 @@
                 "sha256:b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8",
                 "sha256:ec9ef8f4a9bc6f71eec99e1806bfa2de401650d996c59330782b89a5555c1497"
             ],
+            "index": "pypi",
             "version": "==4.3.4"
         },
         "lazy-object-proxy": {
@@ -284,10 +279,10 @@
         },
         "readme-renderer": {
             "hashes": [
-                "sha256:219a02f5359b6631f5ab952f6906c6c105bdd8bc4bf19c1ec5ee8bd9ea2dc1eb",
-                "sha256:f8f122ad9fd6d138337531379575a01a0b6ca70aedca78f094cb833da38c8c0c"
+                "sha256:bb16f55b259f27f75f640acf5e00cf897845a8b3e4731b5c1a436e4b8529202f",
+                "sha256:c8532b79afc0375a85f10433eca157d6b50f7d6990f337fa498c96cd4bfc203d"
             ],
-            "version": "==23.0"
+            "version": "==24.0"
         },
         "requests": {
             "hashes": [
@@ -356,10 +351,10 @@
         },
         "urllib3": {
             "hashes": [
-                "sha256:41c3db2fc01e5b907288010dec72f9d0a74e37d6994e6eb56849f59fea2265ae",
-                "sha256:8819bba37a02d143296a4d032373c4dd4aca11f6d4c9973335ca75f9c8475f59"
+                "sha256:61bf29cada3fc2fbefad4fdf059ea4bd1b4a86d2b6d15e1c7c0b582b9752fe39",
+                "sha256:de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22"
             ],
-            "version": "==1.24"
+            "version": "==1.24.1"
         },
         "webencodings": {
             "hashes": [

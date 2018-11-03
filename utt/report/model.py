@@ -1,7 +1,7 @@
-from .summary_section import SummaryModel
-from .projects_section import ProjectsModel
 from .activities_section import ActivitiesModel
 from .details_section import DetailsModel
+from .projects_section import ProjectsModel
+from .summary_section import SummaryModel
 
 
 class Report:

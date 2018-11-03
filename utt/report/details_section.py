@@ -1,6 +1,7 @@
 from __future__ import print_function
-from .common import clip_activities_by_range
+
 from . import formatter
+from .common import clip_activities_by_range
 
 
 class DetailsModel:

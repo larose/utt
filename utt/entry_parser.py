@@ -1,5 +1,7 @@
 import re
+
 from dateutil.parser import parse
+
 from .entry import Entry
 
 WITH_TZ = re.compile(

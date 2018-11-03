@@ -1,11 +1,12 @@
 import argparse
 import datetime
 import sys
+
 import argcomplete
 import pytz
 
-from .commands import COMMAND_MODULES
 from .__version__ import VERSION
+from .commands import COMMAND_MODULES
 
 
 def parse_args():
