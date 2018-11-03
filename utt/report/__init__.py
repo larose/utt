@@ -11,9 +11,10 @@ def report(args, now, activities, local_timezone):
     else:
         report_date = _parse_date(now, args.report_date)
 
-    report_start_date = (report_date
-                         if args.from_date is None else args.from_date)
-    report_end_date = (report_date if args.to_date is None else args.to_date)
+    report_start_date = (report_date if args.from_date is None else
+                         _parse_date(now, args.from_date))
+    report_end_date = (report_date if args.to_date is None else _parse_date(
+        now, args.to_date))
 
     if report_start_date == report_end_date:
         collect_from_date, collect_to_date = _week_dates(report_start_date)
