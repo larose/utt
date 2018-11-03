@@ -38,19 +38,15 @@ class ReportCommand:
             "--from",
             default=None,
             dest="from_date",
-            type=_parse_absolute_date,
+            type=str,
             help="Specify an inclusive start date to report.")
 
         parser.add_argument(
             "--to",
             default=None,
             dest="to_date",
-            type=_parse_absolute_date,
+            type=str,
             help="Specify an inclusive end date to report.")
 
 
 Command = ReportCommand
-
-
-def _parse_absolute_date(datestring):
-    return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
