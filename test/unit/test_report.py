@@ -4,6 +4,7 @@ import datetime
 
 import pytest
 import pytz
+
 import utt.report
 from utt.activities import Activities
 from utt.entry import Entry
@@ -114,3 +115,57 @@ def test_single_day(args, activities, local_timezone):
         hours=1)
     assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
         hours=1)
+
+
+def test_parse_relative_date_is_past(local_timezone):
+    # wednesday
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    actual = utt.report._parse_relative_date(now, "monday", is_past=True)
+    expected = now.date() - datetime.timedelta(days=2)
+    assert actual == expected
+
+
+def test_parse_relative_date_is_past_2(local_timezone):
+    # wednesday
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    actual = utt.report._parse_relative_date(now, "thursday", is_past=True)
+    expected = now.date() - datetime.timedelta(days=6)
+    assert actual == expected
+
+
+def test_parse_relative_date_is_past_3(local_timezone):
+    # wednesday
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    actual = utt.report._parse_relative_date(now, "wednesday", is_past=True)
+    expected = now.date()
+    assert actual == expected
+
+
+def test_parse_relative_date_is_future(local_timezone):
+    # wednesday
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    actual = utt.report._parse_relative_date(now, "monday", is_past=False)
+    expected = now.date() + datetime.timedelta(days=5)
+    assert actual == expected
+
+
+def test_parse_relative_date_is_future_2(local_timezone):
+    # wednesday
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    actual = utt.report._parse_relative_date(now, "thursday", is_past=False)
+    expected = now.date() + datetime.timedelta(days=1)
+    assert actual == expected
+
+
+def test_parse_relative_date_is_future_3(local_timezone):
+    # wednesday
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    actual = utt.report._parse_relative_date(now, "wednesday", is_past=False)
+    expected = now.date()
+    assert actual == expected
