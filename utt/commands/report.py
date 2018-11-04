@@ -46,7 +46,11 @@ class ReportCommand:
             default=None,
             dest="to_date",
             type=str,
-            help="Specify an inclusive end date to report.")
+            help=(
+                "Specify an inclusive end date to report. "
+                "If this is a day of the week, then it is the next occurence "
+                "from the start date of the report, including the start date "
+                "itself."))
 
 
 Command = ReportCommand

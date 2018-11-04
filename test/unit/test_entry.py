@@ -3,6 +3,7 @@ import unittest
 
 import ddt
 import pytz
+
 from utt.entry_parser import EntryParser
 
 VALID_ENTRIES = [
