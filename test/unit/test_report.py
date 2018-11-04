@@ -86,7 +86,7 @@ def test_range(args, activities, local_timezone):
 
 
 def test_weekday_range(args, activities, local_timezone):
-    now = datetime.datetime(2014, 3, 19, 18, 30)
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
 
     args.from_date = "tuesday"  # 2014-03-18
     args.to_date = "wednesday"  # 2014-03-19
