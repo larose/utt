@@ -4,33 +4,40 @@ Ultimate Time Tracker
 Ultimate Time Tracker (utt) is a simple command-line time tracking
 application written in Python.
 
-## Contents
-
-- [Quick start](#quick-start)
-    - [hello](#hello)
-    - [add](#add)
-    - [report](#report)
-    - [edit](#edit)
-    - [stretch](#stretch)
-- [Usage](#usage)
-    - [Activity](#activity)
-    - [Report](#report)
-- [Bash completion](#bash-completion)
+- [Quick Start](#quick-start)
+- [Commands](#commands)
+    - [`hello`](#hello)
+    - [`add`](#add)
+        - [Activity Type](#activity-type)
+    - [`edit`](#edit)
+    - [`report`](#report)
+        - [Sections](#sections)
+        - [Report Date](#report-date)
+        - [Current Activity](#current-activity)
+        - [Weekly Working and Break Times](#weekly-working-and-break-times)
+    - [`stretch`](#stretch)
+- [Configuration](#configuration)
+- [Bash Completion](#bash-completion)
 - [Development](#development)
-    - [Integration tests](#integration-tests)
-    - [Unit tests](#unit-tests)
+    - [Dependencies](#dependencies)
+    - [Format code](#format-code)
+    - [Lint](#lint)
+    - [Executing `utt` from source](#executing-utt-from-source)
+    - [Tests](#tests)
+        - [Unit Tests](#unit-tests)
+        - [Integration Tests](#integration-tests)
 - [Contributors](#contributors)
 - [License](#license)
 - [Website](#website)
 
 
-## Quick start
+## Quick Start
 
 Install `utt` from PyPI:
 
 `$ pip install utt`
 
-Note: utt is compatible with both Python 2 and Python 3.
+Note: `utt` is compatible with Python 2 and Python 3.
 
 
 ### hello
@@ -76,130 +83,180 @@ Break   Time: 0h00
 
 ### edit
 
-Edit your time sheet with your favorite text editor (according to the
-`EDITOR` environment variable):
+Edit your timesheet:
 
 `$ utt edit`
 
 
-### stretch
+## Commands
 
-Stretch the latest task to the current time:
+### `hello`
+
+`$ utt hello` should be the first command you execute when you start
+your day. It tells `utt` that you are now tracking your time.
+
+Example:
 
 ```
-$ utt stretch
-stretched 2013-07-08 08:34 programming
-        → 2013-07-08 09:00 programming
+$ utt hello
 ```
 
+### `add`
 
-## Usage
+When you have completed a task, add it to `utt` with the `add`
+command.
 
-### Activity
+Example:
 
-An activity name does more than just identifying it. It's used to
-determine its type and to group them.
+`$ utt add programming`
 
-There are three activity types: working, break, ignored.
+You add a task when you have completed it, not when you start doing
+it.
+
+#### Activity Type
+
+There are three types of activities: working, break and
+ignored. Working activities contribute to the working time, break
+activities to the break time and ignored activities to neither. This
+feature is very useful when viewing your timesheet with the `report`
+command as it enables `utt` to group your activities by type.
+
+The activity type is defined by its name. If it ends with `**` it's a
+break activity. If it ends with `***` it's an ignored
+activity. Otherwise, it's a working activity.
+
+Examples:
 
 
-#### Working
-
-This is the default activity. It contributes to the working time.
+- Working activity
 
 ```
 $ utt add "task #4"
 ```
 
-
-#### Break
-
-Activity whose name ends with `**`. It contributes to the break time.
-
-Example:
+- Break activity
 
 ```
 $ utt add "lunch **"
 ```
 
+- Ignored activity
 
-#### Ignored
+```
+$ utt add "commuting ***"
+```
 
-Activity whose name ends with `***`. Only shown in the "Detail
-section".
+
+### `edit`
+
+`edit` opens your timesheet in a text editor so you can edit it.
 
 Example:
 
 ```
-$ utt add "ignored activity ***"
+$ utt edit
 ```
 
+`utt` opens the text editor defined by the environment variable
+`$VISUAL` and, if not set, by the environment variable `$EDITOR`. If
+neither is set, `utt` opens `vi`.
 
-### Report
+
+### `report`
+
+`$ utt report` shows your timesheet.
+
+Examples:
+
+- Timesheet for today: `$ utt report`
+
+- Timesheet for a specific date: `$ utt report 2018-03-25`
+
+- Timesheet for a period: `$ utt report --from 2018-10-22 --to 2018-10-26`
 
 
-#### Grouping by project
 
-The "Projects" section of the report groups activities by projects. A
-project can be associated to an activity by prefixing it with a
-non-whitespace string followed by a colon.
+#### Sections
 
-Example:
+There are four sections in a report. As we will see, each one is a
+aggregated view of the previous one.
+
+1. Summary: shows the report date and the total working and break
+time.
+
+2. Projects: groups activities by project. This is useful to track the
+total time by projects. We will see how to specify the project for an
+activity.
+
+3. Activities: groups activities by name. This is useful to track the
+total time worked on a task when you have worked on it multiple times.
+
+4. Details: timeline of your activities.
+
+
+Let's look at an example. Let's say you entered those activities
+throughout the day:
 
 ```
-$ utt add "#89"
-$ utt add "project1: #43"
-$ utt add "project1: #12"
-$ utt add "project2: #63"
+$ utt hello
+$ utt add "project-1: task-3"
+$ utt add "project-2: task-2"
+$ utt add "project-1: task-1"
+$ utt add "lunch **"
+$ utt add "project-2: task-2"
+$ utt add "project-1: task-2"
+```
+
+And then you view your timesheet:
+
+```
 $ utt report
-...
+
+----------------------- Saturday, Nov 03, 2018 (week 44) -----------------------
+
+Working Time: 7h00 [7h00]
+Break   Time: 1h00 [1h00]
 
 ----------------------------------- Projects -----------------------------------
 
-(0h30)         : #89
-(0h45) project1: #12, #43
-(1h00) project2: #63
+(5h00) project-1: task-1, task-2, task-3
+(2h00) project-2: task-2
 
 ---------------------------------- Activities ----------------------------------
 
-(0h30)         : #89
-(0h30) project1: #12
-(0h15) project1: #43
-(1h00) project2: #63
+(2h15) project-1: task-1
+(2h15) project-1: task-2
+(0h30) project-1: task-3
+(2h00) project-2: task-2
 
-...
-```
-
-
-#### Grouping by name
-
-If multiple activities have the same name, they are merged as one
-activity in the "Activities" section.
-
-Example:
-
-```
-$ utt add "#83"
-$ utt add "#26"
-$ utt add "#83"
-
-...
-
----------------------------------- Activities ----------------------------------
-
-(1h00) : #26
-(2h15) : #83
-
+(1h00) : lunch **
 
 ----------------------------------- Details ------------------------------------
 
-(1h30) 08:30-10:00 #83
-(1h00) 10:00-11:00 #26
-(0h45) 11:00-11:45 #83
+(0h30) 09:00-09:30 project-1: task-3
+(0h15) 09:30-09:45 project-2: task-2
+(2h15) 09:45-12:00 project-1: task-1
+(1h00) 12:00-13:00 lunch **
+(1h45) 13:00-14:45 project-2: task-2
+(2h15) 14:45-17:00 project-1: task-2
 ```
 
+The first section, the summary section, shows that you worked 7h and
+had a 1-hour break.
 
-#### Choosing the report date
+Then, the projects section shows that you worked 5h on project 1 and
+2h on project 2. You can specify the project of an activity by
+prefixing it with a non-whitespace string followed by a colon (e.g
+`project-1:`, `project2:`).
+
+The next section, the activities section, shows how long you worked on
+each activity. For instance, even though you worked twice on
+`project-2: task-2` (0h15 + 1h45), it is shown once in that section.
+
+Finally, the details section shows a timeline of all your activity.
+
+
+#### Report Date
 
 You can choose the report date by passing a date to the `report`
 command. The date must be either an absolute date formatted as
@@ -235,7 +292,7 @@ $ utt report --from monday
 ```
 
 
-#### Current activity
+#### Current Activity
 
 A `-- Current Activity --` is inserted if the date of the report is
 today.
@@ -316,7 +373,7 @@ Break   Time: 0h00
 ```
 
 
-#### Weekly working and break times
+#### Weekly Working and Break Times
 
 The time reported in the square brackets is the total time for the
 week.
@@ -332,7 +389,40 @@ Break   Time: 0h00 [0h30]
 ...
 ```
 
-## Bash completion
+
+### `stretch`
+
+Stretch the latest task to the current time:
+
+Example:
+
+```
+$ utt stretch
+stretched 2013-07-08 08:34 programming
+        → 2013-07-08 09:00 programming
+```
+
+## Configuration
+
+### Timezone
+
+Warning: timezone is an experimental feature.
+
+To enable timezone support, get the config filename:
+
+```
+$ utt config --filename
+`/home/<user>/.config/utt/utt.cfg`
+```
+
+Then, open it with a text editor and change it so it looks like this:
+
+```
+[timezone]
+enabled = true
+```
+
+## Bash Completion
 
 `utt` uses [argcomplete](https://github.com/kislyuk/argcomplete) to
 provide bash completion.
@@ -355,54 +445,62 @@ Finally, start a new shell or execute `source /etc/profile`.
 
 ## Development
 
-utt is written in Python and comptatible with both Python 2 and Python
-3.
+### Dependencies
 
-Directory layout:
+- Python 3
+- [Make](https://www.gnu.org/software/make/)
+- [Pipenv](https://pipenv.readthedocs.io/en/latest/)
+- [Docker](https://www.docker.com/)
 
-- `bin/utt`: executable file
-- `test/integration`: [integration tests](#integration-tests)
-- `test/unit`: [unit tests](#unit-tests)
-- `utt`: source code
+### Format code
 
+To format code:
+
+`$ make format`
+
+
+### Lint
+
+To lint code:
+
+`$ make lint`
 
 ### Executing `utt` from source
 
-To execute `utt` from source:
+To run `utt` from local source:
 
-`./run`
+`$ pipenv run ./run`
 
+### Tests
 
-### Integration tests
+To execute unit and integration tests:
 
-Although utt is cross-platform, the test environment is
-Linux-centric. We use Makefile and Docker.
+`$ make test`
 
-To run the integration tests for Python 2 and Python 3:
+#### Unit Tests
+
+`$ make test-unit`
+
+#### Integration Tests
+
+To run integration tests for Python 2 and Python 3:
 
 `$ make test-integration`
 
 This will create two Docker containers, one for each version of
 Python, and run all the tests in `test/integration/Makefile`.
 
-To run the integration tests for Python 2 only:
+To run integration tests for Python 2 only:
 
 `$ make test-integration-py2`
 
-To run the integration tests for Python 3 only:
+To run integration tests for Python 3 only:
 
 `$ make test-integration-py3`
 
 To run a specific test:
 
 `$ make test-integration INTEGRATION_CMD=hello`
-
-
-### Unit tests
-
-To run the unit tests:
-
-`$ make test-unit`
 
 
 ## Contributors

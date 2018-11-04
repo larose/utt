@@ -16,6 +16,7 @@ clean:
 .PHONY: format
 format:
 	pipenv run yapf --in-place --recursive *.py utt test
+	pipenv run isort --recursive utt test
 
 .PHONY: bdist_wheel
 bdist_wheel:

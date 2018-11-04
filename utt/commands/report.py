@@ -1,6 +1,6 @@
 import datetime
 
-from .print_report import print_report
+from ..report.view import ReportView
 
 
 class ReportHandler:
@@ -9,7 +9,7 @@ class ReportHandler:
         self._output = output
 
     def __call__(self):
-        print_report(self._report, self._output)
+        ReportView(self._report).render(self._output)
 
 
 class ReportCommand:

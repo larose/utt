@@ -1,5 +1,7 @@
 import re
+
 from dateutil.parser import parse
+
 from .entry import Entry
 
 WITH_TZ = re.compile(
@@ -31,12 +33,9 @@ class EntryParser:
         if 'timezone' in groupdict:
             date_str += groupdict['timezone'].replace(':', '')
             date = parse(date_str)
-            date = date.astimezone(self._local_timezone)
-            date = date.replace(tzinfo=None)
         else:
             date = parse(date_str)
             date = self._local_timezone.localize(date)
-            date = date.replace(tzinfo=None)
 
         name = match.groupdict()['name']
         return Entry(date, name, False)

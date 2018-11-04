@@ -1,8 +1,8 @@
 import datetime
 
 
-def now(args):
+def now(args, local_timezone):
     if args.now:
-        return args.now
+        return local_timezone.localize(args.now)
 
-    return datetime.datetime.now()
+    return local_timezone.localize(datetime.datetime.now())

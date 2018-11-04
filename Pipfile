@@ -18,6 +18,7 @@ pytest = "==3.9.2"
 ddt = "==1.2.0"
 pytest-cov = "==2.6.0"
 pylint = "*"
+isort = "*"
 
 [requires]
 python_version = "3.6"

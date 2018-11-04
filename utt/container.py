@@ -1,23 +1,23 @@
 import sys
 
 from . import ioc
-from .commands import COMMAND_MODULES
-from .entry_parser import EntryParser
-from .data_dirname import data_dirname
-from .data_filename import data_filename
+from .activities import Activities
 from .add_entry import AddEntry
-from .now import now
-from .timezone_config import timezone_config
-from .local_timezone import local_timezone
+from .commands import COMMAND_MODULES
+from .config import config
 from .config_dirname import config_dirname
 from .config_filename import config_filename
-from .config import config
+from .data_dirname import data_dirname
+from .data_filename import data_filename
 from .default_config import DefaultConfig
-from .parse_args import parse_args
 from .entries import Entries
-from .activities import Activities
-from .report import report
 from .entry_lines import EntryLines
+from .entry_parser import EntryParser
+from .local_timezone import local_timezone
+from .now import now
+from .parse_args import parse_args
+from .report import report
+from .timezone_config import timezone_config
 
 
 def create_container():

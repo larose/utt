@@ -2,7 +2,20 @@ UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 .PHONY: all
-all: add completion edit hello stretch report-1 report-dayname report-no-current-activity report-uppercase report-range report-overnight report-overnight-range report-change-timezone version
+all: add \
+  completion \
+  edit \
+  hello \
+  stretch \
+  report-1 \
+  report-dayname \
+  report-no-current-activity \
+  report-uppercase \
+  report-range report-overnight \
+  report-overnight-range \
+  report-change-timezone \
+  report-timezone-daylight-change \
+  version
 
 $(UTT):
 	$(PIP) install utt-*.whl
@@ -150,28 +163,21 @@ report-change-timezone: $(UTT)
 	@echo "<< REPORT-CHANGE-TIMEZONE"
 
 
-# SKIPPED
-#
-# Know issue: one hour is lost when converting in Europe/London
-# because of daylight change
+.PHONY: report-timezone-daylight-change
+report-timezone-daylight-change: $(UTT)
+	@echo
+	@echo ">> REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
-# When we are back in the UK, the timestamps are parsed with
-# Europe/London time. So a 4-hour travel becomes 3-hour because London
-# clock is changing on Oct 28.
-#
-# .PHONY: report-timezone-daylight-change
-# report-timezone-daylight-change: $(UTT)
-# 	@echo
-# 	@echo ">> REPORT-TIMEZONE-DAYLIGHT-CHANGE"
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	rm -f $(UTT_DATA_FILENAME)
+	echo "2018-10-28 08:00+0800 hello" >> $(UTT_DATA_FILENAME)
+	echo "2018-10-28 12:00+0800 travel" >> $(UTT_DATA_FILENAME)
 
-# 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
-# 	rm -f $(UTT_DATA_FILENAME)
-# 	echo "2018-10-28 08:00+0800 hello" >> $(UTT_DATA_FILENAME)
-# 	echo "2018-10-28 12:00+0800 travel" >> $(UTT_DATA_FILENAME)
+	utt --now "2018-10-28 18:30" --timezone "Europe/London" report --no-current-activity
 
-# 	bash -c 'diff <(utt --now "2018-10-28 18:30" --timezone "Europe/London" report --no-current-activity) data/utt-report-timezone-daylight-change.stdout'
+	bash -c 'diff <(utt --now "2018-10-28 18:30" --timezone "Europe/London" report --no-current-activity) data/utt-report-timezone-daylight-change.stdout'
 
-# 	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
+	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
 
 .PHONY: version
