@@ -400,6 +400,24 @@ stretched 2013-07-08 08:34 programming
 
 ## Configuration
 
+### Timezone
+
+Warning: timezone is an experimental feature.
+
+To enable timezone support, get the config filename:
+
+```
+$ utt config --filename
+`/home/<user>/.config/utt/utt.cfg`
+```
+
+Then, open it with a text editor and change it so it looks like this:
+
+```
+[timezone]
+enabled = true
+```
+
 ## Bash Completion
 
 `utt` uses [argcomplete](https://github.com/kislyuk/argcomplete) to
