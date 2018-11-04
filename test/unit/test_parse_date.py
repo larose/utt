@@ -2,7 +2,6 @@ import datetime
 import unittest
 
 import ddt
-
 from utt.report import _parse_date
 
 VALID_ENTRIES = [
