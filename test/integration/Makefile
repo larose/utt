@@ -37,14 +37,14 @@ add: $(UTT)
 
 .PHONY: completion
 completion: $(UTT)
-	@echo
-	@echo ">> COMPLETION"
+	# @echo
+	# @echo ">> COMPLETION"
 
-	head -c 1024 `which utt` | grep "PYTHON_ARGCOMPLETE_OK"
-	activate-global-python-argcomplete
-	bash --login -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete_global utt && echo $${COMPREPLY[@]}) <(echo -h --help --data --now --timezone --version add config edit hello report stretch)'
+	# head -c 1024 `which utt` | grep "PYTHON_ARGCOMPLETE_OK"
+	# activate-global-python-argcomplete
+	# bash --login -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete_global utt && echo $${COMPREPLY[@]}) <(echo -h --help --data --now --timezone --version add config edit hello report stretch)'
 
-	@echo "<< COMPLETION"
+	# @echo "<< COMPLETION"
 
 
 .PHONY: edit
