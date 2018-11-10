@@ -438,10 +438,10 @@ installed:
 Then execute:
 
 ```
-$ sudo activate-global-python-argcomplete
+$ register-python-argcomplete utt >> ~/.bashrc
 ```
 
-Finally, start a new shell or execute `source /etc/profile`.
+Finally, start a new shell.
 
 ## Development
 

@@ -25,8 +25,6 @@ setup(
     long_description=long_description,
     name='utt',
     packages=find_packages(),
-    data_files=[(os.path.join('share', 'bash-completion', 'completions'),
-                 (os.path.join('bash', 'utt'), ))],
     url="https://github.com/larose/utt",
     version=utt.__version__,
     install_requires=[
