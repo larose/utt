@@ -9,11 +9,12 @@ def report(args, now, activities, local_timezone):
     if args.report_date is None:
         report_date = today
     else:
-        report_date = _parse_date(now, args.report_date)
+        report_date = _parse_date(today, args.report_date)
 
-    report_start_date = (report_date
-                         if args.from_date is None else args.from_date)
-    report_end_date = (report_date if args.to_date is None else args.to_date)
+    report_start_date = (report_date if args.from_date is None else
+                         _parse_date(today, args.from_date, is_past=True))
+    report_end_date = (report_date if args.to_date is None else _parse_date(
+        report_start_date, args.to_date, is_past=False))
 
     if report_start_date == report_end_date:
         collect_from_date, collect_to_date = _week_dates(report_start_date)
@@ -78,8 +79,8 @@ def _parse_absolute_date(datestring):
     return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
 
 
-def _parse_date(now, datestring):
-    date = _parse_relative_date(now, datestring)
+def _parse_date(today, datestring, is_past=True):
+    date = _parse_relative_date(today, datestring, is_past=is_past)
     if date is not None:
         return date
     return _parse_absolute_date(datestring)
@@ -92,16 +93,19 @@ def _parse_day(day):
     return None
 
 
-def _parse_relative_date(now, datestring):
+def _parse_relative_date(today, datestring, is_past):
     day = _parse_day(datestring)
     if day is None:
         return None
-    now_weekday_offset = now.weekday()
+    now_weekday_offset = today.weekday()
     report_weekday_offset = DAY_NAMES.index(day)
-    delta = now_weekday_offset - report_weekday_offset
-    if delta < 0:
-        delta += len(DAY_NAMES)
-    return now.date() - datetime.timedelta(days=delta)
+    if is_past:
+        delta = now_weekday_offset - report_weekday_offset
+        delta = -(delta % 7)
+    else:
+        delta = report_weekday_offset - now_weekday_offset
+        delta = delta % 7
+    return today + datetime.timedelta(days=delta)
 
 
 def _week_dates(date):

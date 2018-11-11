@@ -56,7 +56,7 @@ def entries(local_timezone):
     ]
 
     for entry in entry_list:
-        entry.datetime = entry.datetime.astimezone(local_timezone)
+        entry.datetime = local_timezone.localize(entry.datetime)
 
     return InMemoryEntries(entry_list)
 
@@ -67,10 +67,10 @@ def activities(entries):
 
 
 def test_range(args, activities, local_timezone):
-    now = datetime.datetime(2014, 3, 19, 18, 30).astimezone(local_timezone)
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
 
-    args.from_date = datetime.date(2014, 3, 15)
-    args.to_date = datetime.date(2014, 3, 19)
+    args.from_date = "2014-03-15"
+    args.to_date = "2014-03-19"
     args.no_current_activity = True
 
     actual_report = utt.report.report(args, now, activities, local_timezone)
@@ -84,8 +84,26 @@ def test_range(args, activities, local_timezone):
         hours=1)
 
 
+def test_weekday_range(args, activities, local_timezone):
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
+
+    args.from_date = "tuesday"  # 2014-03-18
+    args.to_date = "wednesday"  # 2014-03-19
+    args.no_current_activity = True
+
+    actual_report = utt.report.report(args, now, activities, local_timezone)
+    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
+        hours=5, minutes=30)
+    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
+        hours=5, minutes=30)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
+        hours=1)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
+        hours=1)
+
+
 def test_single_day(args, activities, local_timezone):
-    now = datetime.datetime(2014, 3, 19, 18, 30).astimezone(local_timezone)
+    now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
 
     actual_report = utt.report.report(args, now, activities, local_timezone)
     assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(

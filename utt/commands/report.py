@@ -1,5 +1,3 @@
-import datetime
-
 from ..report.view import ReportView
 
 
@@ -38,19 +36,19 @@ class ReportCommand:
             "--from",
             default=None,
             dest="from_date",
-            type=_parse_absolute_date,
+            type=str,
             help="Specify an inclusive start date to report.")
 
         parser.add_argument(
             "--to",
             default=None,
             dest="to_date",
-            type=_parse_absolute_date,
-            help="Specify an inclusive end date to report.")
+            type=str,
+            help=(
+                "Specify an inclusive end date to report. "
+                "If this is a day of the week, then it is the next occurence "
+                "from the start date of the report, including the start date "
+                "itself."))
 
 
 Command = ReportCommand
-
-
-def _parse_absolute_date(datestring):
-    return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()

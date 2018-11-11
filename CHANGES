@@ -1,5 +1,11 @@
+1.10 (2018-11-10)
 
-  * Add timezone support
+  * utt now works on Windows
+
+1.9 (2018-11-04)
+
+  * Add timezone support (experimental)
+  * Range report accepts day of week
 
 1.8 (2018-08-31)
 

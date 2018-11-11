@@ -37,9 +37,15 @@ VALID_ENTRIES = [
         'tz': pytz.timezone("US/Pacific"),
     },
     {
-        'name': "2014-1-23  10:30  -09:00  break**",
+        'name': "2014-1-23  10:30-09:00  break**",
         'expected_utc': datetime.datetime(2014, 1, 23, 19, 30),
         'expected_name': "break**",
+        'tz': pytz.timezone("Australia/Sydney"),
+    },
+    {
+        'name': "2014-1-23  10:30 -09:00  break**",
+        'expected_utc': datetime.datetime(2014, 1, 22, 23, 30),
+        'expected_name': "-09:00  break**",
         'tz': pytz.timezone("Australia/Sydney"),
     },
     {
