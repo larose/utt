@@ -16,11 +16,16 @@ class DetailsView:
         self._model = model
 
     def render(self, output):
+        # Avoid import cycle
+        from ..commands import hello
+
         print(file=output)
         print(formatter.title('Details'), file=output)
         print(file=output)
 
         for activity in self._model.activities:
+            if activity.name.name == hello.HelloCommand.NAME:
+                continue
             print(
                 "(%s) %s-%s %s" %
                 (formatter.format_duration(activity.duration),
