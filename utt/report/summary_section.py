@@ -94,7 +94,7 @@ def _print_time(summary_section, working_break_time, output):
 
     if summary_section.start_date == summary_section.end_date:
         print(
-            " [%s]" % _format_duration_hours_only(
+            " [%s]" % formatter.format_duration(
                 working_break_time.weekly_duration),
             file=output)
     else:
@@ -109,12 +109,3 @@ def _duration(activities):
 def _format_date(datetime):
     return datetime.strftime(
         "%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))
-
-
-# pylint: disable=invalid-name
-def _format_duration_hours_only(duration):
-    mm, _ = divmod(duration.seconds, 60)
-    hh, mm = divmod(mm, 60)
-    hh += duration.days * 24
-    s = "%dh%02d" % (hh, mm)
-    return s
