@@ -4,6 +4,7 @@ import datetime
 
 import pytest
 import pytz
+
 import utt.report
 from utt.activities import Activities
 from utt.entry import Entry
