@@ -15,6 +15,7 @@ all: add \
   report-overnight-range \
   report-change-timezone \
   report-timezone-daylight-change \
+	report-hello-only-today \
   version
 
 $(UTT):
@@ -179,6 +180,15 @@ report-timezone-daylight-change: $(UTT)
 
 	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
+report-hello-only-today:
+	@echo
+	@echo ">> REPORT-HELLO-ONLY-TODAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-no-current-activity.log $(UTT_DATA_FILENAME)
+	bash -c 'diff <(utt --now "2018-08-20 20:00" report 2018-08-20) data/utt-hello-only-today.stdout'
+
+	@echo "<< REPORT-HELLO-ONLY-TODAY"
 
 .PHONY: version
 version: $(UTT)
