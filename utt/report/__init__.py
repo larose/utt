@@ -2,6 +2,7 @@ import datetime
 
 from ..activity import Activity
 from .model import Report
+from ..commands.hello import HelloCommand
 
 
 def report(args, now, activities, local_timezone):
@@ -29,6 +30,8 @@ def report(args, now, activities, local_timezone):
     _add_current_activity(activities_, now, args.current_activity,
                           args.no_current_activity, report_start_date,
                           report_end_date)
+
+    activities_ = _remove_hello_activities(activities_)
 
     activities_ = list(
         _filter_activities_by_range(activities_, collect_from_date,
@@ -106,6 +109,12 @@ def _parse_relative_date(today, datestring, is_past):
         delta = report_weekday_offset - now_weekday_offset
         delta = delta % 7
     return today + datetime.timedelta(days=delta)
+
+
+def _remove_hello_activities(activities_):
+    for activity in activities_:
+        if activity.name.name != HelloCommand.NAME:
+            yield activity
 
 
 def _week_dates(date):
