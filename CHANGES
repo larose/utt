@@ -1,3 +1,7 @@
+1.12 (2018-11-11)
+
+  * Format duration > 24h as hours instead of days
+
 1.11 (2018-11-11)
 
   * Fix current activity start time when previous entry is "hello"
