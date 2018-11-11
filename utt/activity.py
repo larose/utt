@@ -35,10 +35,16 @@ class Activity:
 
     @staticmethod
     def _type_from_name(name):
+        # Avoid import cycle
+        from .commands import hello
+
         if name[-3:] == '***':
             return Activity.Type.IGNORED
         if name[-2:] == '**':
             return Activity.Type.BREAK
+        if name == hello.HelloCommand.NAME:
+            return Activity.Type.IGNORED
+
         return Activity.Type.WORK
 
     def clip(self, start=None, end=None):

@@ -1,7 +1,6 @@
 import itertools
 
 from .activity import Activity
-from .commands import hello
 
 
 class Activities:
@@ -13,9 +12,6 @@ class Activities:
 
     def _activities(self):
         for prev_entry, next_entry in _pairwise(self._entries()):
-            if next_entry.name == hello.HelloCommand.NAME:
-                continue
-
             activity = Activity(next_entry.name, prev_entry.datetime,
                                 next_entry.datetime, False)
             yield activity
