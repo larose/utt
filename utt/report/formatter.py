@@ -1,15 +1,9 @@
-# pylint: disable=invalid-name
 def format_duration(duration):
-    mm, _ = divmod(duration.seconds, 60)
-    hh, mm = divmod(mm, 60)
-    s = "%dh%02d" % (hh, mm)
-    if duration.days:
-
-        def plural(n):
-            return n, abs(n) != 1 and "s" or ""
-
-        s = ("%d day%s, " % plural(duration.days)) + s
-    return s
+    total_minutes, _ = divmod(duration.total_seconds(), 60)
+    total_hours, remainder_minutes = divmod(total_minutes, 60)
+    formatted_duration = "{hours:.0f}h{minutes:02.0f}".format(
+        hours=total_hours, minutes=remainder_minutes)
+    return formatted_duration
 
 
 def title(text):
