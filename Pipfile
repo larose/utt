@@ -16,7 +16,6 @@ wheel = "==0.32.1"
 twine = "==1.12.1"
 pytest = "==3.9.2"
 ddt = "==1.2.0"
-pytest-cov = "==2.6.0"
 pylint = "*"
 isort = "*"
 
