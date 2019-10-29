@@ -28,6 +28,10 @@ def _append_line_to_file(filename, line, insert_new_line_before):
             file.seek(-1, os.SEEK_END)
             last_char = file.read(1)
             prepend_new_line = last_char != b"\n"
+    except OSError as os_err:
+        if os_err.errno not in [errno.EINVAL, errno.ENOENT]:
+            raise
+        prepend_new_line = False
     except EnvironmentError as exc:
         if exc.errno != errno.ENOENT:
             raise
