@@ -2,6 +2,7 @@ from __future__ import print_function
 
 import datetime
 import itertools
+import math
 
 from . import formatter
 from ..activity import Activity
@@ -14,7 +15,7 @@ class ProjectsPerDayModel:
         activities = clip_activities_by_range(start_date, end_date, activities,
                                               local_timezone)
 
-        self.projects = _groupby_project(
+        self.dates = _groupby_date(
             filter_activities_by_type(activities, Activity.Type.WORK))
 
 
@@ -22,35 +23,65 @@ class ProjectsPerDayView:
     def __init__(self, model):
         self._model = model
 
+    @staticmethod
+    def _timedelta_to_billable(td):
+        """Ad hoc method for rounding a decimal number of hours to "billable"
+
+        Using the following approach: round up to the nearest 6 minutes
+        (10th of an hour).
+        """
+        hours = td.total_seconds() / (60 * 60)
+        # Round up to nearest 6 minutes
+        rounder = math.ceil  # Replace with 'round' if that's more appropriate
+        hours = rounder(hours * 10) / 10
+        return f"{hours:4.1f}"
+
     def render(self, output):
         print(file=output)
         print(formatter.title('Projects Per Day'), file=output)
         print(file=output)
 
-        print_dicts(self._model.projects, output)
+        fmt = "{date}: {hours} {duration:>7} - {projects} - {tasks}"
+        for date_activities in self._model.dates:
+            date_render = fmt.format(
+                date=date_activities['date'].isoformat(),
+                hours=self._timedelta_to_billable(date_activities['hours']),
+                duration=f"({date_activities['duration']})",
+                projects=date_activities['projects'],
+                tasks=date_activities['tasks'],
+            )
+            print(date_render, file=output)
 
 
-def _groupby_project(activities):
+def _groupby_date(activities):
     def key(act):
-        return act.name.project
+        """Key on date."""
+        return act.start.date()
 
     result = []
     sorted_activities = sorted(activities, key=key)
     # pylint: disable=redefined-argument-from-local
-    for project, activities in itertools.groupby(sorted_activities, key):
+    for date, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
+        duration = sum((act.duration for act in activities),
+                       datetime.timedelta())
         result.append({
             'duration':
-            formatter.format_duration(
-                sum((act.duration for act in activities),
-                    datetime.timedelta())),
-            'project':
-            project,
-            'name':
+            formatter.format_duration(duration),
+            'hours':
+            duration,
+            'date':
+            date,
+            'projects':
+            ", ".join(
+                sorted(
+                    set(act.name.project for act in activities),
+                    key=lambda project: project.lower())),
+            'tasks':
             ", ".join(
                 sorted(
                     set(act.name.task for act in activities),
                     key=lambda task: task.lower()))
         })
 
-    return sorted(result, key=lambda result: result['project'].lower())
+    return sorted(result, key=lambda result: result['date'])
