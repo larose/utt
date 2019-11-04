@@ -50,5 +50,17 @@ class ReportCommand:
                 "from the start date of the report, including the start date "
                 "itself."))
 
+        parser.add_argument(
+            "--project",
+            default=None,
+            type=str,
+            help="Show activities only for the specified project.")
+
+        parser.add_argument(
+            "--per-day",
+            action='store_true',
+            default=False,
+            help="Show total hours per day.")
+
 
 Command = ReportCommand
