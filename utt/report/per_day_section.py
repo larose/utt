@@ -10,7 +10,7 @@ from .common import (clip_activities_by_range, filter_activities_by_type,
                      print_dicts)
 
 
-class ProjectsPerDayModel:
+class PerDayModel:
     def __init__(self, activities, start_date, end_date, local_timezone):
         activities = clip_activities_by_range(start_date, end_date, activities,
                                               local_timezone)
@@ -19,7 +19,7 @@ class ProjectsPerDayModel:
             filter_activities_by_type(activities, Activity.Type.WORK))
 
 
-class ProjectsPerDayView:
+class PerDayView:
     def __init__(self, model):
         self._model = model
 
@@ -38,7 +38,7 @@ class ProjectsPerDayView:
 
     def render(self, output):
         print(file=output)
-        print(formatter.title('Projects Per Day'), file=output)
+        print(formatter.title('Per Day'), file=output)
         print(file=output)
 
         fmt = "{date}: {hours} {duration:>7} - {projects} - {tasks}"

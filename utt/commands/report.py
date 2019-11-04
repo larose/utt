@@ -57,10 +57,10 @@ class ReportCommand:
             help="Show activities only for the specified project.")
 
         parser.add_argument(
-            "--projects-per-day",
+            "--per-day",
             action='store_true',
             default=False,
-            help="Show total hours per project per day.")
+            help="Show total hours per per day.")
 
 
 Command = ReportCommand

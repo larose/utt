@@ -1,7 +1,7 @@
 from .activities_section import ActivitiesModel
 from .details_section import DetailsModel
 from .projects_section import ProjectsModel
-from .projects_per_day_section import ProjectsPerDayModel
+from .per_day_section import PerDayModel
 from .summary_section import SummaryModel
 
 
@@ -11,7 +11,7 @@ class Report:
                                           local_timezone)
         self.projects_model = ProjectsModel(activities, start_date, end_date,
                                             local_timezone)
-        self.projects_per_day_model = ProjectsPerDayModel(
+        self.per_day_model = PerDayModel(
             activities, start_date, end_date, local_timezone)
         self.activities_model = ActivitiesModel(activities, start_date,
                                                 end_date, local_timezone)
