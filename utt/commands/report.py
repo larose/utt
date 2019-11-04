@@ -50,5 +50,11 @@ class ReportCommand:
                 "from the start date of the report, including the start date "
                 "itself."))
 
+        parser.add_argument(
+            "--project",
+            default=None,
+            type=str,
+            help="Show activities only for the specified project.")
+
 
 Command = ReportCommand
