@@ -39,7 +39,7 @@ def report(args, now, activities, local_timezone):
     activities_ = _filter_activities_by_project(activities_, args.project)
 
     return Report(list(activities_), report_start_date, report_end_date,
-                  local_timezone)
+                  local_timezone, args)
 
 
 DAY_NAMES = [
