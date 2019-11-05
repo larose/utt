@@ -20,8 +20,20 @@ class ReportView:
             DetailsView(self._report.details_model).render(output)
 
     def csv(self, section, output):
-        if section == 'per_day':
+        if section == 'summary':
+            view = SummaryView(self._report.summary_model)
+        elif section == 'per_day':
             view = PerDayView(self._report.per_day_model)
+        elif section == 'projects':
+            view = ProjectsView(self._report.projects_model)
+        elif section == 'activities':
+            view = ActivitiesView(self._report.activities_model)
+        elif section == 'details':
+            view = DetailsView(self._report.details_model)
         else:
-            raise ValueError(f"CSV output not yet implemented for {section}")
+            view = None
+
+        if not hasattr(view, 'csv'):
+            raise ValueError(
+                f"CSV output not yet implemented for '{section}' section")
         view.csv(output)
