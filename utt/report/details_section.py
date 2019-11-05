@@ -20,7 +20,14 @@ class DetailsView:
         print(formatter.title('Details'), file=output)
         print(file=output)
 
+        current_date = None
         for activity in self._model.activities:
+            if current_date != activity.start.date():
+                if current_date is not None:
+                    print("", file=output)
+                current_date = activity.start.date()
+                print(f"{current_date.isoformat()}:", file=output)
+                print("", file=output)
             print(
                 "(%s) %s-%s %s" %
                 (formatter.format_duration(activity.duration),
