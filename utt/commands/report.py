@@ -50,5 +50,11 @@ class ReportCommand:
                 "from the start date of the report, including the start date "
                 "itself."))
 
+        parser.add_argument(
+            "--details",
+            action='store_true',
+            default=False,
+            help="Show details even for multi-day reports.")
+
 
 Command = ReportCommand

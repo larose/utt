@@ -12,5 +12,6 @@ class ReportView:
         SummaryView(self._report.summary_model).render(output)
         ProjectsView(self._report.projects_model).render(output)
         ActivitiesView(self._report.activities_model).render(output)
-        if self._report.start_date == self._report.end_date:
+        if ((self._report.start_date == self._report.end_date)
+                or (self._report.args.details is True)):
             DetailsView(self._report.details_model).render(output)
