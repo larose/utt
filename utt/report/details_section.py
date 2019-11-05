@@ -20,9 +20,12 @@ class DetailsView:
         print(formatter.title('Details'), file=output)
         print(file=output)
 
+        # Print date only when the activities have different dates.
+        print_date = (self._model.activities[0].start.date()
+                      != self._model.activities[-1].start.date())
         current_date = None
         for activity in self._model.activities:
-            if current_date != activity.start.date():
+            if print_date and current_date != activity.start.date():
                 if current_date is not None:
                     print("", file=output)
                 current_date = activity.start.date()
