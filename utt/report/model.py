@@ -5,7 +5,7 @@ from .summary_section import SummaryModel
 
 
 class Report:
-    def __init__(self, activities, start_date, end_date, local_timezone):
+    def __init__(self, activities, start_date, end_date, local_timezone, args):
         self.summary_model = SummaryModel(activities, start_date, end_date,
                                           local_timezone)
         self.projects_model = ProjectsModel(activities, start_date, end_date,
@@ -16,3 +16,4 @@ class Report:
                                           local_timezone)
         self.start_date = start_date
         self.end_date = end_date
+        self.args = args

@@ -38,7 +38,7 @@ def report(args, now, activities, local_timezone):
                                     collect_to_date, local_timezone))
 
     return Report(activities_, report_start_date, report_end_date,
-                  local_timezone)
+                  local_timezone, args)
 
 
 DAY_NAMES = [
