@@ -19,3 +19,22 @@ class ReportView:
         if ((self._report.start_date == self._report.end_date)
                 or (self._report.args.details)):
             DetailsView(self._report.details_model).render(output)
+
+    def csv(self, section, output):
+        if section == 'summary':
+            view = SummaryView(self._report.summary_model)
+        elif section in ['per_day', 'per-day']:
+            view = PerDayView(self._report.per_day_model)
+        elif section == 'projects':
+            view = ProjectsView(self._report.projects_model)
+        elif section == 'activities':
+            view = ActivitiesView(self._report.activities_model)
+        elif section == 'details':
+            view = DetailsView(self._report.details_model)
+        else:
+            view = None
+
+        if not hasattr(view, 'csv'):
+            raise ValueError("CSV output not yet implemented for '{}' section"
+                             "".format(section))
+        view.csv(output)

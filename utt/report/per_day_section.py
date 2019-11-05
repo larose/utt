@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+import csv
 import datetime
 import itertools
 
@@ -58,6 +59,22 @@ class PerDayView:
                 tasks=date_activities['tasks'],
             )
             print(date_render, file=output)
+
+    def csv(self, output):
+        if not self._model.dates:
+            print(" -- No activities for this time range --", file=output)
+            return
+
+        fieldnames = ['date', 'hours', 'duration', 'projects', 'tasks']
+        writer = csv.DictWriter(output, fieldnames=fieldnames)
+
+        # Write header
+        writer.writerow({fn: fn.capitalize() for fn in fieldnames})
+
+        for date_activities in self._model.dates:
+            date_activities['hours'] = self._timedelta_to_billable(
+                date_activities['hours']).strip()
+            writer.writerow(date_activities)
 
 
 def _groupby_date(activities):
