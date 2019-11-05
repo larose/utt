@@ -5,9 +5,14 @@ class ReportHandler:
     def __init__(self, report, output):
         self._report = report
         self._output = output
+        self._csv_section = report.args.csv_section
 
     def __call__(self):
-        ReportView(self._report).render(self._output)
+        view = ReportView(self._report)
+        if self._csv_section:
+            view.csv(self._csv_section, self._output)
+        else:
+            view.render(self._output)
 
 
 class ReportCommand:
@@ -61,6 +66,12 @@ class ReportCommand:
             action='store_true',
             default=False,
             help="Show total hours per per day.")
+
+        parser.add_argument(
+            "--csv-section",
+            choices=['per_day'],
+            default=None,
+            help="Instead of text output, print CSV of desired section")
 
 
 Command = ReportCommand

@@ -52,6 +52,9 @@ class PerDayView:
             )
             print(date_render, file=output)
 
+    def csv(self, output):
+        print("CSV output will come here", file=output)
+
 
 def _groupby_date(activities):
     def key(act):

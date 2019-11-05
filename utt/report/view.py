@@ -18,3 +18,10 @@ class ReportView:
         ActivitiesView(self._report.activities_model).render(output)
         if self._report.start_date == self._report.end_date:
             DetailsView(self._report.details_model).render(output)
+
+    def csv(self, section, output):
+        if section == 'per_day':
+            view = PerDayView(self._report.per_day_model)
+        else:
+            raise ValueError(f"CSV output not yet implemented for {section}")
+        view.csv(output)
