@@ -7,14 +7,18 @@ from ..commands.hello import HelloCommand
 
 def report(args, now, activities, local_timezone):
     today = now.date()
-    if args.report_date is None:
-        report_date = today
+    if args.report_date is not None:
+        report_start_date = report_end_date = _parse_date(today,
+                                                          args.report_date)
     else:
-        report_date = _parse_date(today, args.report_date)
+        report_start_date = report_end_date = today
 
-    report_start_date = (report_date if args.from_date is None else
+    report_start_date = (report_start_date
+                         if args.from_date is None else
                          _parse_date(today, args.from_date, is_past=True))
-    report_end_date = (report_date if args.to_date is None else _parse_date(
+    report_end_date = (report_end_date
+                       if args.to_date is None else
+                       _parse_date(
         report_start_date, args.to_date, is_past=False))
 
     if report_start_date == report_end_date:
