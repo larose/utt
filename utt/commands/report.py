@@ -53,6 +53,8 @@ class ReportCommand:
         parser.add_argument(
             "--month",
             default=None,
+            nargs='?',
+            const='this',
             type=str,
             help=(
                 "Specify a month. "
