@@ -1,4 +1,5 @@
 import datetime
+import calendar
 
 from ..activity import Activity
 from .model import Report
@@ -116,13 +117,37 @@ def _parse_relative_date(today, datestring, is_past):
         delta = delta % 7
     return today + datetime.timedelta(days=delta)
 
+
+MONTH_NAMES = [
+    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER",
+]
+
+def _parse_relative_month(today, monthstring):
+    if len(monthstring) < 3:
+        # ambiguous month
+        return None
+    month_upper = monthstring.upper()
+    for i, monthname in enumerate(MONTH_NAMES):
+        if monthname.startswith(month_upper):
+            month = i+1
+            break
+    else:
+        return None
+
+    year = today.year if month <= today.month else (today.year - 1)
+    return datetime.date(year, month, 1)
+
+
 def _parse_month(today, monthstring):
-    print("-"*80)
-    print("-"*80)
-    print(f"-- Will parse month based on {today=} and {monthstring=} --")
-    print("-"*80)
-    print("-"*80)
-    return (today, today)
+    month = _parse_relative_month(today, monthstring)
+    if month is None:
+        month = _parse_absolute_month(monthstring)
+    (_month_weekday, month_days) = calendar.monthrange(month.year, month.month)
+    start = month
+    end = month.replace(day=month_days)
+
+    return (start, end)
 
 
 def _remove_hello_activities(activities_):
