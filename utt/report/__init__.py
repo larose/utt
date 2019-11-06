@@ -200,6 +200,24 @@ def _parse_relative_week(today, weekstring):
     return datetime.date.fromisocalendar(y, w, 1)
 
 
+def _parse_week_number(today, weekstring):
+    try:
+        weeknum = int(weekstring)
+    except ValueError:
+        return None
+    if weeknum == 0:
+        return None
+    elif weeknum < 0:
+        one_week = datetime.timedelta(days=7)
+        (y, w, d) = (today + weeknum * one_week).isocalendar()
+        return datetime.date.fromisocalendar(y, w, 1)
+    else:
+        (y, w, d) = today.isocalendar()
+        if weeknum > w:
+            y -= 1
+        return datetime.date.fromisocalendar(y, weeknum, 1)
+
+
 def _parse_week(today, weekstring):
     week = _parse_relative_week(today, weekstring)
     if week is None:
