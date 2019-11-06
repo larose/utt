@@ -147,6 +147,9 @@ MONTH_NAMES = [
 ]
 
 def _parse_relative_month(today, monthstring):
+    month = _parse_integer_month(today, monthstring)
+    if month is not None:
+        return month
     if len(monthstring) < 3:
         # ambiguous month
         return None
@@ -167,6 +170,32 @@ def _parse_relative_month(today, monthstring):
 
     year = today.year if month <= today.month else (today.year - 1)
     return datetime.date(year, month, 1)
+
+
+def _parse_integer_month(today, monthstring):
+    """Parse integer month
+
+    This can be a month number (10 -- Oct)
+    or a negative number (-2 -- 2 months ago).
+    """
+    try:
+        monthnum = int(monthstring)
+    except ValueError:
+        return None
+    if monthnum == 0:
+        return None
+    elif monthnum < 0:
+        if monthnum < -11:
+            return None
+        monthnum = today.month + monthnum
+        if monthnum < 1:
+            monthnum += 12
+        if monthnum < 1:
+            return None
+    year = today.year
+    if monthnum > today.month:
+        year -= 1
+    return datetime.date(year, monthnum, 1)
 
 
 def _parse_absolute_month(monthstring):
@@ -209,6 +238,7 @@ def _parse_week_number(today, weekstring):
         return None
     elif weeknum < 0:
         one_week = datetime.timedelta(days=7)
+        # Note: weeknum is negative so this effectively subtracts
         (y, w, d) = (today + weeknum * one_week).isocalendar()
         return datetime.date.fromisocalendar(y, w, 1)
     else:
