@@ -139,6 +139,10 @@ def _parse_relative_month(today, monthstring):
     return datetime.date(year, month, 1)
 
 
+def _parse_absolute_month(monthstring):
+    return datetime.datetime.strptime(monthstring, "%Y-%m").date()
+
+
 def _parse_month(today, monthstring):
     month = _parse_relative_month(today, monthstring)
     if month is None:
