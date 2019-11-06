@@ -16,6 +16,9 @@ def report(args, now, activities, local_timezone):
     if args.month:
         report_start_date, report_end_date = _parse_month(report_date,
                                                           args.month)
+    elif args.week:
+        report_start_date, report_end_date = _parse_week(report_date,
+                                                          args.week)
     else:
         report_start_date = report_end_date = report_date
 
@@ -177,6 +180,32 @@ def _parse_month(today, monthstring):
     (_month_weekday, month_days) = calendar.monthrange(month.year, month.month)
     start = month
     end = month.replace(day=month_days)
+
+    return (start, end)
+
+
+def _parse_relative_week(today, weekstring):
+    """Try to parse a week string ('this' or 'previous').
+
+    Return the first day of the week as a datetime.date
+    """
+    today_year, today_week, today_day = today.isocalendar()
+    week_upper = weekstring.upper()
+    if "THIS".startswith(week_upper):
+        (y, w, d) = today.isocalendar()
+    elif "PREVIOUS".startswith(week_upper):
+        (y, w, d) = (today - datetime.timedelta(days=7)).isocalendar()
+    else:
+        return None
+    return datetime.date.fromisocalendar(y, w, 1)
+
+
+def _parse_week(today, weekstring):
+    week = _parse_relative_week(today, weekstring)
+    if week is None:
+        week = _parse_week_number(today, weekstring)
+    start = week
+    end = week + datetime.timedelta(days=6)
 
     return (start, end)
 
