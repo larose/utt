@@ -50,5 +50,16 @@ class ReportCommand:
                 "from the start date of the report, including the start date "
                 "itself."))
 
+        parser.add_argument(
+            "--month",
+            default=None,
+            type=str,
+            help=(
+                "Specify a month. "
+                "Allowed formats include, '2019-10', 'Oct', 'this' 'prev'. "
+                "The report will start at the first day of the month and end "
+                "at the last.  '--from' or '--to' if present will override "
+                "start and end, respectively.  If the month is the current "
+                "month, 'today' will be the last day of the report."))
 
 Command = ReportCommand

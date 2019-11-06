@@ -10,6 +10,8 @@ def report(args, now, activities, local_timezone):
     if args.report_date is not None:
         report_start_date = report_end_date = _parse_date(today,
                                                           args.report_date)
+    elif args.month:
+        report_start_date, report_end_date = _parse_month(today, args.month)
     else:
         report_start_date = report_end_date = today
 
@@ -113,6 +115,14 @@ def _parse_relative_date(today, datestring, is_past):
         delta = report_weekday_offset - now_weekday_offset
         delta = delta % 7
     return today + datetime.timedelta(days=delta)
+
+def _parse_month(today, monthstring):
+    print("-"*80)
+    print("-"*80)
+    print(f"-- Will parse month based on {today=} and {monthstring=} --")
+    print("-"*80)
+    print("-"*80)
+    return (today, today)
 
 
 def _remove_hello_activities(activities_):
