@@ -133,7 +133,14 @@ def _parse_relative_month(today, monthstring):
             month = i+1
             break
     else:
-        return None
+        if "THIS".startswith(month_upper):
+            month = today.month
+        elif "PREVIOUS".startswith(month_upper):
+            month = today.month - 1
+            if month == 0:
+                month = 12
+        else:
+            return None
 
     year = today.year if month <= today.month else (today.year - 1)
     return datetime.date(year, month, 1)
