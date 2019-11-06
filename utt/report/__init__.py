@@ -93,10 +93,27 @@ def _parse_absolute_date(datestring):
 
 
 def _parse_date(today, datestring, is_past=True):
+    day = _parse_relative_day(today, datestring)
+    if day is not None:
+        return day
     date = _parse_relative_date(today, datestring, is_past=is_past)
     if date is not None:
         return date
     return _parse_absolute_date(datestring)
+
+
+def _parse_relative_day(today, datestring):
+    """Parses day like 'today' or 'yesterday'.
+
+    Note that 'today' has the same effect as "not supplying a date" but
+    it's included for completeness.
+    """
+    if "TODAY".startswith(datestring.upper()):
+        return today
+    elif "YESTERDAY".startswith(datestring.upper()):
+        return today - datetime.timedelta(days=1)
+    else:
+        return None
 
 
 def _parse_day(day):
