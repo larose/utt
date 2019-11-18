@@ -17,6 +17,8 @@ class Args:
         self.no_current_activity = False
         self.report_date = None
         self.to_date = None
+        self.project = None
+        self.per_day = None
 
 
 class InMemoryEntries:
