@@ -6,8 +6,7 @@ import math
 
 from . import formatter
 from ..activity import Activity
-from .common import (clip_activities_by_range, filter_activities_by_type,
-                     print_dicts)
+from .common import clip_activities_by_range, filter_activities_by_type
 
 
 class PerDayModel:
@@ -24,13 +23,13 @@ class PerDayView:
         self._model = model
 
     @staticmethod
-    def _timedelta_to_billable(td):
+    def _timedelta_to_billable(time_delta):
         """Ad hoc method for rounding a decimal number of hours to "billable"
 
         Using the following approach: round up to the nearest 6 minutes
         (10th of an hour).
         """
-        hours = td.total_seconds() / (60 * 60)
+        hours = time_delta.total_seconds() / (60 * 60)
         # Round up to nearest 6 minutes
         rounder = math.ceil  # Replace with 'round' if that's more appropriate
         hours = rounder(hours * 10) / 10
