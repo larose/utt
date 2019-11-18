@@ -6,6 +6,7 @@ from .summary_section import SummaryModel
 
 
 class Report:
+    # pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(self, activities, start_date, end_date, local_timezone, args):
         self.summary_model = SummaryModel(activities, start_date, end_date,
                                           local_timezone)
