@@ -1,7 +1,7 @@
 from .activities_section import ActivitiesView
 from .details_section import DetailsView
-from .projects_section import ProjectsView
 from .per_day_section import PerDayView
+from .projects_section import ProjectsView
 from .summary_section import SummaryView
 
 
