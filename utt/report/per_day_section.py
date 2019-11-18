@@ -45,8 +45,8 @@ class PerDayView:
             date_render = fmt.format(
                 date=date_activities['date'].isoformat(),
                 hours=self._timedelta_to_billable(date_activities['hours']),
-                duration="({date_activities['duration']})".format(
-                    date_activities=date_activities),
+                duration="({duration})".format(
+                    duration=date_activities['duration']),
                 projects=date_activities['projects'],
                 tasks=date_activities['tasks'],
             )
