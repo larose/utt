@@ -33,7 +33,7 @@ class PerDayView:
         # Round up to nearest 6 minutes
         rounder = math.ceil  # Replace with 'round' if that's more appropriate
         hours = rounder(hours * 10) / 10
-        return f"{hours:4.1f}"
+        return "{hours:4.1f}".format(hours=hours)
 
     def render(self, output):
         print(file=output)
@@ -45,7 +45,8 @@ class PerDayView:
             date_render = fmt.format(
                 date=date_activities['date'].isoformat(),
                 hours=self._timedelta_to_billable(date_activities['hours']),
-                duration=f"({date_activities['duration']})",
+                duration="({date_activities['duration']})".format(
+                    date_activities=date_activities),
                 projects=date_activities['projects'],
                 tasks=date_activities['tasks'],
             )
