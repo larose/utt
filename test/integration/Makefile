@@ -90,6 +90,7 @@ report-1: $(UTT)
 	@echo
 	@echo ">> REPORT-1"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report 2014-3-19) data/utt-1.stdout'
 
@@ -105,7 +106,7 @@ report-dayname: $(UTT)
 	@echo "<< REPORT-DAYNAME"
 
 .PHONY: report-no-current-activity
-report-no-current-activity:
+report-no-current-activity: $(UTT)
 	@echo
 	@echo ">> REPORT-NO-CURRENT-ACTIVITY"
 
@@ -120,6 +121,7 @@ report-uppercase: $(UTT)
 	@echo
 	@echo ">> REPORT-UPPERCASE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-upper-case.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-14 12:00" report 2014-3-14 --no-current-activity) data/utt-upper-case.stdout'
 
@@ -129,6 +131,7 @@ report-range: $(UTT)
 	@echo
 	@echo ">> REPORT-RANGE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from 2014-3-15 --to 2014-03-19 --no-current-activity) data/utt-range.stdout'
 
@@ -138,6 +141,7 @@ report-overnight: $(UTT)
 	@echo
 	@echo ">> REPORT-OVERNIGHT"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report "2014-03-14") data/utt-overnight.stdout'
 
@@ -148,6 +152,7 @@ report-overnight-range: $(UTT)
 	@echo
 	@echo ">> REPORT-OVERNIGHT-RANGE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from "2014-03-14" --to "2014-03-18") data/utt-overnight-range.stdout'
 
@@ -157,6 +162,7 @@ report-change-timezone: $(UTT)
 	@echo
 	@echo ">> REPORT-CHANGE-TIMEZONE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-change-timezone.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2018-08-10 18:00" report "2018-08-08") data/utt-change-timezone.stdout'
 
@@ -179,7 +185,7 @@ report-timezone-daylight-change: $(UTT)
 
 	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
-report-hello-only-today:
+report-hello-only-today: $(UTT)
 	@echo
 	@echo ">> REPORT-HELLO-ONLY-TODAY"
 
