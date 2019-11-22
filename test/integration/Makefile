@@ -211,6 +211,33 @@ report-project: $(UTT)
 	@echo "<< REPORT-PROJECT"
 
 
+.PHONY: report-per-day
+report-per-day: $(UTT)
+	# NOTE: this is not an intended use of the `--per-day` switch.
+	#       It only really works well in conjunction with a
+	#       `--project <proj_foo>` switch.  But it still works.
+	@echo
+	@echo ">> REPORT-PER-DAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --per-day) data/utt-report-per-day.stdout'
+
+	@echo "<< REPORT-PER-DAY"
+
+
+.PHONY: report-project-per-day
+report-project-per-day: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-PER-DAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --per-day) data/utt-report-project-per-day.stdout'
+
+	@echo "<< REPORT-PROJECT-PER-DAY"
+
+
 .PHONY: shell
 shell:
 	bash
