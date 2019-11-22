@@ -117,3 +117,29 @@ def test_single_day(args, activities, local_timezone):
         hours=1)
     assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
         hours=1)
+
+
+@pytest.mark.parametrize(
+    "delta,billable",
+    [
+        (dict(minutes=66), ' 1.1'),
+        (dict(minutes=6), ' 0.1'),
+        (dict(minutes=1), ' 0.1'),
+        (dict(minutes=7), ' 0.2'),
+        (dict(minutes=11), ' 0.2'),
+        (dict(minutes=15), ' 0.3'),
+        (dict(minutes=30), ' 0.5'),
+        # NOTE, utt doesn't really deal with seconds, but this is how the
+        #   rounding would work if it did.
+        (dict(seconds=1), ' 0.1'),
+        (dict(seconds=360), ' 0.1'),
+        (dict(seconds=361), ' 0.2'),
+    ])
+def test_timedelta_to_billable(delta, billable):
+    """Ensure that _timedelta_to_billable gives intended outcome.
+
+    Hours are divided in 10, and we round up to the next "6 minute unit".
+    """
+    # pylint: disable=protected-access
+    to_billable = utt.report.per_day_section.PerDayView._timedelta_to_billable
+    assert to_billable(datetime.timedelta(**delta)) == billable
