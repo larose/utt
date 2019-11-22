@@ -38,8 +38,9 @@ def report(args, now, activities, local_timezone):
 
     activities_ = _filter_activities_by_project(activities_, args.project)
 
-    return Report(list(activities_), report_start_date, report_end_date,
-                  local_timezone, args)
+    return Report(
+        list(activities_), report_start_date, report_end_date, local_timezone,
+        args)
 
 
 DAY_NAMES = [
@@ -60,6 +61,7 @@ def _filter_activities_by_range(activities, start_date, end_date,
         activity = full_activity.clip(start_datetime, end_datetime)
         if activity.duration > datetime.timedelta():
             yield activity
+
 
 def _filter_activities_by_project(activities, project):
     for activity in activities:

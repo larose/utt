@@ -65,7 +65,7 @@ class ReportCommand:
             "--per-day",
             action='store_true',
             default=False,
-            help="Show total hours per per day.")
+            help="Show total hours per day.")
 
         parser.add_argument(
             "--csv-section",
