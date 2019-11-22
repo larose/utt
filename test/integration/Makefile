@@ -19,6 +19,8 @@ all: add \
   report-project \
   report-per-day \
   report-project-per-day \
+  report-project-per-day-csv \
+  report-per-day-csv \
   version
 
 $(UTT):
@@ -239,6 +241,33 @@ report-project-per-day: $(UTT)
 	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --per-day) data/utt-report-project-per-day.stdout'
 
 	@echo "<< REPORT-PROJECT-PER-DAY"
+
+
+.PHONY: report-project-per-day-csv
+report-project-per-day-csv: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-PER-DAY-CSV"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --csv-section per_day) data/utt-report-project-per-day-csv.csv'
+
+	@echo "<< REPORT-PROJECT-PER-DAY-CSV"
+
+
+.PHONY: report-per-day-csv
+report-per-day-csv: $(UTT)
+	# NOTE: this is not an intended use of the `--csv-section` switch.
+	#       It only really works well in conjunction with a
+	#       `--project <proj_foo>` switch.  But it still works.
+	@echo
+	@echo ">> REPORT-PER-DAY-CSV"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --csv-section per_day) data/utt-report-per-day-csv.csv'
+
+	@echo "<< REPORT-PER-DAY-CSV"
 
 
 .PHONY: shell
