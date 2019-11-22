@@ -199,6 +199,18 @@ version: $(UTT)
 	@echo "<< VERSION"
 
 
+.PHONY: report-project
+report-project: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-20 20:00" report --project project_1) data/utt-report-project.stdout'
+
+	@echo "<< REPORT-PROJECT"
+
+
 .PHONY: shell
 shell:
 	bash
