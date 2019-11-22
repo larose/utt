@@ -21,15 +21,18 @@ class DetailsView:
         print(file=output)
 
         # Print date only when the activities have different dates.
-        print_date = (self._model.activities[0].start.date()
-                      != self._model.activities[-1].start.date())
+        if len(self._model.activities) == 0:
+            print_date =  False
+        else:
+            print_date = (self._model.activities[0].start.date() !=
+                          self._model.activities[-1].start.date())
         current_date = None
         for activity in self._model.activities:
             if print_date and current_date != activity.start.date():
                 if current_date is not None:
                     print("", file=output)
                 current_date = activity.start.date()
-                print(f"{current_date.isoformat()}:", file=output)
+                print("{}:".format(current_date.isoformat()), file=output)
                 print("", file=output)
             print(
                 "(%s) %s-%s %s" %
