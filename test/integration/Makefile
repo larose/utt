@@ -16,6 +16,7 @@ all: add \
   report-change-timezone \
   report-timezone-daylight-change \
   report-hello-only-today \
+  report-month \
   version
 
 $(UTT):
@@ -197,6 +198,18 @@ version: $(UTT)
 	utt --version
 
 	@echo "<< VERSION"
+
+
+.PHONY: report-month
+report-month: $(UTT)
+	@echo
+	@echo ">> REPORT-MONTH"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-09-21 20:00" report --month prev) data/utt-report-month.stdout'
+
+	@echo "<< REPORT-MONTH"
 
 
 .PHONY: shell
