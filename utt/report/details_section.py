@@ -21,8 +21,8 @@ class DetailsView:
         print(file=output)
 
         # Print date only when the activities have different dates.
-        if len(self._model.activities) == 0:
-            print_date =  False
+        if not self._model.activities:
+            print_date = False
         else:
             print_date = (self._model.activities[0].start.date() !=
                           self._model.activities[-1].start.date())
