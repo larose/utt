@@ -111,10 +111,9 @@ def _parse_relative_day(today, datestring):
     """
     if "TODAY".startswith(datestring.upper()):
         return today
-    elif "YESTERDAY".startswith(datestring.upper()):
+    if "YESTERDAY".startswith(datestring.upper()):
         return today - datetime.timedelta(days=1)
-    else:
-        return None
+    return None
 
 
 def _parse_day(day):
@@ -227,15 +226,14 @@ def _parse_relative_week(today, weekstring):
 
     Return the first day of the week as a datetime.date
     """
-    today_year, today_week, today_day = today.isocalendar()
     week_upper = weekstring.upper()
     if "THIS".startswith(week_upper):
-        (y, w, d) = today.isocalendar()
+        (year, week, _d) = today.isocalendar()
     elif "PREVIOUS".startswith(week_upper):
-        (y, w, d) = (today - datetime.timedelta(days=7)).isocalendar()
+        (year, week, _d) = (today - datetime.timedelta(days=7)).isocalendar()
     else:
         return None
-    return datetime.date.fromisocalendar(y, w, 1)
+    return datetime.date.fromisocalendar(year, week, 1)
 
 
 def _parse_week_number(today, weekstring):
@@ -248,13 +246,13 @@ def _parse_week_number(today, weekstring):
     elif weeknum < 0:
         one_week = datetime.timedelta(days=7)
         # Note: weeknum is negative so this effectively subtracts
-        (y, w, d) = (today + weeknum * one_week).isocalendar()
-        return datetime.date.fromisocalendar(y, w, 1)
+        (year, week, _d) = (today + weeknum * one_week).isocalendar()
+        return datetime.date.fromisocalendar(year, week, 1)
     else:
-        (y, w, d) = today.isocalendar()
-        if weeknum > w:
-            y -= 1
-        return datetime.date.fromisocalendar(y, weeknum, 1)
+        (year, week, _d) = today.isocalendar()
+        if weeknum > week:
+            year -= 1
+        return datetime.date.fromisocalendar(year, weeknum, 1)
 
 
 def _parse_week(today, weekstring):
