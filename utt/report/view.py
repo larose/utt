@@ -34,6 +34,6 @@ class ReportView:
             view = None
 
         if not hasattr(view, 'csv'):
-            raise ValueError(
-                f"CSV output not yet implemented for '{section}' section")
+            raise ValueError("CSV output not yet implemented for '{}' section"
+                             "".format(section))
         view.csv(output)

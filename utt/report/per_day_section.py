@@ -1,9 +1,9 @@
 from __future__ import print_function
 
+import csv
 import datetime
 import itertools
 import math
-import csv
 
 from . import formatter
 from ..activity import Activity
