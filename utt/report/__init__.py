@@ -190,6 +190,7 @@ def _parse_integer_month(today, monthstring):
         monthnum = int(monthstring)
     except ValueError:
         return None
+    # pylint: disable=no-else-return
     if monthnum == 0:
         return None
     elif monthnum < 0:
@@ -241,6 +242,7 @@ def _parse_week_number(today, weekstring):
         weeknum = int(weekstring)
     except ValueError:
         return None
+    # pylint: disable=no-else-return
     if weeknum == 0:
         return None
     elif weeknum < 0:
