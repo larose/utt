@@ -16,6 +16,9 @@ all: add \
   report-change-timezone \
   report-timezone-daylight-change \
   report-hello-only-today \
+  report-project \
+  report-per-day \
+  report-project-per-day \
   version
 
 $(UTT):
