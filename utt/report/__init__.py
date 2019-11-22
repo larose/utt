@@ -14,21 +14,19 @@ def report(args, now, activities, local_timezone):
         report_date = _parse_date(today, args.report_date)
 
     if args.month:
-        report_start_date, report_end_date = _parse_month(report_date,
-                                                          args.month)
+        report_start_date, report_end_date = _parse_month(
+            report_date, args.month)
     elif args.week:
-        report_start_date, report_end_date = _parse_week(report_date,
-                                                          args.week)
+        report_start_date, report_end_date = _parse_week(
+            report_date, args.week)
     else:
         report_start_date = report_end_date = report_date
 
-    report_start_date = (report_start_date
-                         if args.from_date is None else
+    report_start_date = (report_start_date if args.from_date is None else
                          _parse_date(today, args.from_date, is_past=True))
     report_end_date = (report_end_date
-                       if args.to_date is None else
-                       _parse_date(
-        report_start_date, args.to_date, is_past=False))
+                       if args.to_date is None else _parse_date(
+                           report_start_date, args.to_date, is_past=False))
 
     if report_start_date == report_end_date:
         collect_from_date, collect_to_date = _week_dates(report_start_date)
@@ -142,9 +140,20 @@ def _parse_relative_date(today, datestring, is_past):
 
 
 MONTH_NAMES = [
-    "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
-    "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER",
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
 ]
+
 
 def _parse_relative_month(today, monthstring):
     month = _parse_integer_month(today, monthstring)
@@ -156,7 +165,7 @@ def _parse_relative_month(today, monthstring):
     month_upper = monthstring.upper()
     for i, monthname in enumerate(MONTH_NAMES):
         if monthname.startswith(month_upper):
-            month = i+1
+            month = i + 1
             break
     else:
         if "THIS".startswith(month_upper):

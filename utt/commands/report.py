@@ -75,8 +75,9 @@ class ReportCommand:
                 "Allowed formats include, 'this' 'prev', or week noumber. "
                 "The report will start on the first day of the week (Monday) "
                 "and end on the last (Sunday).  '--from' or '--to' if present "
-                "will override " "start and end, respectively.  If the week "
-                "is the current week, 'today' will be the last day of the "
-                "report."))
+                "will override start and end, respectively.  If the week is "
+                "the current week, 'today' will be the last day of the report."
+            ))
+
 
 Command = ReportCommand
