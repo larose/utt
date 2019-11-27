@@ -30,9 +30,8 @@ class PerDayView:
         (10th of an hour).
         """
         hours = time_delta.total_seconds() / (60 * 60)
-        # Round up to nearest 6 minutes
-        rounder = math.ceil  # Replace with 'round' if that's more appropriate
-        hours = rounder(hours * 10) / 10
+        # Round to nearest 6 minutes (0.1h), rounding up 3, 9, 15 mins (etc.)
+        hours = round(hours * 10) / 10
         return "{hours:4.1f}".format(hours=hours)
 
     def render(self, output):
