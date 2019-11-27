@@ -40,7 +40,7 @@ class PerDayView:
         print(formatter.title('Per Day'), file=output)
         print(file=output)
 
-        fmt = "{date}: {hours} {duration:>7} - {projects} - {tasks}"
+        fmt = "{date}: {hours}h {duration:>7} - {projects} - {tasks}"
         for date_activities in self._model.dates:
             date_render = fmt.format(
                 date=date_activities['date'].isoformat(),
