@@ -123,6 +123,7 @@ def test_single_day(args, activities, local_timezone):
     "delta,billable",
     [
         (dict(minutes=66), ' 1.1'),
+        (dict(minutes=0), ' 0.0'),
         (dict(minutes=1), ' 0.0'),
         (dict(minutes=2), ' 0.0'),
         (dict(minutes=3), ' 0.1'),
@@ -138,6 +139,10 @@ def test_single_day(args, activities, local_timezone):
         # NOTE, utt doesn't really deal with seconds, but this is how the
         #   rounding would work if it did.
         (dict(seconds=1), ' 0.0'),
+        (dict(seconds=179), ' 0.0'),
+        (dict(seconds=180), ' 0.1'),
+        (dict(seconds=181), ' 0.1'),
+        (dict(seconds=359), ' 0.1'),
         (dict(seconds=360), ' 0.1'),
         (dict(seconds=361), ' 0.1'),
     ])
