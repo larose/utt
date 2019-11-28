@@ -3,7 +3,6 @@ from __future__ import print_function
 import csv
 import datetime
 import itertools
-import math
 
 from . import formatter
 from ..activity import Activity
@@ -27,13 +26,21 @@ class PerDayView:
     def _timedelta_to_billable(time_delta):
         """Ad hoc method for rounding a decimal number of hours to "billable"
 
-        Using the following approach: round up to the nearest 6 minutes
-        (10th of an hour).
+        Round to the nearest 6 minutes / 0.1 hours.  This means that 2,
+        8, 14 minutes should get rounded down and 3, 9, 15 minutes
+        should get rounded up.
+
+        Note that Python's standard rounding function round() uses
+        what's referred to as "banker's rounding".  We fix it by adding
+        0.000001 (1e-6), or less than 4 milliseconds.
+
+        Alternative would be to use the Decimal module, for instance as
+        suggested here: https://stackoverflow.com/a/33019948/3061818
         """
         hours = time_delta.total_seconds() / (60 * 60)
-        # Round up to nearest 6 minutes
-        rounder = math.ceil  # Replace with 'round' if that's more appropriate
-        hours = rounder(hours * 10) / 10
+        # Round to nearest 6 minutes (0.1h), rounding up 3, 9, 15 mins (etc.)
+        hours += 0.000001  # Hack to avoid 'banker's rounding.
+        hours = round(hours * 10) / 10
         return "{hours:4.1f}".format(hours=hours)
 
     def render(self, output):
@@ -41,7 +48,7 @@ class PerDayView:
         print(formatter.title('Per Day'), file=output)
         print(file=output)
 
-        fmt = "{date}: {hours} {duration:>7} - {projects} - {tasks}"
+        fmt = "{date}: {hours}h {duration:>7} - {projects} - {tasks}"
         for date_activities in self._model.dates:
             date_render = fmt.format(
                 date=date_activities['date'].isoformat(),
