@@ -22,7 +22,7 @@ class ReportView:
     def csv(self, section, output):
         if section == 'summary':
             view = SummaryView(self._report.summary_model)
-        elif section == 'per_day':
+        elif section in ['per_day', 'per-day']:
             view = PerDayView(self._report.per_day_model)
         elif section == 'projects':
             view = ProjectsView(self._report.projects_model)

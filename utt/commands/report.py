@@ -70,7 +70,8 @@ class ReportCommand:
         parser.add_argument(
             "--csv-section",
             choices=[
-                'summary', 'per_day', 'projects', 'activities', 'details'
+                'summary', 'per_day', 'per-day', 'projects', 'activities',
+                'details'
             ],
             default=None,
             help="Instead of text output, print CSV of desired section")
