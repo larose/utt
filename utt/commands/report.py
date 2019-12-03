@@ -51,6 +51,18 @@ class ReportCommand:
                 "itself."))
 
         parser.add_argument(
+            "--project",
+            default=None,
+            type=str,
+            help="Show activities only for the specified project.")
+
+        parser.add_argument(
+            "--per-day",
+            action='store_true',
+            default=False,
+            help="Show total hours per day.")
+
+        parser.add_argument(
             "--details",
             action='store_true',
             default=False,
