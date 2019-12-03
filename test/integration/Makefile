@@ -16,6 +16,9 @@ all: add \
   report-change-timezone \
   report-timezone-daylight-change \
   report-hello-only-today \
+  report-project \
+  report-per-day \
+  report-project-per-day \
   report-month \
   version
 
@@ -91,6 +94,7 @@ report-1: $(UTT)
 	@echo
 	@echo ">> REPORT-1"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report 2014-3-19) data/utt-1.stdout'
 
@@ -106,7 +110,7 @@ report-dayname: $(UTT)
 	@echo "<< REPORT-DAYNAME"
 
 .PHONY: report-no-current-activity
-report-no-current-activity:
+report-no-current-activity: $(UTT)
 	@echo
 	@echo ">> REPORT-NO-CURRENT-ACTIVITY"
 
@@ -121,6 +125,7 @@ report-uppercase: $(UTT)
 	@echo
 	@echo ">> REPORT-UPPERCASE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-upper-case.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-14 12:00" report 2014-3-14 --no-current-activity) data/utt-upper-case.stdout'
 
@@ -130,6 +135,7 @@ report-range: $(UTT)
 	@echo
 	@echo ">> REPORT-RANGE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from 2014-3-15 --to 2014-03-19 --no-current-activity) data/utt-range.stdout'
 
@@ -139,6 +145,7 @@ report-overnight: $(UTT)
 	@echo
 	@echo ">> REPORT-OVERNIGHT"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report "2014-03-14") data/utt-overnight.stdout'
 
@@ -149,6 +156,7 @@ report-overnight-range: $(UTT)
 	@echo
 	@echo ">> REPORT-OVERNIGHT-RANGE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from "2014-03-14" --to "2014-03-18") data/utt-overnight-range.stdout'
 
@@ -158,6 +166,7 @@ report-change-timezone: $(UTT)
 	@echo
 	@echo ">> REPORT-CHANGE-TIMEZONE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-change-timezone.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2018-08-10 18:00" report "2018-08-08") data/utt-change-timezone.stdout'
 
@@ -180,7 +189,7 @@ report-timezone-daylight-change: $(UTT)
 
 	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
-report-hello-only-today:
+report-hello-only-today: $(UTT)
 	@echo
 	@echo ">> REPORT-HELLO-ONLY-TODAY"
 
@@ -198,6 +207,45 @@ version: $(UTT)
 	utt --version
 
 	@echo "<< VERSION"
+
+
+.PHONY: report-project
+report-project: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-20 20:00" report --project project_1) data/utt-report-project.stdout'
+
+	@echo "<< REPORT-PROJECT"
+
+
+.PHONY: report-per-day
+report-per-day: $(UTT)
+	# NOTE: this is not an intended use of the `--per-day` switch.
+	#       It only really works well in conjunction with a
+	#       `--project <proj_foo>` switch.  But it still works.
+	@echo
+	@echo ">> REPORT-PER-DAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --per-day) data/utt-report-per-day.stdout'
+
+	@echo "<< REPORT-PER-DAY"
+
+
+.PHONY: report-project-per-day
+report-project-per-day: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-PER-DAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --per-day) data/utt-report-project-per-day.stdout'
+
+	@echo "<< REPORT-PROJECT-PER-DAY"
 
 
 .PHONY: report-month

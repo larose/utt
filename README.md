@@ -510,6 +510,7 @@ To run a specific test:
 - Paul Ivanov <<pi@berkeley.edu>>
 - Jason Stewart <<support@eggplantsd.com>>
 - Kit Choi <<kit@kychoi.org>>
+- Henrik Holm <<ukrutt@gmail.com>>
 
 
 ## License

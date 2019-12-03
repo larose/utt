@@ -1,3 +1,8 @@
+1.13 (2019-11-27)
+
+  * Add switches to report for specific project, and also hours worked
+    per day
+
 1.12 (2018-11-11)
 
   * Format duration > 24h as hours instead of days
