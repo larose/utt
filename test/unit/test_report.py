@@ -11,6 +11,7 @@ from utt.entry import Entry
 
 
 class Args:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self):
         self.current_activity = "-- Current Activity --"
         self.from_date = None
