@@ -255,7 +255,7 @@ report-details: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u <(utt --now "2018-08-20 20:00" report --from 2018-08-20 --to 2018-08-21 --details) data/utt-report-details.stdout'
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details) data/utt-report-details.stdout'
 
 	@echo "<< REPORT-DETAILS"
 
