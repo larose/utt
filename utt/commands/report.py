@@ -91,5 +91,11 @@ class ReportCommand:
                 "the current week, 'today' will be the last day of the report."
             ))
 
+        parser.add_argument(
+            "--details",
+            action='store_true',
+            default=False,
+            help="Show details even for multi-day reports.")
+
 
 Command = ReportCommand

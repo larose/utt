@@ -1,3 +1,7 @@
+1.14 (2019-12-07)
+
+  * Add `--details` flag to show details even on multi-day reports
+
 1.13 (2019-11-27)
 
   * Add switches to report for specific project, and also hours worked

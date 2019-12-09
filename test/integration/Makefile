@@ -20,6 +20,7 @@ all: add \
   report-per-day \
   report-project-per-day \
   report-month \
+  report-details \
   version
 
 $(UTT):
@@ -258,6 +259,18 @@ report-month: $(UTT)
 	bash -c 'diff -u <(utt --now "2018-09-21 20:00" report --month prev) data/utt-report-month.stdout'
 
 	@echo "<< REPORT-MONTH"
+
+
+.PHONY: report-details
+report-details: $(UTT)
+	@echo
+	@echo ">> REPORT-DETAILS"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details) data/utt-report-details.stdout'
+
+	@echo "<< REPORT-DETAILS"
 
 
 .PHONY: shell
