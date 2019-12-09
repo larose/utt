@@ -22,6 +22,7 @@ all: add \
   report-project-per-day-csv \
   report-project-per-day-csv-2 \
   report-per-day-csv \
+  report-month \
   report-details \
   version
 
@@ -289,6 +290,18 @@ report-per-day-csv: $(UTT)
 	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --csv-section per_day) data/utt-report-per-day-csv.csv'
 
 	@echo "<< REPORT-PER-DAY-CSV"
+
+
+.PHONY: report-month
+report-month: $(UTT)
+	@echo
+	@echo ">> REPORT-MONTH"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-09-21 20:00" report --month prev) data/utt-report-month.stdout'
+
+	@echo "<< REPORT-MONTH"
 
 
 .PHONY: report-details

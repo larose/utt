@@ -77,6 +77,35 @@ class ReportCommand:
             help="Instead of text output, print CSV of desired section")
 
         parser.add_argument(
+            "--month",
+            default=None,
+            nargs='?',
+            const='this',
+            type=str,
+            help=(
+                "Specify a month. "
+                "Allowed formats include, '2019-10', 'Oct', 'this' 'prev'. "
+                "The report will start on the first day of the month and end "
+                "on the last.  '--from' or '--to' if present will override "
+                "start and end, respectively.  If the month is the current "
+                "month, 'today' will be the last day of the report."))
+
+        parser.add_argument(
+            "--week",
+            default=None,
+            nargs='?',
+            const='this',
+            type=str,
+            help=(
+                "Specify a week. "
+                "Allowed formats include, 'this' 'prev', or week noumber. "
+                "The report will start on the first day of the week (Monday) "
+                "and end on the last (Sunday).  '--from' or '--to' if present "
+                "will override start and end, respectively.  If the week is "
+                "the current week, 'today' will be the last day of the report."
+            ))
+
+        parser.add_argument(
             "--details",
             action='store_true',
             default=False,

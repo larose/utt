@@ -11,6 +11,7 @@ from utt.entry import Entry
 
 
 class Args:
+    # pylint: disable=too-many-instance-attributes
     def __init__(self):
         self.current_activity = "-- Current Activity --"
         self.from_date = None
@@ -19,6 +20,8 @@ class Args:
         self.to_date = None
         self.project = None
         self.per_day = None
+        self.month = None
+        self.week = None
 
 
 class InMemoryEntries:
