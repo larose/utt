@@ -16,7 +16,8 @@ class ReportView:
         else:
             ProjectsView(self._report.projects_model).render(output)
         ActivitiesView(self._report.activities_model).render(output)
-        if self._report.start_date == self._report.end_date:
+        if ((self._report.start_date == self._report.end_date)
+                or (self._report.args.details)):
             DetailsView(self._report.details_model).render(output)
 
     def csv(self, section, output):
