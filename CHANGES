@@ -1,3 +1,8 @@
+1.15 (2019-12-14)
+
+  * Add month and week switch to filter by month and week
+  * Add csv switch to output in csv
+
 1.14 (2019-12-07)
 
   * Add `--details` flag to show details even on multi-day reports
