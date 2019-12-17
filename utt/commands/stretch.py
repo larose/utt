@@ -18,7 +18,10 @@ class StretchHandler:
         if not entries:
             raise Exception("No entry to stretch")
         latest_entry = entries[-1]
-        new_entry = Entry(self._now, latest_entry.name, False)
+        new_entry = Entry(self._now,
+                          latest_entry.name,
+                          False,
+                          comment=latest_entry.comment)
         self._add_entry(new_entry)
         print("stretched " +
               str(_localize(self._timezone_config, latest_entry)))

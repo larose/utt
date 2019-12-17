@@ -24,6 +24,7 @@ all: add \
   report-per-day-csv \
   report-month \
   report-details \
+  report-comments \
   version
 
 $(UTT):
@@ -314,6 +315,18 @@ report-details: $(UTT)
 	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details) data/utt-report-details.stdout'
 
 	@echo "<< REPORT-DETAILS"
+
+
+.PHONY: report-comments
+report-commentss: $(UTT)
+	@echo
+	@echo ">> REPORT-COMMENTS"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details --comments) data/utt-report-comments.stdout'
+
+	@echo "<< REPORT-COMMENTS"
 
 
 .PHONY: shell

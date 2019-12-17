@@ -12,8 +12,24 @@ class DetailsModel:
 
 
 class DetailsView:
-    def __init__(self, model):
+    def __init__(self, model, show_comments=False):
         self._model = model
+        self.show_comments = show_comments
+
+    def _create_line_for_render(self, activity):
+        format_str = "(%s) %s-%s %s"
+        line = [
+            formatter.format_duration(activity.duration),
+            _format_time(activity.start, self._model.local_timezone),
+            _format_time(activity.end, self._model.local_timezone),
+            activity.name
+        ]
+
+        if self.show_comments and activity.comment:
+            format_str = " ".join([format_str, " # %s"])
+            line.append(activity.comment)
+
+        return format_str % tuple(line)
 
     def render(self, output):
         print(file=output)
@@ -34,13 +50,7 @@ class DetailsView:
                 current_date = activity.start.date()
                 print("{}:".format(current_date.isoformat()), file=output)
                 print("", file=output)
-            print(
-                "(%s) %s-%s %s" %
-                (formatter.format_duration(activity.duration),
-                 _format_time(activity.start, self._model.local_timezone),
-                 _format_time(activity.end, self._model.local_timezone),
-                 activity.name),
-                file=output)
+            print(self._create_line_for_render(activity), file=output)
 
         print(file=output)
 

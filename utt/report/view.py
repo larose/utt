@@ -18,7 +18,9 @@ class ReportView:
         ActivitiesView(self._report.activities_model).render(output)
         if ((self._report.start_date == self._report.end_date)
                 or (self._report.args.details)):
-            DetailsView(self._report.details_model).render(output)
+            DetailsView(
+                self._report.details_model,
+                show_comments=self._report.args.comments).render(output)
 
     def csv(self, section, output):
         if section == 'summary':
@@ -30,7 +32,9 @@ class ReportView:
         elif section == 'activities':
             view = ActivitiesView(self._report.activities_model)
         elif section == 'details':
-            view = DetailsView(self._report.details_model)
+            view = DetailsView(
+                self._report.details_model,
+                show_comments=self._report.args.comments)
         else:
             view = None
 

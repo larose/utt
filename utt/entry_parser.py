@@ -4,12 +4,15 @@ from dateutil.parser import parse
 
 from .entry import Entry
 
-WITH_TZ = re.compile(
-    r"(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})(?P<timezone>[+-]{1}\d{2}:{0,1}\d{2})"
-    r"\s+(?P<name>[^\s].*)")
+DATE_REGEX = r"(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})"
+TIMEZONE_REGEX = r"(?P<timezone>[+-]{1}\d{2}:{0,1}\d{2})"
+NAME_REGEX = r"\s+(?P<name>[^\s].*?)"
+COMMENT_REGEX = r"\s{2}#\s(?P<comment>.*$)?"
+WITH_TZ = re.compile("".join([
+    DATE_REGEX, TIMEZONE_REGEX, NAME_REGEX, r"($|", COMMENT_REGEX, ")"]))
 
-WITHOUT_TZ = re.compile(
-    r"(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})\s+(?P<name>[^\s].*)")
+WITHOUT_TZ = re.compile("".join(
+    [DATE_REGEX, NAME_REGEX, r"($|", COMMENT_REGEX, ")"]))
 
 
 class EntryParser:
@@ -37,5 +40,6 @@ class EntryParser:
             date = parse(date_str)
             date = self._local_timezone.localize(date)
 
-        name = match.groupdict()['name']
-        return Entry(date, name, False)
+        name = groupdict['name']
+        comment = groupdict.get('comment')
+        return Entry(date, name, False, comment=comment)

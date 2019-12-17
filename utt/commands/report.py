@@ -111,5 +111,11 @@ class ReportCommand:
             default=False,
             help="Show details even for multi-day reports.")
 
+        parser.add_argument(
+            "--comments",
+            action='store_true',
+            default=False,
+            help="Show comments in details sections.")
+
 
 Command = ReportCommand

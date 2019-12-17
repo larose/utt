@@ -9,5 +9,5 @@
 2018-08-21 08:12 project_2: task_1
 2018-08-21 08:18 project_1: task_2
 2018-08-21 08:24 project_2: task_2
-2018-08-21 08:30 project_1: task_3
-2018-08-21 08:36 project_2: task_3
+2018-08-21 08:30 project_1: task_3  # creating tests for task_3
+2018-08-21 08:36 project_2: task_3  # refactoring project_2 UI
