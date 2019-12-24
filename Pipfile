@@ -16,7 +16,7 @@ wheel = "==0.32.1"
 twine = "==1.12.1"
 pytest = "==3.9.2"
 ddt = "==1.2.0"
-pylint = "*"
+pylint = "==2.4.4"
 isort = "*"
 
 [requires]
