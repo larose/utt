@@ -7,3 +7,4 @@ CMD []
 WORKDIR /utt
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bash-completion make python3-pip python3-setuptools
 RUN pip3 install --upgrade pip
+COPY . .

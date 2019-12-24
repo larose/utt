@@ -22,6 +22,10 @@ format:
 bdist_wheel:
 	pipenv run python setup.py bdist_wheel --universal
 
+.PHONY: install-dev
+install-dev:
+	pipenv install --dev
+
 .PHONY: lint
 lint:
 	pipenv run pylint utt test
@@ -38,7 +42,7 @@ test-integration: clean test-integration-py2 test-integration-py3
 
 .PHONY: test-integration-py%
 test-integration-py%: test-integration-container-py%
-	docker run --rm -ti -v "$(CURDIR)/$(INTEGRATION_DIR):/utt:ro" $(CONTAINER_NAME) $(INTEGRATION_CMD)
+	docker run --rm -ti $(CONTAINER_NAME) $(INTEGRATION_CMD)
 
 .PHONY: test-integration-container-py%
 test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
