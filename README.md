@@ -37,8 +37,6 @@ Install `utt` from PyPI:
 
 `$ pip install utt`
 
-Note: `utt` is compatible with Python 2 and Python 3.
-
 
 ### hello
 
@@ -447,7 +445,7 @@ Finally, start a new shell.
 
 ### Dependencies
 
-- Python 3
+- Python
 - [Make](https://www.gnu.org/software/make/)
 - [Pipenv](https://pipenv.readthedocs.io/en/latest/)
 - [Docker](https://www.docker.com/)
@@ -483,20 +481,12 @@ To execute unit and integration tests:
 
 #### Integration Tests
 
-To run integration tests for Python 2 and Python 3:
+To run integration tests:
 
 `$ make test-integration`
 
 This will create two Docker containers, one for each version of
 Python, and run all the tests in `test/integration/Makefile`.
-
-To run integration tests for Python 2 only:
-
-`$ make test-integration-py2`
-
-To run integration tests for Python 3 only:
-
-`$ make test-integration-py3`
 
 To run a specific test:
 
