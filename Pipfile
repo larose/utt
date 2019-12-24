@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 argcomplete = "==1.9.4"
-pytz = "==2018.5"
+pytz = "==2019.3"
 python-dateutil = "==2.7.3"
 tzlocal = "==1.5.1"
 
