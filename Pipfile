@@ -15,7 +15,7 @@ setuptools = "==40.4.3"
 wheel = "==0.33.6"
 twine = "==3.1.1"
 pytest = "==5.3.2"
-ddt = "==1.2.0"
+ddt = "==1.2.2"
 pylint = "==2.4.4"
 isort = "==4.3.21"
 
