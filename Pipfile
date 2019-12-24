@@ -7,7 +7,7 @@ name = "pypi"
 argcomplete = "==1.11.0"
 pytz = "==2019.3"
 python-dateutil = "==2.7.3"
-tzlocal = "==1.5.1"
+tzlocal = "==2.0.0"
 
 [dev-packages]
 yapf = "==0.29.0"
