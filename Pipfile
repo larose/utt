@@ -17,7 +17,7 @@ twine = "==1.12.1"
 pytest = "==3.9.2"
 ddt = "==1.2.0"
 pylint = "==2.4.4"
-isort = "*"
+isort = "==4.3.21"
 
 [requires]
 python_version = "3.6"
