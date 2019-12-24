@@ -12,7 +12,7 @@ tzlocal = "==1.5.1"
 [dev-packages]
 yapf = "==0.24.0"
 setuptools = "==40.4.3"
-wheel = "==0.32.1"
+wheel = "==0.33.6"
 twine = "==1.12.1"
 pytest = "==3.9.2"
 ddt = "==1.2.0"
