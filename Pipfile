@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-argcomplete = "==1.9.4"
+argcomplete = "==1.11.0"
 pytz = "==2019.3"
 python-dateutil = "==2.7.3"
 tzlocal = "==1.5.1"
