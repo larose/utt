@@ -38,15 +38,12 @@ sdist:
 test: test-unit test-integration
 
 .PHONY: test-integration
-test-integration: clean test-integration-py2 test-integration-py3
-
-.PHONY: test-integration-py%
-test-integration-py%: test-integration-container-py%
+test-integration: clean test-integration-container
 	docker run --rm -ti $(CONTAINER_NAME) $(INTEGRATION_CMD)
 
-.PHONY: test-integration-container-py%
-test-integration-container-py%: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
-	docker build -t $(CONTAINER_NAME) -f $(INTEGRATION_DIR)/Dockerfile.py$* $(INTEGRATION_DIR)
+.PHONY: test-integration-container
+test-integration-container: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
+	docker build -t $(CONTAINER_NAME) $(INTEGRATION_DIR)
 
 .PHONY: test-unit
 test-unit:
