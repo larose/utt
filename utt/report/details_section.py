@@ -14,7 +14,7 @@ class DetailsModel:
 class DetailsView:
     def __init__(self, model, show_comments=False):
         self._model = model
-        self.show_comments = show_comments
+        self._show_comments = show_comments
 
     def _create_line_for_render(self, activity):
         format_str = "(%s) %s-%s %s"
@@ -25,7 +25,7 @@ class DetailsView:
             activity.name
         ]
 
-        if self.show_comments and activity.comment:
+        if self._show_comments and activity.comment:
             format_str = " ".join([format_str, " # %s"])
             line.append(activity.comment)
 
