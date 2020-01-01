@@ -1,5 +1,7 @@
 import sys
 
+from utt.api import _v1
+
 
 class ConfigHandler:
     def __init__(self, args, config, default_config, config_filename):
@@ -32,4 +34,4 @@ class ConfigCommand:
         parser.add_argument("--filename", action='store_true', default=False)
 
 
-Command = ConfigCommand
+_v1.add_command(ConfigCommand)

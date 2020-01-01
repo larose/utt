@@ -5,6 +5,7 @@ UTT = /usr/local/bin/utt
 all: add \
   completion \
   edit \
+  foo-plugin \
   hello \
   stretch \
   report-1 \
@@ -51,7 +52,7 @@ completion: $(UTT)
 	@echo ">> COMPLETION"
 
 	register-python-argcomplete utt >> ~/.bashrc
-	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]}) <(echo -h --help --data --now --timezone --version add config edit hello report stretch)'
+	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]} | tr " " "\n" | sort) <(echo -h --help --data --now --timezone --version add config edit hello report stretch | tr " " "\n" | sort)'
 
 	@echo "<< COMPLETION"
 
@@ -66,6 +67,17 @@ edit: $(UTT)
 	bash -c 'diff <(EDITOR=cat utt edit) data/hello/utt.log'
 
 	@echo "<< EDIT"
+
+.PHONY: foo-plugin
+foo-plugin: $(UTT)
+	@echo
+	@echo ">> FOO PLUGIN"
+
+	cd utt_foo_plugin && python3 setup.py install --record utt_foo_files
+	bash -c 'diff <(utt foo) <(echo foo)'
+	cd utt_foo_plugin && cat utt_foo_files | xargs rm -rf
+
+	@echo "<< FOO PLUGIN"
 
 .PHONY: hello
 hello: $(UTT)

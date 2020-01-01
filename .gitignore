@@ -2,6 +2,7 @@
 *.swp
 *.pyc
 .coverage
+.idea
 build
 dist
 test/integration/utt-*.tar.gz

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 import copy
 
-from ..entry import Entry
+from utt.api import _v1
 
 
 class StretchHandler:
@@ -18,14 +17,21 @@ class StretchHandler:
         if not entries:
             raise Exception("No entry to stretch")
         latest_entry = entries[-1]
-        new_entry = Entry(self._now,
-                          latest_entry.name,
-                          False,
-                          comment=latest_entry.comment)
+        new_entry = _v1.Entry(
+            self._now, latest_entry.name, False, comment=latest_entry.comment)
         self._add_entry(new_entry)
         print("stretched " +
               str(_localize(self._timezone_config, latest_entry)))
         print("        → " + str(_localize(self._timezone_config, new_entry)))
+
+
+def _localize(timezone_config, new_entry):
+    if timezone_config.enabled():
+        return new_entry
+
+    new_entry = copy.deepcopy(new_entry)
+    new_entry.datetime = new_entry.datetime.replace(tzinfo=None)
+    return new_entry
 
 
 class StretchCommand:
@@ -39,13 +45,4 @@ class StretchCommand:
         pass
 
 
-Command = StretchCommand
-
-
-def _localize(timezone_config, new_entry):
-    if timezone_config.enabled():
-        return new_entry
-
-    new_entry = copy.deepcopy(new_entry)
-    new_entry.datetime = new_entry.datetime.replace(tzinfo=None)
-    return new_entry
+_v1.add_command(StretchCommand)

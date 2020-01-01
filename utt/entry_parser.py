@@ -8,8 +8,8 @@ DATE_REGEX = r"(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})"
 TIMEZONE_REGEX = r"(?P<timezone>[+-]{1}\d{2}:{0,1}\d{2})"
 NAME_REGEX = r"\s+(?P<name>[^\s].*?)"
 COMMENT_REGEX = r"\s{2}#\s(?P<comment>.*$)?"
-WITH_TZ = re.compile("".join([
-    DATE_REGEX, TIMEZONE_REGEX, NAME_REGEX, r"($|", COMMENT_REGEX, ")"]))
+WITH_TZ = re.compile("".join(
+    [DATE_REGEX, TIMEZONE_REGEX, NAME_REGEX, r"($|", COMMENT_REGEX, ")"]))
 
 WITHOUT_TZ = re.compile("".join(
     [DATE_REGEX, NAME_REGEX, r"($|", COMMENT_REGEX, ")"]))

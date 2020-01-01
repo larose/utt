@@ -6,10 +6,9 @@ import argcomplete
 import pytz
 
 from .__version__ import VERSION
-from .commands import COMMAND_MODULES
 
 
-def parse_args():
+def parse_args(commands):
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
         description='Ultimate Time Tracker (utt) is a simple command-line time'
@@ -30,8 +29,7 @@ def parse_args():
 
     subparsers = parser.add_subparsers(dest="command")
 
-    for module in COMMAND_MODULES:
-        command = module.Command
+    for command in commands:
         sub_parser = subparsers.add_parser(
             command.NAME, description=command.DESCRIPTION)
         command.add_args(sub_parser)

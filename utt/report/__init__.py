@@ -1,9 +1,9 @@
 import datetime
 import calendar
 
+from ..constants import HELLO_ENTRY_NAME
 from ..activity import Activity
 from .model import Report
-from ..commands.hello import HelloCommand
 
 
 def report(args, now, activities, local_timezone):
@@ -277,7 +277,7 @@ def _parse_week(today, weekstring):
 
 def _remove_hello_activities(activities_):
     for activity in activities_:
-        if activity.name.name != HelloCommand.NAME:
+        if activity.name.name != HELLO_ENTRY_NAME:
             yield activity
 
 

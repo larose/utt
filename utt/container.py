@@ -3,7 +3,7 @@ import sys
 from . import ioc
 from .activities import Activities
 from .add_entry import AddEntry
-from .commands import COMMAND_MODULES
+from .api import _v1
 from .config import config
 from .config_dirname import config_dirname
 from .config_filename import config_filename
@@ -20,11 +20,16 @@ from .report import report
 from .timezone_config import timezone_config
 
 
+def get_commands():
+    return _v1._commands  # pylint: disable=protected-access
+
+
 def create_container():
     container = ioc.Container()
     container.activities = Activities
     container.add_entry = AddEntry
     container.args = parse_args
+    container.commands = get_commands()
     container.config = config
     container.config_dirname = config_dirname
     container.config_filename = config_filename
@@ -40,8 +45,7 @@ def create_container():
     container.report = report
     container.timezone_config = timezone_config
 
-    for module in COMMAND_MODULES:
-        setattr(container, 'command/{}'.format(module.Command.NAME),
-                module.Command.Handler)
+    for command in container.commands:
+        setattr(container, 'command/{}'.format(command.NAME), command.Handler)
 
     return container
