@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+from utt.api import _v1
+
 
 class EditHandler:
     def __init__(self, args, data_filename):
@@ -22,7 +24,7 @@ class EditCommand:
         pass
 
 
-Command = EditCommand
+_v1.add_command(EditCommand)
 
 
 def _editor():

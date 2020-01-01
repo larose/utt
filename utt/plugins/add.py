@@ -1,4 +1,4 @@
-from ..entry import Entry
+from utt.api import _v1
 
 
 class AddHandler:
@@ -10,10 +10,8 @@ class AddHandler:
 
     def __call__(self):
         self._add_entry(
-            Entry(self._now,
-                  self._args.name,
-                  False,
-                  comment=self._args.comment))
+            _v1.Entry(
+                self._now, self._args.name, False, comment=self._args.comment))
 
 
 class AddCommand:
@@ -25,9 +23,8 @@ class AddCommand:
     @staticmethod
     def add_args(parser):
         parser.add_argument("name", help="completed task description")
-        parser.add_argument("-c",
-                            "--comment",
-                            help="comment/annotation for task entry")
+        parser.add_argument(
+            "-c", "--comment", help="comment/annotation for task entry")
 
 
-Command = AddCommand
+_v1.add_command(AddCommand)

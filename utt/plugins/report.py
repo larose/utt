@@ -1,4 +1,7 @@
-from ..report.view import ReportView
+from utt.api import _v1
+
+from ..report.view import \
+    ReportView  # TODO: it should use the public api (utt.api.v<version>)
 
 
 class ReportHandler:
@@ -118,4 +121,4 @@ class ReportCommand:
             help="Show comments in details sections.")
 
 
-Command = ReportCommand
+_v1.add_command(ReportCommand)
