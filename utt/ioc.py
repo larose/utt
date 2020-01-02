@@ -51,7 +51,6 @@ class Value:
         return self._value
 
 
-# pylint: disable=too-many-instance-attributes,useless-object-inheritance
 class Container(object):
     def __init__(self):
         super(Container, self).__setattr__('_values', {})

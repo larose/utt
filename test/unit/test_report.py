@@ -1,5 +1,3 @@
-# pylint: disable=redefined-outer-name
-
 import datetime
 
 import pytest
@@ -11,7 +9,6 @@ from utt.data_structures.entry import Entry
 
 
 class Args:
-    # pylint: disable=too-many-instance-attributes
     def __init__(self):
         self.current_activity = "-- Current Activity --"
         self.from_date = None
@@ -159,6 +156,5 @@ def test_timedelta_to_billable(delta, billable):
 
     Hours are divided in 10, and we round up to the next "6 minute unit".
     """
-    # pylint: disable=protected-access
     to_billable = utt.report.per_day_section.PerDayView._timedelta_to_billable
     assert to_billable(datetime.timedelta(**delta)) == billable

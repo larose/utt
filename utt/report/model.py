@@ -13,7 +13,6 @@ from .summary_section import SummaryModel
 
 
 class Report:
-    # pylint: disable=too-many-arguments, too-many-instance-attributes
     def __init__(self, activities: List[Activity], start_date: date,
                  end_date: date, local_timezone: DstTzInfo,
                  args: argparse.Namespace):

@@ -14,8 +14,10 @@ class AddHandler:
 
     def __call__(self):
         self._add_entry(
-            _v1.types.Entry(
-                self._now, self._args.name, False, comment=self._args.comment))
+            _v1.types.Entry(self._now,
+                            self._args.name,
+                            False,
+                            comment=self._args.comment))
 
 
 class AddCommand:
@@ -27,8 +29,9 @@ class AddCommand:
     @staticmethod
     def add_args(parser):
         parser.add_argument("name", help="completed task description")
-        parser.add_argument(
-            "-c", "--comment", help="comment/annotation for task entry")
+        parser.add_argument("-c",
+                            "--comment",
+                            help="comment/annotation for task entry")
 
 
 _v1.add_command(AddCommand)

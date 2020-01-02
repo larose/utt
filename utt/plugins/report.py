@@ -30,24 +30,21 @@ class ReportCommand:
     def add_args(parser):
         parser.add_argument("report_date", metavar="date", type=str, nargs='?')
 
-        parser.add_argument(
-            "--current-activity",
-            default='-- Current Activity --',
-            type=str,
-            help="Set the current activity")
+        parser.add_argument("--current-activity",
+                            default='-- Current Activity --',
+                            type=str,
+                            help="Set the current activity")
 
-        parser.add_argument(
-            "--no-current-activity",
-            action='store_true',
-            default=False,
-            help="Do not display the current activity")
+        parser.add_argument("--no-current-activity",
+                            action='store_true',
+                            default=False,
+                            help="Do not display the current activity")
 
-        parser.add_argument(
-            "--from",
-            default=None,
-            dest="from_date",
-            type=str,
-            help="Specify an inclusive start date to report.")
+        parser.add_argument("--from",
+                            default=None,
+                            dest="from_date",
+                            type=str,
+                            help="Specify an inclusive start date to report.")
 
         parser.add_argument(
             "--to",
@@ -66,11 +63,10 @@ class ReportCommand:
             type=str,
             help="Show activities only for the specified project.")
 
-        parser.add_argument(
-            "--per-day",
-            action='store_true',
-            default=False,
-            help="Show total hours per day.")
+        parser.add_argument("--per-day",
+                            action='store_true',
+                            default=False,
+                            help="Show total hours per day.")
 
         parser.add_argument(
             "--csv-section",
@@ -110,17 +106,15 @@ class ReportCommand:
                 "the current week, 'today' will be the last day of the report."
             ))
 
-        parser.add_argument(
-            "--details",
-            action='store_true',
-            default=False,
-            help="Show details even for multi-day reports.")
+        parser.add_argument("--details",
+                            action='store_true',
+                            default=False,
+                            help="Show details even for multi-day reports.")
 
-        parser.add_argument(
-            "--comments",
-            action='store_true',
-            default=False,
-            help="Show comments in details sections.")
+        parser.add_argument("--comments",
+                            action='store_true',
+                            default=False,
+                            help="Show comments in details sections.")
 
 
 _v1.add_command(ReportCommand)

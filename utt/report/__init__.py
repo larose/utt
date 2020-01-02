@@ -1,5 +1,5 @@
-import datetime
 import calendar
+import datetime
 
 from ..constants import HELLO_ENTRY_NAME
 from ..data_structures.activity import Activity
@@ -49,9 +49,8 @@ def report(args, now, activities, local_timezone):
 
     activities_ = _filter_activities_by_project(activities_, args.project)
 
-    return Report(
-        list(activities_), report_start_date, report_end_date, local_timezone,
-        args)
+    return Report(list(activities_), report_start_date, report_end_date,
+                  local_timezone, args)
 
 
 DAY_NAMES = [
@@ -80,7 +79,6 @@ def _filter_activities_by_project(activities, project):
             yield activity
 
 
-# pylint: disable=too-many-arguments
 def _add_current_activity(activities, now, current_activity_name,
                           disable_current_activity, report_start_date,
                           report_end_date):
@@ -198,7 +196,7 @@ def _parse_integer_month(today, monthstring):
         monthnum = int(monthstring)
     except ValueError:
         return None
-    # pylint: disable=no-else-return
+
     if monthnum == 0:
         return None
     elif monthnum < 0:
@@ -250,7 +248,7 @@ def _parse_week_number(today, weekstring):
         weeknum = int(weekstring)
     except ValueError:
         return None
-    # pylint: disable=no-else-return
+
     if weeknum == 0:
         return None
     elif weeknum < 0:

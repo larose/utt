@@ -8,8 +8,8 @@ from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
-from . import formatter
 from ..data_structures.activity import Activity
+from . import formatter
 from .common import clip_activities_by_range, filter_activities_by_type
 
 
@@ -89,7 +89,7 @@ def _groupby_date(activities: List[Activity]) -> List[Dict]:
 
     result = []
     sorted_activities = sorted(activities, key=key)
-    # pylint: disable=redefined-argument-from-local
+
     for date, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
         duration = sum((act.duration for act in activities),
@@ -103,14 +103,12 @@ def _groupby_date(activities: List[Activity]) -> List[Dict]:
             date,
             'projects':
             ", ".join(
-                sorted(
-                    set(act.name.project for act in activities),
-                    key=lambda project: project.lower())),
+                sorted(set(act.name.project for act in activities),
+                       key=lambda project: project.lower())),
             'tasks':
             ", ".join(
-                sorted(
-                    set(act.name.task for act in activities),
-                    key=lambda task: task.lower()))
+                sorted(set(act.name.task for act in activities),
+                       key=lambda task: task.lower()))
         })
 
     return sorted(result, key=lambda result: result['date'])
