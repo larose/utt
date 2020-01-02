@@ -1,6 +1,7 @@
 INTEGRATION_DIR = test/integration
 UNIT_DIR = test/unit
 CONTAINER_NAME = utt-integration-py$*
+SOURCE_DIRECTORIES=utt test
 VERSION := $(shell python3 setup.py --version)
 
 .PHONY: all
@@ -15,8 +16,8 @@ clean:
 
 .PHONY: format
 format:
-	pipenv run yapf --in-place --recursive *.py utt test
-	pipenv run isort --recursive utt test
+	pipenv run black utt test
+	pipenv run isort --recursive $(SOURCE_DIRECTORIES)
 
 .PHONY: bdist_wheel
 bdist_wheel:
@@ -29,7 +30,8 @@ install-dev:
 .PHONY: lint
 lint:
 	pipenv run flake8 utt test
-	pipenv run isort --check-only --diff --ignore-whitespace --recursive --quiet utt test
+	pipenv run isort --check-only --diff --ignore-whitespace --recursive --quiet $(SOURCE_DIRECTORIES)
+	pipenv run black --diff --check $(SOURCE_DIRECTORIES)
 
 .PHONY: sdist
 sdist:

@@ -53,7 +53,7 @@ class Value:
 
 class Container(object):
     def __init__(self):
-        super(Container, self).__setattr__('_values', {})
+        super(Container, self).__setattr__("_values", {})
 
     def __setattr__(self, key, value):
         if inspect.isclass(value):

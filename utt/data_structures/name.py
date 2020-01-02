@@ -9,12 +9,12 @@ class Name:
         match = Name.NAME_REGEX.match(name)
         if match is None:
             self.task = name
-            self.project = ''
+            self.project = ""
             return
 
         groupdict = match.groupdict()
-        self.project = groupdict['project']
-        self.task = groupdict['task']
+        self.project = groupdict["project"]
+        self.task = groupdict["task"]
 
     def __lt__(self, other):
         return self.name < other.name
