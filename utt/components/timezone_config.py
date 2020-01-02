@@ -10,5 +10,5 @@ class TimezoneConfig:
 
 
 def timezone_config(config: configparser.ConfigParser) -> TimezoneConfig:
-    enabled = config.getboolean('timezone', 'enabled')
+    enabled = config.getboolean("timezone", "enabled")
     return TimezoneConfig(enabled)

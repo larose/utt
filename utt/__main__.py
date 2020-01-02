@@ -23,11 +23,11 @@ def load_plugins():
 
 def main():
     if len(sys.argv) == 1:
-        sys.argv.append('--help')
+        sys.argv.append("--help")
 
     load_plugins()
     getattr(_v1._container, f"commands/{_v1._container.args.command}")()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

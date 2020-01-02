@@ -48,8 +48,9 @@ class V1:
     def add_command(self, command_class):
         self._commands[command_class.NAME] = command_class
         self._container.commands.append(command_class)
-        setattr(self._container, 'commands/{}'.format(command_class.NAME),
-                command_class.Handler)
+        setattr(
+            self._container, "commands/{}".format(command_class.NAME), command_class.Handler,
+        )
 
     @property
     def commands(self):

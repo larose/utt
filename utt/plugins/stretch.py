@@ -6,10 +6,14 @@ from utt.api import _v1
 
 
 class StretchHandler:
-    def __init__(self, args: argparse.Namespace, now: datetime,
-                 add_entry: _v1.components.AddEntry,
-                 entries: _v1.components.Entries,
-                 timezone_config: _v1.components.TimezoneConfig):
+    def __init__(
+        self,
+        args: argparse.Namespace,
+        now: datetime,
+        add_entry: _v1.components.AddEntry,
+        entries: _v1.components.Entries,
+        timezone_config: _v1.components.TimezoneConfig,
+    ):
         self._args = args
         self._now = now
         self._add_entry = add_entry
@@ -21,13 +25,9 @@ class StretchHandler:
         if not entries:
             raise Exception("No entry to stretch")
         latest_entry = entries[-1]
-        new_entry = _v1.types.Entry(self._now,
-                                    latest_entry.name,
-                                    False,
-                                    comment=latest_entry.comment)
+        new_entry = _v1.types.Entry(self._now, latest_entry.name, False, comment=latest_entry.comment)
         self._add_entry(new_entry)
-        print("stretched " +
-              str(_localize(self._timezone_config, latest_entry)))
+        print("stretched " + str(_localize(self._timezone_config, latest_entry)))
         print("        → " + str(_localize(self._timezone_config, new_entry)))
 
 
@@ -41,8 +41,8 @@ def _localize(timezone_config, new_entry):
 
 
 class StretchCommand:
-    NAME = 'stretch'
-    DESCRIPTION = 'Stretch the latest task to the current time'
+    NAME = "stretch"
+    DESCRIPTION = "Stretch the latest task to the current time"
 
     Handler = StretchHandler
 

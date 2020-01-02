@@ -7,8 +7,7 @@ from .timezone_config import TimezoneConfig
 
 
 class AddEntry:
-    def __init__(self, data_filename: str, timezone_config: TimezoneConfig,
-                 entries: Entries):
+    def __init__(self, data_filename: str, timezone_config: TimezoneConfig, entries: Entries):
         self._data_filename = data_filename
         self._timezone_config = timezone_config
         self._entries = entries
@@ -18,14 +17,14 @@ class AddEntry:
         entries = self._entries()
         insert_new_line_before = _insert_new_line(entries, new_entry)
         new_entry = _localize(self._timezone_config, new_entry)
-        _append_line_to_file(self._data_filename,
-                             str(new_entry),
-                             insert_new_line_before=insert_new_line_before)
+        _append_line_to_file(
+            self._data_filename, str(new_entry), insert_new_line_before=insert_new_line_before,
+        )
 
 
 def _append_line_to_file(filename, line, insert_new_line_before):
     try:
-        with open(filename, 'rb+') as file:
+        with open(filename, "rb+") as file:
             file.seek(-1, os.SEEK_END)
             last_char = file.read(1)
             prepend_new_line = last_char != b"\n"
@@ -34,7 +33,7 @@ def _append_line_to_file(filename, line, insert_new_line_before):
             raise
         prepend_new_line = False
 
-    with open(filename, 'a') as file:
+    with open(filename, "a") as file:
         if prepend_new_line:
             file.write("\n")
         if insert_new_line_before:

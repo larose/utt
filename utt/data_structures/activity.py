@@ -10,12 +10,9 @@ class Activity:
         BREAK = 1
         IGNORED = 2
 
-    def __init__(self,
-                 name: str,
-                 start: datetime,
-                 end: datetime,
-                 is_current_activity: bool,
-                 comment: str = None):
+    def __init__(
+        self, name: str, start: datetime, end: datetime, is_current_activity: bool, comment: str = None,
+    ):
         self.name = Name(name)
         self.start = start
         self.end = end
@@ -25,26 +22,25 @@ class Activity:
         self.comment = comment
 
     def __eq__(self, other):
-        return self.name == other.name and \
-            self.start == other.start and \
-            self.end == other.end and \
-            self.duration == other.duration and \
-            self.type == other.type
+        return (
+            self.name == other.name
+            and self.start == other.start
+            and self.end == other.end
+            and self.duration == other.duration
+            and self.type == other.type
+        )
 
     def __str__(self):
-        return "Activity(" + ", ".join(
-            map(str,
-                [self.name, self.start, self.end, self.duration, self.type
-                 ])) + ")"
+        return "Activity(" + ", ".join(map(str, [self.name, self.start, self.end, self.duration, self.type])) + ")"
 
     def __repr__(self):
         return self.__str__()
 
     @staticmethod
     def _type_from_name(name):
-        if name[-3:] == '***':
+        if name[-3:] == "***":
             return Activity.Type.IGNORED
-        if name[-2:] == '**':
+        if name[-2:] == "**":
             return Activity.Type.BREAK
 
         return Activity.Type.WORK
@@ -66,10 +62,8 @@ class Activity:
         """
         new_activity = copy.copy(self)
         if start is not None:
-            new_activity.start = min(new_activity.end,
-                                     max(new_activity.start, start))
+            new_activity.start = min(new_activity.end, max(new_activity.start, start))
         if end is not None:
-            new_activity.end = max(new_activity.start,
-                                   min(new_activity.end, end))
+            new_activity.end = max(new_activity.start, min(new_activity.end, end))
         new_activity.duration = new_activity.end - new_activity.start
         return new_activity

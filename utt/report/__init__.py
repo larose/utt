@@ -14,19 +14,18 @@ def report(args, now, activities, local_timezone):
         report_date = _parse_date(today, args.report_date)
 
     if args.month:
-        report_start_date, report_end_date = _parse_month(
-            report_date, args.month)
+        report_start_date, report_end_date = _parse_month(report_date, args.month)
     elif args.week:
-        report_start_date, report_end_date = _parse_week(
-            report_date, args.week)
+        report_start_date, report_end_date = _parse_week(report_date, args.week)
     else:
         report_start_date = report_end_date = report_date
 
-    report_start_date = (report_start_date if args.from_date is None else
-                         _parse_date(today, args.from_date, is_past=True))
-    report_end_date = (report_end_date
-                       if args.to_date is None else _parse_date(
-                           report_start_date, args.to_date, is_past=False))
+    report_start_date = (
+        report_start_date if args.from_date is None else _parse_date(today, args.from_date, is_past=True)
+    )
+    report_end_date = (
+        report_end_date if args.to_date is None else _parse_date(report_start_date, args.to_date, is_past=False)
+    )
 
     if report_start_date == report_end_date:
         collect_from_date, collect_to_date = _week_dates(report_start_date)
@@ -38,34 +37,35 @@ def report(args, now, activities, local_timezone):
     collect_from_date = min(today, collect_from_date)
 
     activities_ = activities()
-    _add_current_activity(activities_, now, args.current_activity,
-                          args.no_current_activity, report_start_date,
-                          report_end_date)
+    _add_current_activity(
+        activities_, now, args.current_activity, args.no_current_activity, report_start_date, report_end_date,
+    )
 
     activities_ = _remove_hello_activities(activities_)
 
-    activities_ = _filter_activities_by_range(activities_, collect_from_date,
-                                              collect_to_date, local_timezone)
+    activities_ = _filter_activities_by_range(activities_, collect_from_date, collect_to_date, local_timezone)
 
     activities_ = _filter_activities_by_project(activities_, args.project)
 
-    return Report(list(activities_), report_start_date, report_end_date,
-                  local_timezone, args)
+    return Report(list(activities_), report_start_date, report_end_date, local_timezone, args)
 
 
 DAY_NAMES = [
-    "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY",
-    "SUNDAY"
+    "MONDAY",
+    "TUESDAY",
+    "WEDNESDAY",
+    "THURSDAY",
+    "FRIDAY",
+    "SATURDAY",
+    "SUNDAY",
 ]
 
 
-def _filter_activities_by_range(activities, start_date, end_date,
-                                local_timezone):
-    start_datetime = local_timezone.localize(
-        datetime.datetime(start_date.year, start_date.month, start_date.day))
+def _filter_activities_by_range(activities, start_date, end_date, local_timezone):
+    start_datetime = local_timezone.localize(datetime.datetime(start_date.year, start_date.month, start_date.day))
     end_datetime = local_timezone.localize(
-        datetime.datetime(end_date.year, end_date.month, end_date.day, 23, 59,
-                          59, 99999))
+        datetime.datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59, 99999)
+    )
 
     for full_activity in activities:
         activity = full_activity.clip(start_datetime, end_datetime)
@@ -79,9 +79,9 @@ def _filter_activities_by_project(activities, project):
             yield activity
 
 
-def _add_current_activity(activities, now, current_activity_name,
-                          disable_current_activity, report_start_date,
-                          report_end_date):
+def _add_current_activity(
+    activities, now, current_activity_name, disable_current_activity, report_start_date, report_end_date,
+):
 
     if not activities or disable_current_activity:
         return
@@ -91,8 +91,7 @@ def _add_current_activity(activities, now, current_activity_name,
     now_is_after_last_activity = activities[-1].end < now
 
     if report_is_today and now_is_after_last_activity:
-        activities.append(
-            Activity(current_activity_name, activities[-1].end, now, True))
+        activities.append(Activity(current_activity_name, activities[-1].end, now, True))
 
 
 def _parse_absolute_date(datestring):

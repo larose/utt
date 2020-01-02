@@ -8,8 +8,7 @@ from utt.report import _parse_date
 VALID_ENTRIES = [
     ("monday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 9), True),
     ("tuesday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 10), True),
-    ("wednesday", datetime.date(2015, 2, 11), datetime.date(2015, 2,
-                                                            11), True),
+    ("wednesday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 11), True),
     ("thursday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 5), True),
     ("friday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 6), True),
     ("saturday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 7), True),
@@ -17,13 +16,10 @@ VALID_ENTRIES = [
     ("2015-2-8", datetime.date(2015, 2, 11), datetime.date(2015, 2, 8), True),
     ("monday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 16), False),
     ("tuesday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 17), False),
-    ("wednesday", datetime.date(2015, 2, 11), datetime.date(2015, 2,
-                                                            11), False),
-    ("thursday", datetime.date(2015, 2, 11), datetime.date(2015, 2,
-                                                           12), False),
+    ("wednesday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 11), False),
+    ("thursday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 12), False),
     ("friday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 13), False),
-    ("saturday", datetime.date(2015, 2, 11), datetime.date(2015, 2,
-                                                           14), False),
+    ("saturday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 14), False),
     ("sunday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 15), False),
 ]
 

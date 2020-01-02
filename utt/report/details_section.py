@@ -12,10 +12,10 @@ from .common import clip_activities_by_range
 
 
 class DetailsModel:
-    def __init__(self, activities: List[Activity], start_date: date,
-                 end_date: date, local_timezone: DstTzInfo):
-        self.activities = clip_activities_by_range(start_date, end_date,
-                                                   activities, local_timezone)
+    def __init__(
+        self, activities: List[Activity], start_date: date, end_date: date, local_timezone: DstTzInfo,
+    ):
+        self.activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
         self.local_timezone = local_timezone
 
 
@@ -30,7 +30,7 @@ class DetailsView:
             formatter.format_duration(activity.duration),
             _format_time(activity.start, self._model.local_timezone),
             _format_time(activity.end, self._model.local_timezone),
-            activity.name
+            activity.name,
         ]
 
         if self._show_comments and activity.comment:
@@ -41,15 +41,14 @@ class DetailsView:
 
     def render(self, output: io.TextIOWrapper) -> None:
         print(file=output)
-        print(formatter.title('Details'), file=output)
+        print(formatter.title("Details"), file=output)
         print(file=output)
 
         # Print date only when the activities have different dates.
         if not self._model.activities:
             print_date = False
         else:
-            print_date = (self._model.activities[0].start.date() !=
-                          self._model.activities[-1].start.date())
+            print_date = self._model.activities[0].start.date() != self._model.activities[-1].start.date()
         current_date = None
         for activity in self._model.activities:
             if print_date and current_date != activity.start.date():

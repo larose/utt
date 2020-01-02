@@ -14,13 +14,12 @@ from .common import clip_activities_by_range, filter_activities_by_type
 
 
 class PerDayModel:
-    def __init__(self, activities: List[Activity], start_date: datetime.date,
-                 end_date: datetime.date, local_timezone: DstTzInfo):
-        activities = clip_activities_by_range(start_date, end_date, activities,
-                                              local_timezone)
+    def __init__(
+        self, activities: List[Activity], start_date: datetime.date, end_date: datetime.date, local_timezone: DstTzInfo,
+    ):
+        activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
 
-        self.dates = _groupby_date(
-            filter_activities_by_type(activities, Activity.Type.WORK))
+        self.dates = _groupby_date(filter_activities_by_type(activities, Activity.Type.WORK))
 
 
 class PerDayView:
@@ -50,18 +49,17 @@ class PerDayView:
 
     def render(self, output: io.TextIOWrapper) -> None:
         print(file=output)
-        print(formatter.title('Per Day'), file=output)
+        print(formatter.title("Per Day"), file=output)
         print(file=output)
 
         fmt = "{date}: {hours}h {duration:>7} - {projects} - {tasks}"
         for date_activities in self._model.dates:
             date_render = fmt.format(
-                date=date_activities['date'].isoformat(),
-                hours=self._timedelta_to_billable(date_activities['hours']),
-                duration="({duration})".format(
-                    duration=date_activities['duration']),
-                projects=date_activities['projects'],
-                tasks=date_activities['tasks'],
+                date=date_activities["date"].isoformat(),
+                hours=self._timedelta_to_billable(date_activities["hours"]),
+                duration="({duration})".format(duration=date_activities["duration"]),
+                projects=date_activities["projects"],
+                tasks=date_activities["tasks"],
             )
             print(date_render, file=output)
 
@@ -70,15 +68,14 @@ class PerDayView:
             print(" -- No activities for this time range --", file=output)
             return
 
-        fieldnames = ['date', 'hours', 'duration', 'projects', 'tasks']
+        fieldnames = ["date", "hours", "duration", "projects", "tasks"]
         writer = csv.DictWriter(output, fieldnames=fieldnames)
 
         # Write header
         writer.writerow({fn: fn.capitalize() for fn in fieldnames})
 
         for date_activities in self._model.dates:
-            date_activities['hours'] = self._timedelta_to_billable(
-                date_activities['hours']).strip()
+            date_activities["hours"] = self._timedelta_to_billable(date_activities["hours"]).strip()
             writer.writerow(date_activities)
 
 
@@ -92,23 +89,17 @@ def _groupby_date(activities: List[Activity]) -> List[Dict]:
 
     for date, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
-        duration = sum((act.duration for act in activities),
-                       datetime.timedelta())
-        result.append({
-            'duration':
-            formatter.format_duration(duration),
-            'hours':
-            duration,
-            'date':
-            date,
-            'projects':
-            ", ".join(
-                sorted(set(act.name.project for act in activities),
-                       key=lambda project: project.lower())),
-            'tasks':
-            ", ".join(
-                sorted(set(act.name.task for act in activities),
-                       key=lambda task: task.lower()))
-        })
+        duration = sum((act.duration for act in activities), datetime.timedelta())
+        result.append(
+            {
+                "duration": formatter.format_duration(duration),
+                "hours": duration,
+                "date": date,
+                "projects": ", ".join(
+                    sorted(set(act.name.project for act in activities), key=lambda project: project.lower(),)
+                ),
+                "tasks": ", ".join(sorted(set(act.name.task for act in activities), key=lambda task: task.lower(),)),
+            }
+        )
 
-    return sorted(result, key=lambda result: result['date'])
+    return sorted(result, key=lambda result: result["date"])

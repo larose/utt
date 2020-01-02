@@ -15,8 +15,8 @@ class EditHandler:
 
 
 class EditCommand:
-    NAME = 'edit'
-    DESCRIPTION = 'Edit task log using your system\'s default editor'
+    NAME = "edit"
+    DESCRIPTION = "Edit task log using your system's default editor"
 
     Handler = EditHandler
 
@@ -33,4 +33,4 @@ def _editor():
 
 
 def _run_editor(editor, data_filename):
-    return subprocess.call("%s \"%s\"" % (editor, data_filename), shell=True)
+    return subprocess.call('%s "%s"' % (editor, data_filename), shell=True)

@@ -1,6 +1,6 @@
 import configparser
 
-DEFAULTS = {'timezone': {'enabled': 'false'}}
+DEFAULTS = {"timezone": {"enabled": "false"}}
 
 
 class DefaultConfig:
