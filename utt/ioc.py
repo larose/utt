@@ -9,7 +9,7 @@ class Class:
 
     def __call__(self, values):
         if not self._called:
-            arg_names = inspect.getargspec(self._cls.__init__).args  # pylint: disable=deprecated-method
+            arg_names = inspect.getfullargspec(self._cls.__init__).args
 
             args = []
             for name in arg_names[1:]:
@@ -30,7 +30,7 @@ class Function:
 
     def __call__(self, values):
         if not self._called:
-            arg_names = inspect.getargspec(self._fn).args  # pylint: disable=deprecated-method
+            arg_names = inspect.getfullargspec(self._fn).args
 
             args = []
             for name in arg_names:
