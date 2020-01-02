@@ -1,6 +1,8 @@
 import re
+from typing import Optional
 
 from dateutil.parser import parse
+from pytz.tzinfo import DstTzInfo
 
 from ..data_structures.entry import Entry
 
@@ -16,10 +18,10 @@ WITHOUT_TZ = re.compile("".join(
 
 
 class EntryParser:
-    def __init__(self, local_timezone):
+    def __init__(self, local_timezone: DstTzInfo):
         self._local_timezone = local_timezone
 
-    def parse(self, string):
+    def parse(self, string: str) -> Optional[Entry]:
         match_wo_tz = WITHOUT_TZ.match(string)
         match_w_tz = WITH_TZ.match(string)
         match = match_w_tz if match_w_tz is not None else match_wo_tz

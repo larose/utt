@@ -1,22 +1,30 @@
 from __future__ import print_function
 
+import io
+from datetime import date, datetime  # pylint: disable=unused-import
+from typing import List
+
+from pytz.tzinfo import DstTzInfo
+
 from . import formatter
+from ..data_structures.activity import Activity
 from .common import clip_activities_by_range
 
 
 class DetailsModel:
-    def __init__(self, activities, start_date, end_date, local_timezone):
+    def __init__(self, activities: List[Activity], start_date: date,
+                 end_date: date, local_timezone: DstTzInfo):
         self.activities = clip_activities_by_range(start_date, end_date,
                                                    activities, local_timezone)
         self.local_timezone = local_timezone
 
 
 class DetailsView:
-    def __init__(self, model, show_comments=False):
+    def __init__(self, model: DetailsModel, show_comments: bool = False):
         self._model = model
         self._show_comments = show_comments
 
-    def _create_line_for_render(self, activity):
+    def _create_line_for_render(self, activity: Activity) -> str:
         format_str = "(%s) %s-%s %s"
         line = [
             formatter.format_duration(activity.duration),
@@ -31,7 +39,7 @@ class DetailsView:
 
         return format_str % tuple(line)
 
-    def render(self, output):
+    def render(self, output: io.TextIOWrapper) -> None:
         print(file=output)
         print(formatter.title('Details'), file=output)
         print(file=output)
@@ -56,5 +64,5 @@ class DetailsView:
 
 
 # pylint: disable=redefined-outer-name
-def _format_time(datetime, local_timezone):
+def _format_time(datetime: datetime, local_timezone: DstTzInfo) -> str:
     return datetime.astimezone(local_timezone).strftime("%H:%M")

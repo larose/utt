@@ -1,11 +1,16 @@
+import argparse
 import copy
+from datetime import datetime
 
 from utt.api import _v1
 
 
 class StretchHandler:
     # pylint: disable=too-many-arguments
-    def __init__(self, args, now, add_entry, entries, timezone_config):
+    def __init__(self, args: argparse.Namespace, now: datetime,
+                 add_entry: _v1.components.AddEntry,
+                 entries: _v1.components.Entries,
+                 timezone_config: _v1.components.TimezoneConfig):
         self._args = args
         self._now = now
         self._add_entry = add_entry
@@ -17,7 +22,7 @@ class StretchHandler:
         if not entries:
             raise Exception("No entry to stretch")
         latest_entry = entries[-1]
-        new_entry = _v1.Entry(
+        new_entry = _v1.types.Entry(
             self._now, latest_entry.name, False, comment=latest_entry.comment)
         self._add_entry(new_entry)
         print("stretched " +

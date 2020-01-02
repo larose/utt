@@ -1,8 +1,12 @@
+import argparse
+from datetime import datetime
+
 from utt.api import _v1
 
 
 class AddHandler:
-    def __init__(self, args, data_filename, now, add_entry):
+    def __init__(self, args: argparse.Namespace, data_filename: str,
+                 now: datetime, add_entry: _v1.components.AddEntry):
         self._args = args
         self._data_filename = data_filename
         self._now = now
@@ -10,7 +14,7 @@ class AddHandler:
 
     def __call__(self):
         self._add_entry(
-            _v1.Entry(
+            _v1.types.Entry(
                 self._now, self._args.name, False, comment=self._args.comment))
 
 

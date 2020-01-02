@@ -1,14 +1,26 @@
+from typing import Generator, List, Tuple
+
+from ..data_structures.entry import Entry
+from .entry_lines import EntryLines
+from .entry_parser import EntryParser
+from .timezone_config import TimezoneConfig
+
+
 class Entries:
-    def __init__(self, entry_lines, timezone_config, entry_parser):
+    def __init__(self, entry_lines: EntryLines,
+                 timezone_config: TimezoneConfig, entry_parser: EntryParser):
         self._entry_lines = entry_lines
         self._timezone_config = timezone_config
         self._entry_parser = entry_parser
 
-    def __call__(self):
-        return list(_parse_log(self._entry_lines(), self._entry_parser))
+    def __call__(self) -> List[Entry]:
+        entries: List[Entry] = list(
+            _parse_log(self._entry_lines(), self._entry_parser))
+        return entries
 
 
-def _parse_log(lines, entry_parser):
+def _parse_log(lines: List[Tuple[int, str]],
+               entry_parser: EntryParser) -> Generator[Entry, None, None]:
     previous_entry = None
     for line_number, line in lines:
         parsed_line = _parse_line(previous_entry, line_number, line.strip(),
@@ -19,7 +31,8 @@ def _parse_log(lines, entry_parser):
             yield entry
 
 
-def _parse_line(previous_entry, line_number, line, entry_parser):
+def _parse_line(previous_entry: Entry, line_number: int, line: str,
+                entry_parser: EntryParser):
     # Ignore empty lines
     if not line:
         return None

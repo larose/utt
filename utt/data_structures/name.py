@@ -4,7 +4,7 @@ import re
 class Name:
     NAME_REGEX = re.compile(r"(?P<project>[^\s:]+):\s(?P<task>.*)")
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
         match = Name.NAME_REGEX.match(name)
         if match is None:

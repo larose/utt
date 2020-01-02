@@ -1,7 +1,4 @@
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
+import configparser
 
 DEFAULTS = {'timezone': {'enabled': 'false'}}
 
@@ -10,7 +7,7 @@ class DefaultConfig:
     def __init__(self):
         pass
 
-    def __call__(self):
+    def __call__(self) -> configparser.ConfigParser:
         config = configparser.ConfigParser()
 
         for section, options in DEFAULTS.items():

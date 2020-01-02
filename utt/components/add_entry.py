@@ -2,9 +2,13 @@ import copy
 import errno
 import os
 
+from .entries import Entries
+from .timezone_config import TimezoneConfig
+
 
 class AddEntry:
-    def __init__(self, data_filename, timezone_config, entries):
+    def __init__(self, data_filename: str, timezone_config: TimezoneConfig,
+                 entries: Entries):
         self._data_filename = data_filename
         self._timezone_config = timezone_config
         self._entries = entries

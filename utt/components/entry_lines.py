@@ -1,14 +1,16 @@
+from typing import List, Tuple
+
+
 class EntryLines:
-    def __init__(self, data_filename):
+    def __init__(self, data_filename: str):
         self._data_filename = data_filename
 
-    def __call__(self):
+    def __call__(self) -> List[Tuple[int, str]]:
         try:
             return self._get_lines()
         except IOError:
             return []
 
-    def _get_lines(self):
+    def _get_lines(self) -> List[Tuple[int, str]]:
         with open(self._data_filename) as entry_file:
-            lines = list(enumerate(entry_file, 1))
-        return lines
+            return list(enumerate(entry_file, 1))

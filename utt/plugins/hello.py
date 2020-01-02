@@ -1,14 +1,19 @@
+import argparse
+from datetime import datetime
+
 from utt.api import _v1
 
 
 class HelloHandler:
-    def __init__(self, args, now, add_entry):
+    def __init__(self, args: argparse.Namespace, now: datetime,
+                 add_entry: _v1.components.AddEntry):
         self._args = args
         self._now = now
         self._add_entry = add_entry
 
     def __call__(self):
-        self._add_entry(_v1.Entry(self._now, _v1.HELLO_ENTRY_NAME, False))
+        self._add_entry(
+            _v1.types.Entry(self._now, _v1.HELLO_ENTRY_NAME, False))
 
 
 class HelloCommand:
