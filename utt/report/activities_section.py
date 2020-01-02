@@ -4,7 +4,7 @@ import datetime
 import itertools
 
 from . import formatter
-from ..activity import Activity
+from ..data_structures.activity import Activity
 from .common import (clip_activities_by_range, filter_activities_by_type,
                      print_dicts)
 

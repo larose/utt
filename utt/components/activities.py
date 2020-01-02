@@ -1,6 +1,6 @@
 import itertools
 
-from .activity import Activity
+from ..data_structures.activity import Activity
 
 
 class Activities:

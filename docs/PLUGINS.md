@@ -37,7 +37,7 @@ _v1.add_command(FooCommand)
 ```
 
 `_v1` is the current API version. It's prefixed with `_` to indicate
-that the version (`v1) is not stable yet. Once it is be stable, the
+that the version (`v1`) is not stable yet. Once it is be stable, the
 `_` will be removed.
 
 
@@ -56,9 +56,10 @@ class StretchHandler:
         self._timezone_config = timezone_config
 ```
 
-See the [`create_container`](../utt/container.py) function for the
-list of all possible arguments. Note that these arguments are not yet
-versioned are therefore are subject to change.
+See `_create_container` function in
+[`../utt/api/_v1.py`](../utt/api/_v1.py) for the list of all possible
+arguments. Note that these arguments are not yet versioned are
+therefore are subject to change.
 
 
 ## Tips
