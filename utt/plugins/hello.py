@@ -12,8 +12,8 @@ class HelloHandler:
         self._add_entry = add_entry
 
     def __call__(self):
-        self._add_entry(
-            _v1.types.Entry(self._now, _v1.HELLO_ENTRY_NAME, False))
+        self._add_entry(_v1.types.Entry(self._now, _v1.HELLO_ENTRY_NAME,
+                                        False))
 
 
 class HelloCommand:

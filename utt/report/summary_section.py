@@ -6,13 +6,12 @@ from typing import List, Optional
 
 from pytz.tzinfo import DstTzInfo
 
-from . import formatter
 from ..data_structures.activity import Activity
+from . import formatter
 from .common import clip_activities_by_range, filter_activities_by_type
 
 
 class WorkingBreakTime:
-    # pylint: disable=too-many-arguments
     def __init__(self, activity_type: Activity.Type,
                  activities: List[Activity], start_date: datetime.date,
                  end_date: datetime.date, local_timezone: DstTzInfo):
@@ -84,28 +83,26 @@ def _print_time(summary_section: SummaryModel,
         Activity.Type.BREAK: 'Break   Time',
     }
 
-    print(
-        "%s: %s" % (activity_names[working_break_time.activity_type],
-                    formatter.format_duration(
-                        working_break_time.total_duration)),
-        end='',
-        file=output)
+    print("%s: %s" %
+          (activity_names[working_break_time.activity_type],
+           formatter.format_duration(working_break_time.total_duration)),
+          end='',
+          file=output)
 
     if summary_section.current_activity is not None and \
        summary_section.current_activity.type == working_break_time.activity_type:
         cur_duration = summary_section.current_activity.duration
-        print(
-            " (%s + %s)" % (formatter.format_duration(
-                working_break_time.total_duration - cur_duration),
-                            formatter.format_duration(cur_duration)),
-            end='',
-            file=output)
+        print(" (%s + %s)" %
+              (formatter.format_duration(working_break_time.total_duration -
+                                         cur_duration),
+               formatter.format_duration(cur_duration)),
+              end='',
+              file=output)
 
     if summary_section.start_date == summary_section.end_date:
-        print(
-            " [%s]" % formatter.format_duration(
-                working_break_time.weekly_duration),
-            file=output)
+        print(" [%s]" %
+              formatter.format_duration(working_break_time.weekly_duration),
+              file=output)
     else:
         print(file=output)
 
@@ -114,7 +111,6 @@ def _duration(activities: List[Activity]) -> datetime.timedelta:
     return sum((act.duration for act in activities), datetime.timedelta())
 
 
-# pylint: disable=redefined-outer-name
 def _format_date(datetime: datetime.datetime) -> str:
     return datetime.strftime(
         "%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))

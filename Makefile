@@ -28,7 +28,8 @@ install-dev:
 
 .PHONY: lint
 lint:
-	pipenv run pylint utt test
+	pipenv run flake8 utt test
+	pipenv run isort --check-only --diff --ignore-whitespace --recursive --quiet utt test
 
 .PHONY: sdist
 sdist:

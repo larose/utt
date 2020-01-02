@@ -39,8 +39,8 @@ def _parse_line(previous_entry: Entry, line_number: int, line: str,
 
     new_entry = entry_parser.parse(line)
     if new_entry is None:
-        raise SyntaxError(
-            "Invalid syntax at line %d: %s" % (line_number, line))
+        raise SyntaxError("Invalid syntax at line %d: %s" %
+                          (line_number, line))
 
     if previous_entry and \
        previous_entry.datetime > new_entry.datetime:

@@ -35,9 +35,8 @@ class ReportView:
         elif section == 'activities':
             view = ActivitiesView(self._report.activities_model)
         elif section == 'details':
-            view = DetailsView(
-                self._report.details_model,
-                show_comments=self._report.args.comments)
+            view = DetailsView(self._report.details_model,
+                               show_comments=self._report.args.comments)
         else:
             view = None
 

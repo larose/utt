@@ -7,8 +7,8 @@ from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
-from . import formatter
 from ..data_structures.activity import Activity
+from . import formatter
 from .common import (clip_activities_by_range, filter_activities_by_type,
                      print_dicts)
 
@@ -41,7 +41,7 @@ def _groupby_project(activities: List[Activity]) -> List[Dict]:
 
     result = []
     sorted_activities = sorted(activities, key=key)
-    # pylint: disable=redefined-argument-from-local
+
     for project, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
         result.append({
@@ -53,9 +53,8 @@ def _groupby_project(activities: List[Activity]) -> List[Dict]:
             project,
             'name':
             ", ".join(
-                sorted(
-                    set(act.name.task for act in activities),
-                    key=lambda task: task.lower()))
+                sorted(set(act.name.task for act in activities),
+                       key=lambda task: task.lower()))
         })
 
     return sorted(result, key=lambda result: result['project'].lower())

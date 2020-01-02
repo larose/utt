@@ -10,7 +10,6 @@ class Activity:
         BREAK = 1
         IGNORED = 2
 
-    # pylint: disable=too-many-arguments
     def __init__(self,
                  name: str,
                  start: datetime,

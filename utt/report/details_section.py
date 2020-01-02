@@ -1,13 +1,13 @@
 from __future__ import print_function
 
 import io
-from datetime import date, datetime  # pylint: disable=unused-import
+from datetime import date, datetime
 from typing import List
 
 from pytz.tzinfo import DstTzInfo
 
-from . import formatter
 from ..data_structures.activity import Activity
+from . import formatter
 from .common import clip_activities_by_range
 
 
@@ -63,6 +63,5 @@ class DetailsView:
         print(file=output)
 
 
-# pylint: disable=redefined-outer-name
 def _format_time(datetime: datetime, local_timezone: DstTzInfo) -> str:
     return datetime.astimezone(local_timezone).strftime("%H:%M")
