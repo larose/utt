@@ -2,7 +2,7 @@ import re
 
 from dateutil.parser import parse
 
-from .entry import Entry
+from ..data_structures.entry import Entry
 
 DATE_REGEX = r"(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})"
 TIMEZONE_REGEX = r"(?P<timezone>[+-]{1}\d{2}:{0,1}\d{2})"

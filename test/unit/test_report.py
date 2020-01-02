@@ -6,8 +6,8 @@ import pytest
 import pytz
 
 import utt.report
-from utt.activities import Activities
-from utt.entry import Entry
+from utt.components.activities import Activities
+from utt.data_structures.entry import Entry
 
 
 class Args:

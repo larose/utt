@@ -1,9 +1,10 @@
+# pylint: disable=protected-access
 import importlib
 import pkgutil
 import sys
 
 import utt.plugins
-from utt.container import create_container
+from utt.api import _v1  # pylint: disable=protected-access
 
 
 def iter_namespace(ns_pkg):
@@ -26,10 +27,7 @@ def main():
         sys.argv.append('--help')
 
     load_plugins()
-    container = create_container()
-
-    # pylint: disable=no-member
-    getattr(container, 'command/{}'.format(container.args.command))()
+    getattr(_v1._container, f"commands/{_v1._container.args.command}")()  # pylint: disable=protected-access, no-member
 
 
 if __name__ == '__main__':

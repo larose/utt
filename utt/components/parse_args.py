@@ -5,7 +5,7 @@ import sys
 import argcomplete
 import pytz
 
-from .__version__ import VERSION
+from ..__version__ import VERSION
 
 
 def parse_args(commands):

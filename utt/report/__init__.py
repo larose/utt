@@ -2,7 +2,7 @@ import datetime
 import calendar
 
 from ..constants import HELLO_ENTRY_NAME
-from ..activity import Activity
+from ..data_structures.activity import Activity
 from .model import Report
 
 
