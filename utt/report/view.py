@@ -1,15 +1,18 @@
+import io
+
 from .activities_section import ActivitiesView
 from .details_section import DetailsView
+from .model import Report
 from .per_day_section import PerDayView
 from .projects_section import ProjectsView
 from .summary_section import SummaryView
 
 
 class ReportView:
-    def __init__(self, report):
+    def __init__(self, report: Report):
         self._report = report
 
-    def render(self, output):
+    def render(self, output: io.TextIOWrapper) -> None:
         SummaryView(self._report.summary_model).render(output)
         if self._report.args.per_day:
             PerDayView(self._report.per_day_model).render(output)
@@ -22,7 +25,7 @@ class ReportView:
                 self._report.details_model,
                 show_comments=self._report.args.comments).render(output)
 
-    def csv(self, section, output):
+    def csv(self, section: str, output: io.TextIOWrapper) -> None:
         if section == 'summary':
             view = SummaryView(self._report.summary_model)
         elif section in ['per_day', 'per-day']:

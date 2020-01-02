@@ -1,7 +1,10 @@
+import argparse
+
 import tzlocal
+from pytz.tzinfo import DstTzInfo
 
 
-def local_timezone(args):
+def local_timezone(args: argparse.Namespace) -> DstTzInfo:
     if args.timezone:
         return args.timezone
 

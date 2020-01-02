@@ -1,6 +1,7 @@
 import argparse
 import datetime
 import sys
+from typing import List
 
 import argcomplete
 import pytz
@@ -8,7 +9,7 @@ import pytz
 from ..__version__ import VERSION
 
 
-def parse_args(commands):
+def parse_args(commands: List) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
         description='Ultimate Time Tracker (utt) is a simple command-line time'

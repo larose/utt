@@ -2,7 +2,11 @@ from __future__ import print_function
 
 import csv
 import datetime
+import io
 import itertools
+from typing import Dict, List
+
+from pytz.tzinfo import DstTzInfo
 
 from . import formatter
 from ..data_structures.activity import Activity
@@ -10,7 +14,8 @@ from .common import clip_activities_by_range, filter_activities_by_type
 
 
 class PerDayModel:
-    def __init__(self, activities, start_date, end_date, local_timezone):
+    def __init__(self, activities: List[Activity], start_date: datetime.date,
+                 end_date: datetime.date, local_timezone: DstTzInfo):
         activities = clip_activities_by_range(start_date, end_date, activities,
                                               local_timezone)
 
@@ -19,11 +24,11 @@ class PerDayModel:
 
 
 class PerDayView:
-    def __init__(self, model):
+    def __init__(self, model: PerDayModel):
         self._model = model
 
     @staticmethod
-    def _timedelta_to_billable(time_delta):
+    def _timedelta_to_billable(time_delta: datetime.timedelta) -> str:
         """Ad hoc method for rounding a decimal number of hours to "billable"
 
         Round to the nearest 6 minutes / 0.1 hours.  This means that 2,
@@ -43,7 +48,7 @@ class PerDayView:
         hours = round(hours * 10) / 10
         return "{hours:4.1f}".format(hours=hours)
 
-    def render(self, output):
+    def render(self, output: io.TextIOWrapper) -> None:
         print(file=output)
         print(formatter.title('Per Day'), file=output)
         print(file=output)
@@ -60,7 +65,7 @@ class PerDayView:
             )
             print(date_render, file=output)
 
-    def csv(self, output):
+    def csv(self, output: io.TextIOWrapper) -> None:
         if not self._model.dates:
             print(" -- No activities for this time range --", file=output)
             return
@@ -77,7 +82,7 @@ class PerDayView:
             writer.writerow(date_activities)
 
 
-def _groupby_date(activities):
+def _groupby_date(activities: List[Activity]) -> List[Dict]:
     def key(act):
         """Key on date."""
         return act.start.date()

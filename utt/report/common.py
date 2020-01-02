@@ -1,10 +1,14 @@
-from __future__ import print_function
-
 import datetime
+import io
 import itertools
+from typing import Dict, List
+
+from pytz.tzinfo import DstTzInfo
+
+from ..data_structures.activity import Activity
 
 
-def print_dicts(dcts, output):
+def print_dicts(dcts: List[Dict], output: io.TextIOWrapper) -> None:
     format_string = "({duration}) {project:<{projects_max_length}}: {name}"
 
     projects = (dct['project'] for dct in dcts)
@@ -15,7 +19,10 @@ def print_dicts(dcts, output):
         print(format_string.format(**dict(context, **dct)), file=output)
 
 
-def clip_activities_by_range(start_date, end_date, activities, local_timezone):
+def clip_activities_by_range(start_date: datetime.date,
+                             end_date: datetime.date,
+                             activities: List[Activity],
+                             local_timezone: DstTzInfo) -> List[Activity]:
     """ Clip a list of Activity with the given range, remove activities
     which have zero durations
 
@@ -43,7 +50,8 @@ def clip_activities_by_range(start_date, end_date, activities, local_timezone):
     return new_activities
 
 
-def filter_activities_by_type(activities, activity_type):
+def filter_activities_by_type(activities: List[Activity],
+                              activity_type: str) -> List[Activity]:
     """ Filter a list of Activity with the given activity type.
 
     Parameters

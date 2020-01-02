@@ -15,7 +15,7 @@ from utt.components.entry_parser import EntryParser
 from utt.components.local_timezone import local_timezone
 from utt.components.now import now
 from utt.components.parse_args import parse_args
-from utt.components.timezone_config import timezone_config
+from utt.components.timezone_config import TimezoneConfig, timezone_config
 from utt.constants import HELLO_ENTRY_NAME
 from utt.data_structures.activity import Activity
 from utt.data_structures.entry import Entry
@@ -23,11 +23,23 @@ from utt.data_structures.name import Name
 from utt.report import report
 
 
-class V1:
-    HELLO_ENTRY_NAME = HELLO_ENTRY_NAME
+class Types:
     Activity = Activity
     Entry = Entry
     Name = Name
+
+
+class Components:
+    AddEntry = AddEntry
+    DefaultConfig = DefaultConfig
+    Entries = Entries
+    TimezoneConfig = TimezoneConfig
+
+
+class V1:
+    HELLO_ENTRY_NAME = HELLO_ENTRY_NAME
+    types = Types
+    components = Components
 
     def __init__(self):
         self._container = _create_container()

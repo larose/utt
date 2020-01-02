@@ -1,3 +1,10 @@
+import argparse
+from datetime import date
+from typing import List
+
+from pytz.tzinfo import DstTzInfo
+
+from ..data_structures.activity import Activity
 from .activities_section import ActivitiesModel
 from .details_section import DetailsModel
 from .per_day_section import PerDayModel
@@ -7,7 +14,9 @@ from .summary_section import SummaryModel
 
 class Report:
     # pylint: disable=too-many-arguments, too-many-instance-attributes
-    def __init__(self, activities, start_date, end_date, local_timezone, args):
+    def __init__(self, activities: List[Activity], start_date: date,
+                 end_date: date, local_timezone: DstTzInfo,
+                 args: argparse.Namespace):
         self.summary_model = SummaryModel(activities, start_date, end_date,
                                           local_timezone)
         self.projects_model = ProjectsModel(activities, start_date, end_date,

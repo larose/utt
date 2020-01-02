@@ -1,6 +1,10 @@
 from __future__ import print_function
 
 import datetime
+import io
+from typing import List, Optional
+
+from pytz.tzinfo import DstTzInfo
 
 from . import formatter
 from ..data_structures.activity import Activity
@@ -9,8 +13,9 @@ from .common import clip_activities_by_range, filter_activities_by_type
 
 class WorkingBreakTime:
     # pylint: disable=too-many-arguments
-    def __init__(self, activity_type, activities, start_date, end_date,
-                 local_timezone):
+    def __init__(self, activity_type: Activity.Type,
+                 activities: List[Activity], start_date: datetime.date,
+                 end_date: datetime.date, local_timezone: DstTzInfo):
         self.activity_type = activity_type
 
         self.total_duration = _duration(
@@ -21,7 +26,8 @@ class WorkingBreakTime:
 
 
 class SummaryModel:
-    def __init__(self, activities, start_date, end_date, local_timezone):
+    def __init__(self, activities: List[Activity], start_date: datetime.date,
+                 end_date: datetime.date, local_timezone: DstTzInfo):
         self.start_date = start_date
         self.end_date = end_date
 
@@ -40,7 +46,8 @@ class SummaryModel:
         self.current_activity = self._current_activity(activities,
                                                        local_timezone)
 
-    def _current_activity(self, activities, local_timezone):
+    def _current_activity(self, activities: List[Activity],
+                          local_timezone: DstTzInfo) -> Optional[Activity]:
         activities = clip_activities_by_range(self.start_date, self.end_date,
                                               activities, local_timezone)
 
@@ -52,10 +59,10 @@ class SummaryModel:
 
 
 class SummaryView:
-    def __init__(self, model):
+    def __init__(self, model: SummaryModel):
         self._model = model
 
-    def render(self, output):
+    def render(self, output: io.TextIOWrapper) -> None:
         print(file=output)
         date_str = _format_date(self._model.start_date)
         if self._model.end_date != self._model.start_date:
@@ -69,7 +76,9 @@ class SummaryView:
         _print_time(self._model, self._model.break_time, output)
 
 
-def _print_time(summary_section, working_break_time, output):
+def _print_time(summary_section: SummaryModel,
+                working_break_time: WorkingBreakTime,
+                output: io.TextIOWrapper) -> None:
     activity_names = {
         Activity.Type.WORK: 'Working Time',
         Activity.Type.BREAK: 'Break   Time',
@@ -101,11 +110,11 @@ def _print_time(summary_section, working_break_time, output):
         print(file=output)
 
 
-def _duration(activities):
+def _duration(activities: List[Activity]) -> datetime.timedelta:
     return sum((act.duration for act in activities), datetime.timedelta())
 
 
 # pylint: disable=redefined-outer-name
-def _format_date(datetime):
+def _format_date(datetime: datetime.datetime) -> str:
     return datetime.strftime(
         "%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))

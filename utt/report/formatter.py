@@ -1,4 +1,7 @@
-def format_duration(duration):
+from datetime import timedelta
+
+
+def format_duration(duration: timedelta) -> str:
     total_minutes, _ = divmod(duration.total_seconds(), 60)
     total_hours, remainder_minutes = divmod(total_minutes, 60)
     formatted_duration = "{hours:.0f}h{minutes:02.0f}".format(
@@ -6,5 +9,5 @@ def format_duration(duration):
     return formatted_duration
 
 
-def title(text):
+def title(text: str) -> str:
     return '{:-^80}'.format(' ' + text + ' ')

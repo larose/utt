@@ -1,10 +1,11 @@
 import itertools
 
 from ..data_structures.activity import Activity
+from .entries import Entries
 
 
 class Activities:
-    def __init__(self, entries):
+    def __init__(self, entries: Entries):
         self._entries = entries
 
     def __call__(self):

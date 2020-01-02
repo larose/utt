@@ -1,3 +1,4 @@
+import argparse
 import os
 import subprocess
 
@@ -5,7 +6,7 @@ from utt.api import _v1
 
 
 class EditHandler:
-    def __init__(self, args, data_filename):
+    def __init__(self, args: argparse.Namespace, data_filename: str):
         self._args = args
         self._data_filename = data_filename
 

@@ -1,7 +1,9 @@
-from __future__ import print_function
-
-import datetime
+import io
 import itertools
+from datetime import date, timedelta
+from typing import Dict, List
+
+from pytz.tzinfo import DstTzInfo
 
 from . import formatter
 from ..data_structures.activity import Activity
@@ -10,7 +12,8 @@ from .common import (clip_activities_by_range, filter_activities_by_type,
 
 
 class ActivitiesModel:
-    def __init__(self, activities, start_date, end_date, local_timezone):
+    def __init__(self, activities: List[Activity], start_date: date,
+                 end_date: date, local_timezone: DstTzInfo):
         activities = clip_activities_by_range(start_date, end_date, activities,
                                               local_timezone)
         self.names_work = _groupby_name(
@@ -20,10 +23,10 @@ class ActivitiesModel:
 
 
 class ActivitiesView:
-    def __init__(self, model):
+    def __init__(self, model: ActivitiesModel):
         self._model = model
 
-    def render(self, output):
+    def render(self, output: io.TextIOWrapper) -> None:
         print(file=output)
         print(formatter.title('Activities'), file=output)
         print(file=output)
@@ -35,7 +38,7 @@ class ActivitiesView:
         print_dicts(self._model.names_break, output)
 
 
-def _groupby_name(activities):
+def _groupby_name(activities: List[Activity]) -> List[Dict]:
     def key(act):
         return act.name.name
 
@@ -50,8 +53,7 @@ def _groupby_name(activities):
             project,
             'duration':
             formatter.format_duration(
-                sum((act.duration for act in activities),
-                    datetime.timedelta())),
+                sum((act.duration for act in activities), timedelta())),
             'name':
             ", ".join(sorted(set(act.name.task for act in activities)))
         })

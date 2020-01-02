@@ -1,4 +1,5 @@
 import copy
+from datetime import datetime
 
 from .name import Name
 
@@ -10,7 +11,12 @@ class Activity:
         IGNORED = 2
 
     # pylint: disable=too-many-arguments
-    def __init__(self, name, start, end, is_current_activity, comment=None):
+    def __init__(self,
+                 name: str,
+                 start: datetime,
+                 end: datetime,
+                 is_current_activity: bool,
+                 comment: str = None):
         self.name = Name(name)
         self.start = start
         self.end = end
