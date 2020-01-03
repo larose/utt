@@ -29,7 +29,7 @@ all: add \
   version
 
 $(UTT):
-	$(PIP) install utt-*.whl
+	pip install utt-*.whl
 
 .PHONY: add
 add: $(UTT)

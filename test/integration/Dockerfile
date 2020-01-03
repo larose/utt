@@ -1,10 +1,8 @@
-FROM ubuntu:18.04
+FROM python:3.7.6-slim
 
-ENV PYTHON=python3
-ENV PIP=pip3
 ENTRYPOINT ["make"]
-CMD []
 WORKDIR /utt
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bash-completion make python3-pip python3-setuptools
-RUN pip3 install --upgrade pip
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    bash-completion \
+    make
 COPY . .
