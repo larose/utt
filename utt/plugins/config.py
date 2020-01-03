@@ -2,7 +2,9 @@ import argparse
 import configparser
 import sys
 
-from utt.api import _v1
+from ..api import _v1
+from ..components.config_filename import ConfigFilename  # Private API
+from ..components.default_config import DefaultConfig  # Private API
 
 
 class ConfigHandler:
@@ -10,8 +12,8 @@ class ConfigHandler:
         self,
         args: argparse.Namespace,
         config: configparser.ConfigParser,
-        default_config: _v1.components.DefaultConfig,
-        config_filename: str,
+        default_config: DefaultConfig,
+        config_filename: ConfigFilename,
     ):
         self._args = args
         self._config = config

@@ -1,22 +1,22 @@
 import itertools
+from typing import List
 
 from ..data_structures.activity import Activity
 from .entries import Entries
 
+Activities = List[Activity]
 
-class Activities:
-    def __init__(self, entries: Entries):
-        self._entries = entries
 
-    def __call__(self):
-        return list(self._activities())
+def activities(entries: Entries) -> Activities:
+    return list(_activities(entries))
 
-    def _activities(self):
-        for prev_entry, next_entry in _pairwise(self._entries()):
-            activity = Activity(
-                next_entry.name, prev_entry.datetime, next_entry.datetime, False, comment=next_entry.comment,
-            )
-            yield activity
+
+def _activities(entries: Entries):
+    for prev_entry, next_entry in _pairwise(entries):
+        activity = Activity(
+            next_entry.name, prev_entry.datetime, next_entry.datetime, False, comment=next_entry.comment,
+        )
+        yield activity
 
 
 def _pairwise(iterable):

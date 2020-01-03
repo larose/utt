@@ -1,11 +1,11 @@
 from __future__ import print_function
 
-import io
 from datetime import date, datetime
 from typing import List
 
 from pytz.tzinfo import DstTzInfo
 
+from ..components.output import Output
 from ..data_structures.activity import Activity
 from . import formatter
 from .common import clip_activities_by_range
@@ -39,7 +39,7 @@ class DetailsView:
 
         return format_str % tuple(line)
 
-    def render(self, output: io.TextIOWrapper) -> None:
+    def render(self, output: Output) -> None:
         print(file=output)
         print(formatter.title("Details"), file=output)
         print(file=output)

@@ -1,11 +1,11 @@
 from __future__ import print_function
 
 import datetime
-import io
 from typing import List, Optional
 
 from pytz.tzinfo import DstTzInfo
 
+from ..components.output import Output
 from ..data_structures.activity import Activity
 from . import formatter
 from .common import clip_activities_by_range, filter_activities_by_type
@@ -58,7 +58,7 @@ class SummaryView:
     def __init__(self, model: SummaryModel):
         self._model = model
 
-    def render(self, output: io.TextIOWrapper) -> None:
+    def render(self, output: Output) -> None:
         print(file=output)
         date_str = _format_date(self._model.start_date)
         if self._model.end_date != self._model.start_date:
@@ -70,7 +70,7 @@ class SummaryView:
         _print_time(self._model, self._model.break_time, output)
 
 
-def _print_time(summary_section: SummaryModel, working_break_time: WorkingBreakTime, output: io.TextIOWrapper,) -> None:
+def _print_time(summary_section: SummaryModel, working_break_time: WorkingBreakTime, output: Output,) -> None:
     activity_names = {
         Activity.Type.WORK: "Working Time",
         Activity.Type.BREAK: "Break   Time",

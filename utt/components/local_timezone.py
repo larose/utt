@@ -1,11 +1,14 @@
 import argparse
+import typing
 
 import tzlocal
 from pytz.tzinfo import DstTzInfo
 
+LocalTimezone = typing.NewType("LocalTimezone", DstTzInfo)
 
-def local_timezone(args: argparse.Namespace) -> DstTzInfo:
+
+def local_timezone(args: argparse.Namespace) -> LocalTimezone:
     if args.timezone:
-        return args.timezone
+        return LocalTimezone(args.timezone)
 
-    return tzlocal.get_localzone()
+    return LocalTimezone(tzlocal.get_localzone())

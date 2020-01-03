@@ -1,12 +1,16 @@
+import argparse
 import calendar
 import datetime
 
+from ..components.activities import Activities
+from ..components.local_timezone import LocalTimezone
+from ..components.now import Now
 from ..constants import HELLO_ENTRY_NAME
 from ..data_structures.activity import Activity
 from .model import Report
 
 
-def report(args, now, activities, local_timezone):
+def report(args: argparse.Namespace, now: Now, activities: Activities, local_timezone: LocalTimezone):
     today = now.date()
     if args.report_date is None:
         report_date = today
@@ -36,7 +40,7 @@ def report(args, now, activities, local_timezone):
     collect_to_date = min(today, collect_to_date)
     collect_from_date = min(today, collect_from_date)
 
-    activities_ = activities()
+    activities_ = activities.copy()
     _add_current_activity(
         activities_, now, args.current_activity, args.no_current_activity, report_start_date, report_end_date,
     )

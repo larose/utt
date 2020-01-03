@@ -1,14 +1,14 @@
 import datetime
-import io
 import itertools
 from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
+from ..components.output import Output
 from ..data_structures.activity import Activity
 
 
-def print_dicts(dcts: List[Dict], output: io.TextIOWrapper) -> None:
+def print_dicts(dcts: List[Dict], output: Output) -> None:
     format_string = "({duration}) {project:<{projects_max_length}}: {name}"
 
     projects = (dct["project"] for dct in dcts)

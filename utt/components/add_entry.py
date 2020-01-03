@@ -2,20 +2,20 @@ import copy
 import errno
 import os
 
+from .data_filename import DataFilename
 from .entries import Entries
 from .timezone_config import TimezoneConfig
 
 
 class AddEntry:
-    def __init__(self, data_filename: str, timezone_config: TimezoneConfig, entries: Entries):
+    def __init__(self, data_filename: DataFilename, timezone_config: TimezoneConfig, entries: Entries):
         self._data_filename = data_filename
         self._timezone_config = timezone_config
         self._entries = entries
 
     def __call__(self, new_entry):
         _create_directories_for_file(self._data_filename)
-        entries = self._entries()
-        insert_new_line_before = _insert_new_line(entries, new_entry)
+        insert_new_line_before = _insert_new_line(self._entries, new_entry)
         new_entry = _localize(self._timezone_config, new_entry)
         _append_line_to_file(
             self._data_filename, str(new_entry), insert_new_line_before=insert_new_line_before,
