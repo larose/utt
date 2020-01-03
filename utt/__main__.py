@@ -1,9 +1,11 @@
+import argparse
 import importlib
 import pkgutil
 import sys
 
 import utt.plugins
 from utt.api import _v1
+from utt.components.commands import Commands
 
 
 def iter_namespace(ns_pkg):
@@ -26,7 +28,12 @@ def main():
         sys.argv.append("--help")
 
     load_plugins()
-    getattr(_v1._container, f"commands/{_v1._container.args.command}")()
+
+    command_name = _v1._private.container[argparse.Namespace].command
+
+    for command_class in _v1._private.container[Commands]:
+        if command_class.NAME == command_name:
+            _v1._private.container[command_class]()
 
 
 if __name__ == "__main__":

@@ -3,20 +3,12 @@ from typing import Generator, List, Tuple
 from ..data_structures.entry import Entry
 from .entry_lines import EntryLines
 from .entry_parser import EntryParser
-from .timezone_config import TimezoneConfig
+
+Entries = List[Entry]
 
 
-class Entries:
-    def __init__(
-        self, entry_lines: EntryLines, timezone_config: TimezoneConfig, entry_parser: EntryParser,
-    ):
-        self._entry_lines = entry_lines
-        self._timezone_config = timezone_config
-        self._entry_parser = entry_parser
-
-    def __call__(self) -> List[Entry]:
-        entries: List[Entry] = list(_parse_log(self._entry_lines(), self._entry_parser))
-        return entries
+def entries(entry_lines: EntryLines, entry_parser: EntryParser) -> Entries:
+    return list(_parse_log(entry_lines(), entry_parser))
 
 
 def _parse_log(lines: List[Tuple[int, str]], entry_parser: EntryParser) -> Generator[Entry, None, None]:

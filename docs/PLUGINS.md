@@ -1,11 +1,11 @@
 # How to write a utt plugin
 
 utt plugins allow to add new commands to utt. For example, `$ utt
-<your new command>`.
+foo`, where `foo` is a new command.
 
 A utt plugin is simply a [namespace
 package](https://packaging.python.org/guides/packaging-namespace-packages/)
-in the `utt.plugins` namespace.
+in the `utt.plugins`.
 
 You can find an [example plugin](../test/integration/utt_foo_plugin)
 in the tests:
@@ -15,11 +15,12 @@ from utt.api import _v1
 
 
 class FooHandler:
-    def __init__(self):
-        pass
+    def __init__(self, now: _v1.Now, output: _v1.Output):
+        self._now = now
+        self._output = output
 
     def __call__(self, *args, **kwargs):
-        print("foo")
+        print(f"Now: {self._now}", file=self._output)
 
 
 class FooCommand:
@@ -36,33 +37,52 @@ class FooCommand:
 _v1.add_command(FooCommand)
 ```
 
-`_v1` is the current API version. It's prefixed with `_` to indicate
-that the version (`v1`) is not stable yet. Once it is be stable, the
-`_` will be removed.
-
-
-Note that you the handler's constructor can receive
-arguments. Example:
-[../utt/plugins/stretch.py](../utt/plugins/stretch.py):
+This plugins first imports utt's api:
 
 ```
-class StretchHandler:
-    # pylint: disable=too-many-arguments
-    def __init__(self, args, now, add_entry, entries, timezone_config):
-        self._args = args
-        self._now = now
-        self._add_entry = add_entry
-        self._entries = entries
-        self._timezone_config = timezone_config
+from utt.api import _v1
 ```
 
-See `_create_container` function in
-[`../utt/api/_v1.py`](../utt/api/_v1.py) for the list of all possible
-arguments. Note that these arguments are not yet versioned are
-therefore are subject to change.
+Note that `_v1` is the latest utt's api version. It's prefixed with
+`_` to indicate that the version (`v1`) is not stable yet. `_` will be
+removed once it is be stable.
+
+Then the plugin declares a command handler and a command:
+
+```
+class FooHandler:
+    ...
+
+class FooCommand:
+    ...
+```
+
+The handler can receive arguments that are injected by utt:
+
+```
+class FooHandler:
+    def __init__(self, now: _v1.Now, output: _v1.Output):
+        ...
+```
+
+Consult [`../utt/api/_v1/__init__.py`](../utt/api/_v1/__init__.py) to
+see the list of available types that can be injected.
+
+Finally, the plugin registers the new command to utt:
+
+```
+_v1.add_command(FooCommand)
+```
 
 
-## Tips
+## Best practices
 
-Never import "private" utt modules in your plugins. Only import
-packages under the `utt.api` package.
+All symbols exported in
+[`../utt/api/_v1/__init__.py`](../utt/api/_v1/__init__.py) are part of
+the public api and are safe to use. (However, note that `_v1` is still
+in development and we may introduce breaking changes until it becomes
+stable.)
+
+Therefore, anything not exported in
+[`../utt/api/_v1/__init__.py`](../utt/api/_v1/__init__.py) is not part
+of utt's api and should not be imported in your plugin.

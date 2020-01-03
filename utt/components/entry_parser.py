@@ -2,9 +2,9 @@ import re
 from typing import Optional
 
 from dateutil.parser import parse
-from pytz.tzinfo import DstTzInfo
 
 from ..data_structures.entry import Entry
+from .local_timezone import LocalTimezone
 
 DATE_REGEX = r"(?P<date>\d{4}-\d{1,2}-\d{1,2}\s+\d{1,2}:\d{1,2})"
 TIMEZONE_REGEX = r"(?P<timezone>[+-]{1}\d{2}:{0,1}\d{2})"
@@ -16,7 +16,7 @@ WITHOUT_TZ = re.compile("".join([DATE_REGEX, NAME_REGEX, r"($|", COMMENT_REGEX, 
 
 
 class EntryParser:
-    def __init__(self, local_timezone: DstTzInfo):
+    def __init__(self, local_timezone: LocalTimezone):
         self._local_timezone = local_timezone
 
     def parse(self, string: str) -> Optional[Entry]:

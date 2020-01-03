@@ -1,13 +1,10 @@
-import io
-
-from utt.api import _v1
-
-from ..report import Report  # TODO: should not use the private api
-from ..report.view import ReportView  # TODO: should not use the private api
+from ..api import _v1
+from ..report import Report  # Private API
+from ..report.view import ReportView  # Private API
 
 
 class ReportHandler:
-    def __init__(self, report: Report, output: io.TextIOWrapper):
+    def __init__(self, report: Report, output: _v1.Output):
         self._report = report
         self._output = output
         self._csv_section = report.args.csv_section

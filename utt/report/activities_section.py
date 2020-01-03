@@ -1,10 +1,10 @@
-import io
 import itertools
 from datetime import date, timedelta
 from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
+from ..components.output import Output
 from ..data_structures.activity import Activity
 from . import formatter
 from .common import clip_activities_by_range, filter_activities_by_type, print_dicts
@@ -23,7 +23,7 @@ class ActivitiesView:
     def __init__(self, model: ActivitiesModel):
         self._model = model
 
-    def render(self, output: io.TextIOWrapper) -> None:
+    def render(self, output: Output) -> None:
         print(file=output)
         print(formatter.title("Activities"), file=output)
         print(file=output)

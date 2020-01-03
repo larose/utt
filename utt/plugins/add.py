@@ -1,12 +1,13 @@
 import argparse
-from datetime import datetime
 
-from utt.api import _v1
+from ..api import _v1
+from ..components.add_entry import AddEntry  # Private API
+from ..components.data_filename import DataFilename  # Private API
 
 
 class AddHandler:
     def __init__(
-        self, args: argparse.Namespace, data_filename: str, now: datetime, add_entry: _v1.components.AddEntry,
+        self, args: argparse.Namespace, data_filename: DataFilename, now: _v1.Now, add_entry: AddEntry,
     ):
         self._args = args
         self._data_filename = data_filename
@@ -14,7 +15,7 @@ class AddHandler:
         self._add_entry = add_entry
 
     def __call__(self):
-        self._add_entry(_v1.types.Entry(self._now, self._args.name, False, comment=self._args.comment))
+        self._add_entry(_v1.Entry(self._now, self._args.name, False, comment=self._args.comment))
 
 
 class AddCommand:

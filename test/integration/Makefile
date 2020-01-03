@@ -74,7 +74,7 @@ foo-plugin: $(UTT)
 	@echo ">> FOO PLUGIN"
 
 	cd utt_foo_plugin && python3 setup.py install --record utt_foo_files
-	bash -c 'diff <(utt foo) <(echo foo)'
+	bash -c 'diff <(utt  --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00+00:00)'
 	cd utt_foo_plugin && cat utt_foo_files | xargs rm -rf
 
 	@echo "<< FOO PLUGIN"

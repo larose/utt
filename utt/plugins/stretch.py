@@ -1,34 +1,36 @@
 import argparse
 import copy
-from datetime import datetime
 
-from utt.api import _v1
+from ..api import _v1
+from ..components.add_entry import AddEntry  # Private API
+from ..components.timezone_config import TimezoneConfig  # Private API
 
 
 class StretchHandler:
     def __init__(
         self,
         args: argparse.Namespace,
-        now: datetime,
-        add_entry: _v1.components.AddEntry,
-        entries: _v1.components.Entries,
-        timezone_config: _v1.components.TimezoneConfig,
+        now: _v1.Now,
+        add_entry: AddEntry,
+        entries: _v1.Entries,
+        timezone_config: TimezoneConfig,
+        output: _v1.Output,
     ):
         self._args = args
         self._now = now
         self._add_entry = add_entry
         self._entries = entries
         self._timezone_config = timezone_config
+        self._output = output
 
     def __call__(self):
-        entries = self._entries()
-        if not entries:
+        if not self._entries:
             raise Exception("No entry to stretch")
-        latest_entry = entries[-1]
-        new_entry = _v1.types.Entry(self._now, latest_entry.name, False, comment=latest_entry.comment)
+        latest_entry = self._entries[-1]
+        new_entry = _v1.Entry(self._now, latest_entry.name, False, comment=latest_entry.comment)
         self._add_entry(new_entry)
-        print("stretched " + str(_localize(self._timezone_config, latest_entry)))
-        print("        → " + str(_localize(self._timezone_config, new_entry)))
+        print("stretched " + str(_localize(self._timezone_config, latest_entry)), file=self._output)
+        print("        → " + str(_localize(self._timezone_config, new_entry)), file=self._output)
 
 
 def _localize(timezone_config, new_entry):

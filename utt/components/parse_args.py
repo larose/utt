@@ -1,15 +1,15 @@
 import argparse
 import datetime
 import sys
-from typing import List
 
 import argcomplete
 import pytz
 
 from ..__version__ import VERSION
+from .commands import Commands
 
 
-def parse_args(commands: List) -> argparse.Namespace:
+def parse_args(commands: Commands) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
         description="Ultimate Time Tracker (utt) is a simple command-line time"

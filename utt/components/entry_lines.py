@@ -1,8 +1,10 @@
 from typing import List, Tuple
 
+from .data_filename import DataFilename
+
 
 class EntryLines:
-    def __init__(self, data_filename: str):
+    def __init__(self, data_filename: DataFilename):
         self._data_filename = data_filename
 
     def __call__(self) -> List[Tuple[int, str]]:

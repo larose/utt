@@ -2,12 +2,12 @@ from __future__ import print_function
 
 import csv
 import datetime
-import io
 import itertools
 from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
+from ..components.output import Output
 from ..data_structures.activity import Activity
 from . import formatter
 from .common import clip_activities_by_range, filter_activities_by_type
@@ -47,7 +47,7 @@ class PerDayView:
         hours = round(hours * 10) / 10
         return "{hours:4.1f}".format(hours=hours)
 
-    def render(self, output: io.TextIOWrapper) -> None:
+    def render(self, output: Output) -> None:
         print(file=output)
         print(formatter.title("Per Day"), file=output)
         print(file=output)
@@ -63,7 +63,7 @@ class PerDayView:
             )
             print(date_render, file=output)
 
-    def csv(self, output: io.TextIOWrapper) -> None:
+    def csv(self, output: Output) -> None:
         if not self._model.dates:
             print(" -- No activities for this time range --", file=output)
             return

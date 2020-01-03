@@ -1,5 +1,4 @@
-import io
-
+from ..components.output import Output
 from .activities_section import ActivitiesView
 from .details_section import DetailsView
 from .model import Report
@@ -12,7 +11,7 @@ class ReportView:
     def __init__(self, report: Report):
         self._report = report
 
-    def render(self, output: io.TextIOWrapper) -> None:
+    def render(self, output: Output) -> None:
         SummaryView(self._report.summary_model).render(output)
         if self._report.args.per_day:
             PerDayView(self._report.per_day_model).render(output)
@@ -22,7 +21,7 @@ class ReportView:
         if (self._report.start_date == self._report.end_date) or (self._report.args.details):
             DetailsView(self._report.details_model, show_comments=self._report.args.comments).render(output)
 
-    def csv(self, section: str, output: io.TextIOWrapper) -> None:
+    def csv(self, section: str, output: Output) -> None:
         if section == "summary":
             view = SummaryView(self._report.summary_model)
         elif section in ["per_day", "per-day"]:

@@ -4,7 +4,7 @@ import pytest
 import pytz
 
 import utt.report
-from utt.components.activities import Activities
+from utt.components.activities import activities as _activities
 from utt.data_structures.entry import Entry
 
 
@@ -19,14 +19,6 @@ class Args:
         self.per_day = None
         self.month = None
         self.week = None
-
-
-class InMemoryEntries:
-    def __init__(self, entries):
-        self._entries = entries
-
-    def __call__(self):
-        return self._entries
 
 
 @pytest.fixture()
@@ -61,12 +53,12 @@ def entries(local_timezone):
     for entry in entry_list:
         entry.datetime = local_timezone.localize(entry.datetime)
 
-    return InMemoryEntries(entry_list)
+    return entry_list
 
 
 @pytest.fixture()
 def activities(entries):
-    return Activities(entries)
+    return _activities(entries)
 
 
 def test_range(args, activities, local_timezone):
