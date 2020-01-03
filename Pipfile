@@ -20,4 +20,4 @@ isort = "==4.3.21"
 flake8 = "==3.7.9"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
