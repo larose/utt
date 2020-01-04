@@ -1,4 +1,4 @@
-FROM python:3.7.6-slim
+FROM python:3.6.10-slim
 
 ENTRYPOINT ["make"]
 WORKDIR /utt
