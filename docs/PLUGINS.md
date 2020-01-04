@@ -19,22 +19,14 @@ class FooHandler:
         self._now = now
         self._output = output
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self):
         print(f"Now: {self._now}", file=self._output)
 
 
-class FooCommand:
-    NAME = "foo"
-    DESCRIPTION = "Foo"
-
-    Handler = FooHandler
-
-    @staticmethod
-    def add_args(parser):
-        pass
+foo_command = _v1.Command(name="foo", description="Foo", handler_class=FooHandler, add_args=lambda p: None)
 
 
-_v1.add_command(FooCommand)
+_v1.add_command(foo_command)
 ```
 
 This plugins first imports utt's api:
@@ -53,7 +45,7 @@ Then the plugin declares a command handler and a command:
 class FooHandler:
     ...
 
-class FooCommand:
+foo_command = _v1.Command(name="foo", description="Foo", handler_class=FooHandler, add_args=lambda p: None)
     ...
 ```
 
@@ -71,7 +63,7 @@ see the list of available types that can be injected.
 Finally, the plugin registers the new command to utt:
 
 ```
-_v1.add_command(FooCommand)
+_v1.add_command(foo_command)
 ```
 
 

@@ -42,15 +42,12 @@ def _localize(timezone_config, new_entry):
     return new_entry
 
 
-class StretchCommand:
-    NAME = "stretch"
-    DESCRIPTION = "Stretch the latest task to the current time"
-
-    Handler = StretchHandler
-
-    @staticmethod
-    def add_args(parser):
-        pass
+stretch_command = _v1.Command(
+    name="stretch",
+    description="Stretch the latest task to the current time",
+    handler_class=StretchHandler,
+    add_args=lambda p: None,
+)
 
 
-_v1.add_command(StretchCommand)
+_v1.add_command(stretch_command)

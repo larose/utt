@@ -31,7 +31,7 @@ def parse_args(commands: Commands) -> argparse.Namespace:
     subparsers = parser.add_subparsers(dest="command")
 
     for command in commands:
-        sub_parser = subparsers.add_parser(command.NAME, description=command.DESCRIPTION)
+        sub_parser = subparsers.add_parser(command.name, description=command.description)
         command.add_args(sub_parser)
 
     argcomplete.autocomplete(parser, append_space=False)

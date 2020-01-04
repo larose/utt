@@ -1,3 +1,5 @@
 import typing
 
-Commands = typing.NewType("Commands", list)
+from ..command import Command
+
+Commands = typing.List[Command]

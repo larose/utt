@@ -3,6 +3,7 @@ import configparser
 import sys
 
 from ..api import _v1
+from ..command import Command
 from ..components.config_filename import ConfigFilename  # Private API
 from ..components.default_config import DefaultConfig  # Private API
 
@@ -32,16 +33,12 @@ class ConfigHandler:
         self._config.write(sys.stdout)
 
 
-class ConfigCommand:
-    NAME = "config"
-    DESCRIPTION = "Show config"
-
-    Handler = ConfigHandler
-
-    @staticmethod
-    def add_args(parser):
-        parser.add_argument("--default", action="store_true", default=False)
-        parser.add_argument("--filename", action="store_true", default=False)
+def add_args(parser: argparse.ArgumentParser):
+    parser.add_argument("--default", action="store_true", default=False)
+    parser.add_argument("--filename", action="store_true", default=False)
 
 
-_v1.add_command(ConfigCommand)
+config_command = Command("config", "Show config", ConfigHandler, add_args)
+
+
+_v1.add_command(config_command)
