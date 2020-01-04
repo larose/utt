@@ -31,9 +31,10 @@ def main():
 
     command_name = _v1._private.container[argparse.Namespace].command
 
-    for command_class in _v1._private.container[Commands]:
-        if command_class.NAME == command_name:
-            _v1._private.container[command_class]()
+    commands: Commands = _v1._private.container[Commands]
+    for command in commands:
+        if command.name == command_name:
+            _v1._private.container[command.handler_class]()
 
 
 if __name__ == "__main__":

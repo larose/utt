@@ -3,6 +3,7 @@ import sys
 from configparser import ConfigParser
 
 from ... import ioc
+from ...command import Command
 from ...components.activities import Activities, activities
 from ...components.add_entry import AddEntry
 from ...components.commands import Commands
@@ -48,10 +49,10 @@ def create_container():
     return _container
 
 
-def add_command(command_class):
-    commands[command_class.NAME] = command_class
-    container[Commands].append(command_class)
-    container[command_class] = command_class.Handler
+def add_command(command: Command):
+    commands[command.name] = command
+    container[Commands].append(command)
+    container[command.handler_class] = command.handler_class
 
 
 commands = {}
