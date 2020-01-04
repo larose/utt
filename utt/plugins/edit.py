@@ -16,18 +16,10 @@ class EditHandler:
         _run_editor(_editor(), self._data_filename)
 
 
-class EditCommand:
-    NAME = "edit"
-    DESCRIPTION = "Edit task log using your system's default editor"
-
-    Handler = EditHandler
-
-    @staticmethod
-    def add_args(parser):
-        pass
+edit_command = _v1.Command("edit", "Edit task log using your system's default editor", EditHandler, lambda p: None)
 
 
-_v1.add_command(EditCommand)
+_v1.add_command(edit_command)
 
 
 def _editor():

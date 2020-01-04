@@ -1,3 +1,4 @@
+from ...command import Command  # noqa: F401
 from ...components.activities import Activities  # noqa: F401. Injectable
 from ...components.entries import Entries  # noqa: F401. Injectable
 from ...components.now import Now  # noqa: F401. Injectable

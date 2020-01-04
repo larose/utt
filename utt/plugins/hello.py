@@ -16,17 +16,11 @@ class HelloHandler:
         self._add_entry(_v1.Entry(self._now, _v1.HELLO_ENTRY_NAME, False))
 
 
-class HelloCommand:
-    NAME = _v1.HELLO_ENTRY_NAME
-    DESCRIPTION = "Say '{hello_entry_name}' when you arrive in the morning...".format(
-        hello_entry_name=_v1.HELLO_ENTRY_NAME
-    )
+hello_command = _v1.Command(
+    "hello",
+    "Say '{hello_entry_name}' when you arrive in the morning...".format(hello_entry_name=_v1.HELLO_ENTRY_NAME),
+    HelloHandler,
+    lambda p: None,
+)
 
-    Handler = HelloHandler
-
-    @staticmethod
-    def add_args(parser):
-        pass
-
-
-_v1.add_command(HelloCommand)
+_v1.add_command(hello_command)
