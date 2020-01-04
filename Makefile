@@ -25,7 +25,7 @@ bdist_wheel:
 
 .PHONY: install-dev
 install-dev:
-	pipenv install --dev
+	pipenv install --dev --deploy
 
 .PHONY: lint
 lint:
