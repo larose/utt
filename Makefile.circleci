@@ -1,0 +1,11 @@
+.PHONY: integration-tests
+integration-tests:
+	make install-dev test-integration
+
+.PHONY: lint
+lint:
+	make install-dev lint
+
+.PHONY: unit-tests
+unit-tests:
+	make install-dev test-unit

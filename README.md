@@ -4,6 +4,9 @@ Ultimate Time Tracker
 Ultimate Time Tracker (utt) is a simple command-line time tracking
 application written in Python.
 
+**Table of Contents**
+
+
 - [Quick Start](#quick-start)
 - [Commands](#commands)
     - [`hello`](#hello)
@@ -16,16 +19,10 @@ application written in Python.
         - [Current Activity](#current-activity)
         - [Weekly Working and Break Times](#weekly-working-and-break-times)
     - [`stretch`](#stretch)
+- [Plugins](#plugins)
 - [Configuration](#configuration)
 - [Bash Completion](#bash-completion)
-- [Development](#development)
-    - [Dependencies](#dependencies)
-    - [Format code](#format-code)
-    - [Lint](#lint)
-    - [Executing `utt` from source](#executing-utt-from-source)
-    - [Tests](#tests)
-        - [Unit Tests](#unit-tests)
-        - [Integration Tests](#integration-tests)
+- [Contributing](#contributing)
 - [Contributors](#contributors)
 - [License](#license)
 - [Website](#website)
@@ -36,8 +33,6 @@ application written in Python.
 Install `utt` from PyPI:
 
 `$ pip install utt`
-
-Note: `utt` is compatible with Python 2 and Python 3.
 
 
 ### hello
@@ -402,6 +397,20 @@ stretched 2013-07-08 08:34 programming
         → 2013-07-08 09:00 programming
 ```
 
+## Plugins
+
+utt can be extended by installing plugins. Unfortunately, since this
+is a recent feature, no plugins have been listed here yet. Write to
+Mathieu Larose <<mathieu@mathieularose.com>> to add your plugin here.
+
+
+### Plugin development
+
+See
+[docs/CONTRIBUTING.md#how-can-i-create-a-plugin](docs/CONTRIBUTING.md#how-can-i-create-a-plugin)
+how to create a utt plugin.
+
+
 ## Configuration
 
 ### Timezone
@@ -443,64 +452,10 @@ $ register-python-argcomplete utt >> ~/.bashrc
 
 Finally, start a new shell.
 
-## Development
 
-### Dependencies
+## Contributing
 
-- Python 3
-- [Make](https://www.gnu.org/software/make/)
-- [Pipenv](https://pipenv.readthedocs.io/en/latest/)
-- [Docker](https://www.docker.com/)
-
-### Format code
-
-To format code:
-
-`$ make format`
-
-
-### Lint
-
-To lint code:
-
-`$ make lint`
-
-### Executing `utt` from source
-
-To run `utt` from local source:
-
-`$ pipenv run ./run`
-
-### Tests
-
-To execute unit and integration tests:
-
-`$ make test`
-
-#### Unit Tests
-
-`$ make test-unit`
-
-#### Integration Tests
-
-To run integration tests for Python 2 and Python 3:
-
-`$ make test-integration`
-
-This will create two Docker containers, one for each version of
-Python, and run all the tests in `test/integration/Makefile`.
-
-To run integration tests for Python 2 only:
-
-`$ make test-integration-py2`
-
-To run integration tests for Python 3 only:
-
-`$ make test-integration-py3`
-
-To run a specific test:
-
-`$ make test-integration INTEGRATION_CMD=hello`
+See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for how to contribute to utt.
 
 
 ## Contributors
@@ -510,6 +465,8 @@ To run a specific test:
 - Paul Ivanov <<pi@berkeley.edu>>
 - Jason Stewart <<support@eggplantsd.com>>
 - Kit Choi <<kit@kychoi.org>>
+- Henrik Holm <<ukrutt@gmail.com>>
+- Stephan Gross <<stephangross6@gmail.com>>
 
 
 ## License

@@ -4,20 +4,20 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-argcomplete = "==1.9.4"
-pytz = "==2018.5"
-python-dateutil = "==2.7.3"
-tzlocal = "==1.5.1"
+argcomplete = "==1.11.1"
+pytz = "==2019.3"
+python-dateutil = "==2.8.1"
+tzlocal = "==2.0.0"
 
 [dev-packages]
-yapf = "==0.24.0"
+black = "==19.10b0"
 setuptools = "==40.4.3"
-wheel = "==0.32.1"
-twine = "==1.12.1"
-pytest = "==3.9.2"
-ddt = "==1.2.0"
-pylint = "*"
-isort = "*"
+wheel = "==0.34.2"
+twine = "==3.1.1"
+pytest = "==5.3.5"
+ddt = "==1.2.2"
+isort = "==4.3.21"
+flake8 = "==3.7.9"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"

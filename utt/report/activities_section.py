@@ -1,31 +1,31 @@
-from __future__ import print_function
-
-import datetime
 import itertools
+from datetime import date, timedelta
+from typing import Dict, List
 
+from pytz.tzinfo import DstTzInfo
+
+from ..components.output import Output
+from ..data_structures.activity import Activity
 from . import formatter
-from ..activity import Activity
-from .common import (clip_activities_by_range, filter_activities_by_type,
-                     print_dicts)
+from .common import clip_activities_by_range, filter_activities_by_type, print_dicts
 
 
 class ActivitiesModel:
-    def __init__(self, activities, start_date, end_date, local_timezone):
-        activities = clip_activities_by_range(start_date, end_date, activities,
-                                              local_timezone)
-        self.names_work = _groupby_name(
-            filter_activities_by_type(activities, Activity.Type.WORK))
-        self.names_break = _groupby_name(
-            filter_activities_by_type(activities, Activity.Type.BREAK))
+    def __init__(
+        self, activities: List[Activity], start_date: date, end_date: date, local_timezone: DstTzInfo,
+    ):
+        activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
+        self.names_work = _groupby_name(filter_activities_by_type(activities, Activity.Type.WORK))
+        self.names_break = _groupby_name(filter_activities_by_type(activities, Activity.Type.BREAK))
 
 
 class ActivitiesView:
-    def __init__(self, model):
+    def __init__(self, model: ActivitiesModel):
         self._model = model
 
-    def render(self, output):
+    def render(self, output: Output) -> None:
         print(file=output)
-        print(formatter.title('Activities'), file=output)
+        print(formatter.title("Activities"), file=output)
         print(file=output)
 
         print_dicts(self._model.names_work, output)
@@ -35,26 +35,21 @@ class ActivitiesView:
         print_dicts(self._model.names_break, output)
 
 
-def _groupby_name(activities):
+def _groupby_name(activities: List[Activity]) -> List[Dict]:
     def key(act):
         return act.name.name
 
     result = []
     sorted_activities = sorted(activities, key=key)
-    # pylint: disable=redefined-argument-from-local
     for _, activities in itertools.groupby(sorted_activities, key):
         activities = list(activities)
         project = activities[0].name.project
-        result.append({
-            'project':
-            project,
-            'duration':
-            formatter.format_duration(
-                sum((act.duration for act in activities),
-                    datetime.timedelta())),
-            'name':
-            ", ".join(sorted(set(act.name.task for act in activities)))
-        })
+        result.append(
+            {
+                "project": project,
+                "duration": formatter.format_duration(sum((act.duration for act in activities), timedelta())),
+                "name": ", ".join(sorted(set(act.name.task for act in activities))),
+            }
+        )
 
-    return sorted(
-        result, key=lambda act: (act['project'].lower(), act['name'].lower()))
+    return sorted(result, key=lambda act: (act["project"].lower(), act["name"].lower()))

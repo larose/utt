@@ -1,13 +1,11 @@
-# pylint: disable=redefined-outer-name
-
 import datetime
 
 import pytest
 import pytz
 
 import utt.report
-from utt.activities import Activities
-from utt.entry import Entry
+from utt.components.activities import activities as _activities
+from utt.data_structures.entry import Entry
 
 
 class Args:
@@ -17,14 +15,10 @@ class Args:
         self.no_current_activity = False
         self.report_date = None
         self.to_date = None
-
-
-class InMemoryEntries:
-    def __init__(self, entries):
-        self._entries = entries
-
-    def __call__(self):
-        return self._entries
+        self.project = None
+        self.per_day = None
+        self.month = None
+        self.week = None
 
 
 @pytest.fixture()
@@ -34,7 +28,7 @@ def args():
 
 @pytest.fixture()
 def local_timezone():
-    return pytz.timezone('America/Montreal')
+    return pytz.timezone("America/Montreal")
 
 
 @pytest.fixture()
@@ -59,12 +53,12 @@ def entries(local_timezone):
     for entry in entry_list:
         entry.datetime = local_timezone.localize(entry.datetime)
 
-    return InMemoryEntries(entry_list)
+    return entry_list
 
 
 @pytest.fixture()
 def activities(entries):
-    return Activities(entries)
+    return _activities(entries)
 
 
 def test_range(args, activities, local_timezone):
@@ -75,14 +69,10 @@ def test_range(args, activities, local_timezone):
     args.no_current_activity = True
 
     actual_report = utt.report.report(args, now, activities, local_timezone)
-    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
-        hours=6, minutes=45)
-    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
-        hours=6, minutes=45)
-    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
-        hours=1)
-    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
-        hours=1)
+    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(hours=6, minutes=45)
+    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(hours=6, minutes=45)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
 
 
 def test_weekday_range(args, activities, local_timezone):
@@ -93,25 +83,59 @@ def test_weekday_range(args, activities, local_timezone):
     args.no_current_activity = True
 
     actual_report = utt.report.report(args, now, activities, local_timezone)
-    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
-        hours=5, minutes=30)
-    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
-        hours=5, minutes=30)
-    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
-        hours=1)
-    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
-        hours=1)
+    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(hours=5, minutes=30)
+    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(hours=5, minutes=30)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
 
 
 def test_single_day(args, activities, local_timezone):
     now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
 
     actual_report = utt.report.report(args, now, activities, local_timezone)
-    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(
-        hours=7, minutes=30)
-    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(
-        hours=8, minutes=45)
-    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
-        hours=1)
-    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(
-        hours=1)
+    assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(hours=7, minutes=30)
+    assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(hours=8, minutes=45)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
+    assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
+
+
+@pytest.mark.parametrize(
+    "delta,billable",
+    [
+        (dict(minutes=0), " 0.0"),
+        (dict(minutes=1), " 0.0"),
+        (dict(minutes=2), " 0.0"),
+        (dict(minutes=3), " 0.1"),
+        (dict(minutes=4), " 0.1"),
+        (dict(minutes=5), " 0.1"),
+        (dict(minutes=6), " 0.1"),
+        (dict(minutes=7), " 0.1"),
+        (dict(minutes=8), " 0.1"),
+        (dict(minutes=9), " 0.2"),
+        (dict(minutes=14), " 0.2"),
+        (dict(minutes=15), " 0.3"),
+        (dict(minutes=30), " 0.5"),
+        (dict(minutes=56), " 0.9"),
+        (dict(minutes=57), " 1.0"),
+        (dict(minutes=60), " 1.0"),
+        (dict(minutes=62), " 1.0"),
+        (dict(minutes=63), " 1.1"),
+        (dict(minutes=66), " 1.1"),
+        # NOTE, utt doesn't really deal with seconds, but this is how the
+        #   rounding would work if it did.
+        (dict(seconds=1), " 0.0"),
+        (dict(seconds=179), " 0.0"),
+        (dict(seconds=180), " 0.1"),
+        (dict(seconds=181), " 0.1"),
+        (dict(seconds=359), " 0.1"),
+        (dict(seconds=360), " 0.1"),
+        (dict(seconds=361), " 0.1"),
+    ],
+)
+def test_timedelta_to_billable(delta, billable):
+    """Ensure that _timedelta_to_billable gives intended outcome.
+
+    Hours are divided in 10, and we round up to the next "6 minute unit".
+    """
+    to_billable = utt.report.per_day_section.PerDayView._timedelta_to_billable
+    assert to_billable(datetime.timedelta(**delta)) == billable

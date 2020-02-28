@@ -1,3 +1,29 @@
+1.18 (2020-01-01)
+
+  * Add plugin support
+
+1.17 (2019-12-27)
+
+  * Drop Python 2 support
+
+1.16 (2019-12-24)
+
+  * Add ability to comment/annotate an entry
+
+1.15 (2019-12-14)
+
+  * Add month and week switch to filter by month and week
+  * Add csv switch to output in csv
+
+1.14 (2019-12-07)
+
+  * Add `--details` flag to show details even on multi-day reports
+
+1.13 (2019-11-27)
+
+  * Add switches to report for specific project, and also hours worked
+    per day
+
 1.12 (2018-11-11)
 
   * Format duration > 24h as hours instead of days

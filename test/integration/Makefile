@@ -5,6 +5,7 @@ UTT = /usr/local/bin/utt
 all: add \
   completion \
   edit \
+  foo-plugin \
   hello \
   stretch \
   report-1 \
@@ -16,10 +17,19 @@ all: add \
   report-change-timezone \
   report-timezone-daylight-change \
   report-hello-only-today \
+  report-project \
+  report-per-day \
+  report-project-per-day \
+  report-project-per-day-csv \
+  report-project-per-day-csv-2 \
+  report-per-day-csv \
+  report-month \
+  report-details \
+  report-comments \
   version
 
 $(UTT):
-	$(PIP) install utt-*.whl
+	pip install utt-*.whl
 
 .PHONY: add
 add: $(UTT)
@@ -42,7 +52,7 @@ completion: $(UTT)
 	@echo ">> COMPLETION"
 
 	register-python-argcomplete utt >> ~/.bashrc
-	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]}) <(echo -h --help --data --now --timezone --version add config edit hello report stretch)'
+	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]} | tr " " "\n" | sort) <(echo -h --help --data --now --timezone --version add config edit hello report stretch | tr " " "\n" | sort)'
 
 	@echo "<< COMPLETION"
 
@@ -57,6 +67,17 @@ edit: $(UTT)
 	bash -c 'diff <(EDITOR=cat utt edit) data/hello/utt.log'
 
 	@echo "<< EDIT"
+
+.PHONY: foo-plugin
+foo-plugin: $(UTT)
+	@echo
+	@echo ">> FOO PLUGIN"
+
+	cd utt_foo_plugin && python3 setup.py install --record utt_foo_files
+	bash -c 'diff <(utt  --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00+00:00)'
+	cd utt_foo_plugin && cat utt_foo_files | xargs rm -rf
+
+	@echo "<< FOO PLUGIN"
 
 .PHONY: hello
 hello: $(UTT)
@@ -90,6 +111,7 @@ report-1: $(UTT)
 	@echo
 	@echo ">> REPORT-1"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report 2014-3-19) data/utt-1.stdout'
 
@@ -105,7 +127,7 @@ report-dayname: $(UTT)
 	@echo "<< REPORT-DAYNAME"
 
 .PHONY: report-no-current-activity
-report-no-current-activity:
+report-no-current-activity: $(UTT)
 	@echo
 	@echo ">> REPORT-NO-CURRENT-ACTIVITY"
 
@@ -120,6 +142,7 @@ report-uppercase: $(UTT)
 	@echo
 	@echo ">> REPORT-UPPERCASE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-upper-case.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-14 12:00" report 2014-3-14 --no-current-activity) data/utt-upper-case.stdout'
 
@@ -129,6 +152,7 @@ report-range: $(UTT)
 	@echo
 	@echo ">> REPORT-RANGE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-1.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from 2014-3-15 --to 2014-03-19 --no-current-activity) data/utt-range.stdout'
 
@@ -138,6 +162,7 @@ report-overnight: $(UTT)
 	@echo
 	@echo ">> REPORT-OVERNIGHT"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report "2014-03-14") data/utt-overnight.stdout'
 
@@ -148,6 +173,7 @@ report-overnight-range: $(UTT)
 	@echo
 	@echo ">> REPORT-OVERNIGHT-RANGE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-overnight.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from "2014-03-14" --to "2014-03-18") data/utt-overnight-range.stdout'
 
@@ -157,6 +183,7 @@ report-change-timezone: $(UTT)
 	@echo
 	@echo ">> REPORT-CHANGE-TIMEZONE"
 
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-change-timezone.log $(UTT_DATA_FILENAME)
 	bash -c 'diff <(utt --now "2018-08-10 18:00" report "2018-08-08") data/utt-change-timezone.stdout'
 
@@ -179,7 +206,7 @@ report-timezone-daylight-change: $(UTT)
 
 	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
-report-hello-only-today:
+report-hello-only-today: $(UTT)
 	@echo
 	@echo ">> REPORT-HELLO-ONLY-TODAY"
 
@@ -197,6 +224,121 @@ version: $(UTT)
 	utt --version
 
 	@echo "<< VERSION"
+
+
+.PHONY: report-project
+report-project: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-20 20:00" report --project project_1) data/utt-report-project.stdout'
+
+	@echo "<< REPORT-PROJECT"
+
+
+.PHONY: report-per-day
+report-per-day: $(UTT)
+	# NOTE: this is not an intended use of the `--per-day` switch.
+	#       It only really works well in conjunction with a
+	#       `--project <proj_foo>` switch.  But it still works.
+	@echo
+	@echo ">> REPORT-PER-DAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --per-day) data/utt-report-per-day.stdout'
+
+	@echo "<< REPORT-PER-DAY"
+
+
+.PHONY: report-project-per-day
+report-project-per-day: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-PER-DAY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --per-day) data/utt-report-project-per-day.stdout'
+
+	@echo "<< REPORT-PROJECT-PER-DAY"
+
+
+.PHONY: report-project-per-day-csv
+report-project-per-day-csv: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-PER-DAY-CSV"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --csv-section per_day) data/utt-report-project-per-day-csv.csv'
+
+	@echo "<< REPORT-PROJECT-PER-DAY-CSV"
+
+
+# Like test above, but allow `--csv-section per-day` (not only `per_day`)
+.PHONY: report-project-per-day-csv-2
+report-project-per-day-csv-2: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-PER-DAY-CSV-2"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --csv-section per-day) data/utt-report-project-per-day-csv.csv'
+
+	@echo "<< REPORT-PROJECT-PER-DAY-CSV-2"
+
+
+.PHONY: report-per-day-csv
+report-per-day-csv: $(UTT)
+	# NOTE: this is not an intended use of the `--csv-section` switch.
+	#       It only really works well in conjunction with a
+	#       `--project <proj_foo>` switch.  But it still works.
+	@echo
+	@echo ">> REPORT-PER-DAY-CSV"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --csv-section per_day) data/utt-report-per-day-csv.csv'
+
+	@echo "<< REPORT-PER-DAY-CSV"
+
+
+.PHONY: report-month
+report-month: $(UTT)
+	@echo
+	@echo ">> REPORT-MONTH"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-09-21 20:00" report --month prev) data/utt-report-month.stdout'
+
+	@echo "<< REPORT-MONTH"
+
+
+.PHONY: report-details
+report-details: $(UTT)
+	@echo
+	@echo ">> REPORT-DETAILS"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details) data/utt-report-details.stdout'
+
+	@echo "<< REPORT-DETAILS"
+
+
+.PHONY: report-comments
+report-commentss: $(UTT)
+	@echo
+	@echo ">> REPORT-COMMENTS"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details --comments) data/utt-report-comments.stdout'
+
+	@echo "<< REPORT-COMMENTS"
 
 
 .PHONY: shell

@@ -1,43 +1,71 @@
 import inspect
+from abc import ABC, abstractmethod
+from typing import List
 
 
-class Class:
+class FactorySpec(ABC):
+    @abstractmethod
+    def arg_names(self) -> List[str]:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def spec(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def instantiate(self, args):
+        raise NotImplementedError()
+
+
+class ClassFactorySpec(FactorySpec):
     def __init__(self, cls):
-        self._called = False
         self._cls = cls
-        self._cached_value = None
 
-    def __call__(self, values):
-        if not self._called:
-            arg_names = inspect.getargspec(self._cls.__init__).args  # pylint: disable=deprecated-method
+    def arg_names(self):
+        return inspect.getfullargspec(self._cls.__init__).args[1:]
 
-            args = []
-            for name in arg_names[1:]:
-                value = values[name](values)
-                args.append(value)
+    def spec(self):
+        return inspect.getfullargspec(self._cls.__init__)
 
-            self._cached_value = self._cls(*args)
-            self._called = True
-
-        return self._cached_value
+    def instantiate(self, args):
+        return self._cls(*args)
 
 
-class Function:
+class FunctionFactorySpec(FactorySpec):
     def __init__(self, fn):
-        self._called = False
         self._fn = fn
-        self._cached_value = None
+
+    def arg_names(self):
+        return inspect.getfullargspec(self._fn).args
+
+    def spec(self):
+        return inspect.getfullargspec(self._fn)
+
+    def instantiate(self, args):
+        return self._fn(*args)
+
+
+class Factory:
+    def __init__(self, factory_spec: FactorySpec):
+        self._factory_spec = factory_spec
+        self._called = False
+
+    def _create(self, values):
+        spec = self._factory_spec.spec()
+
+        annotations = spec.annotations
+
+        args = []
+        for arg_name in self._factory_spec.arg_names():
+            arg_type = annotations[arg_name]
+            value = values[arg_type](values)
+            args.append(value)
+
+        return self._factory_spec.instantiate(args)
 
     def __call__(self, values):
         if not self._called:
-            arg_names = inspect.getargspec(self._fn).args  # pylint: disable=deprecated-method
-
-            args = []
-            for name in arg_names:
-                value = values[name](values)
-                args.append(value)
-
-            self._cached_value = self._fn(*args)
+            self._cached_value = self._create(values)
             self._called = True
 
         return self._cached_value
@@ -51,18 +79,17 @@ class Value:
         return self._value
 
 
-# pylint: disable=too-many-instance-attributes,useless-object-inheritance
-class Container(object):
+class Container:
     def __init__(self):
-        super(Container, self).__setattr__('_values', {})
+        self._values = {}
 
-    def __setattr__(self, key, value):
+    def __setitem__(self, key, value):
         if inspect.isclass(value):
-            self._values[key] = Class(value)
+            self._values[key] = Factory(ClassFactorySpec(value))
         elif inspect.isfunction(value) or inspect.ismethod(value):
-            self._values[key] = Function(value)
+            self._values[key] = Factory(FunctionFactorySpec(value))
         else:
             self._values[key] = Value(value)
 
-    def __getattr__(self, key):
+    def __getitem__(self, key):
         return self._values[key](self._values)
