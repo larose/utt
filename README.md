@@ -7,25 +7,32 @@ application written in Python.
 **Table of Contents**
 
 
-- [Quick Start](#quick-start)
-- [Commands](#commands)
-    - [`hello`](#hello)
-    - [`add`](#add)
-        - [Activity Type](#activity-type)
-    - [`edit`](#edit)
-    - [`report`](#report)
-        - [Sections](#sections)
-        - [Report Date](#report-date)
-        - [Current Activity](#current-activity)
-        - [Weekly Working and Break Times](#weekly-working-and-break-times)
+- [Ultimate Time Tracker](#ultimate-time-tracker)
+  - [Quick Start](#quick-start)
+    - [hello](#hello)
+    - [add](#add)
+    - [report](#report)
+    - [edit](#edit)
+  - [Commands](#commands)
+    - [`hello`](#hello-1)
+    - [`add`](#add-1)
+      - [Activity Type](#activity-type)
+    - [`edit`](#edit-1)
+    - [`report`](#report-1)
+      - [Sections](#sections)
+      - [Report Date](#report-date)
+      - [Current Activity](#current-activity)
+      - [Weekly Working and Break Times](#weekly-working-and-break-times)
     - [`stretch`](#stretch)
-- [Plugins](#plugins)
-- [Configuration](#configuration)
-- [Bash Completion](#bash-completion)
-- [Contributing](#contributing)
-- [Contributors](#contributors)
-- [License](#license)
-- [Website](#website)
+  - [Plugins](#plugins)
+    - [Plugin development](#plugin-development)
+  - [Configuration](#configuration)
+    - [Timezone](#timezone)
+  - [Bash Completion](#bash-completion)
+  - [Contributing](#contributing)
+  - [Contributors](#contributors)
+  - [License](#license)
+  - [Website](#website)
 
 
 ## Quick Start
@@ -467,6 +474,7 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for how to contribute to utt.
 - Kit Choi <<kit@kychoi.org>>
 - Henrik Holm <<ukrutt@gmail.com>>
 - Stephan Gross <<stephangross6@gmail.com>>
+- Kent Martin <<kentaasvang@gmail.com>>
 
 
 ## License
