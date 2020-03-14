@@ -68,6 +68,17 @@ edit: $(UTT)
 
 	@echo "<< EDIT"
 
+.PHONY: empty-file
+empty-file: $(UTT)
+	@echo
+	@echo ">> EMPTY FILE"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	echo -n "" > $(UTT_DATA_FILENAME)
+	utt hello
+
+	@echo "<< EMPTY FILE"
+
 .PHONY: foo-plugin
 foo-plugin: $(UTT)
 	@echo
