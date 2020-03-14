@@ -1,3 +1,7 @@
+1.19 (2020-03-14)
+
+  * Prevent EINVAL when reading empty log file
+
 1.18 (2020-01-01)
 
   * Add plugin support
