@@ -32,10 +32,6 @@ def _append_line_to_file(filename, line, insert_new_line_before):
         if os_err.errno not in [errno.EINVAL, errno.ENOENT]:
             raise
         prepend_new_line = False
-    except EnvironmentError as exc:
-        if exc.errno != errno.ENOENT:
-            raise
-        prepend_new_line = False
 
     with open(filename, "a") as file:
         if prepend_new_line:
