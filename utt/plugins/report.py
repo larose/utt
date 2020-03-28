@@ -41,7 +41,7 @@ def add_args(parser: argparse.ArgumentParser):
         type=str,
         help=(
             "Specify an inclusive end date to report. "
-            "If this is a day of the week, then it is the next occurence "
+            "If this is a day of the week, then it is the next occurrence "
             "from the start date of the report, including the start date "
             "itself."
         ),
