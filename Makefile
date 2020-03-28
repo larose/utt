@@ -45,7 +45,7 @@ test-integration: clean test-integration-container
 	docker run --rm -ti --mount source=utt-pip-cache,target=/root/.cache/pip $(CONTAINER_NAME) $(INTEGRATION_CMD)
 
 .PHONY: test-integration-container
-test-integration-container: $(INTEGRATION_DIR)/utt-$(VERSION).tar.gz $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
+test-integration-container: $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
 	docker build -t $(CONTAINER_NAME) $(INTEGRATION_DIR)
 
 .PHONY: test-unit
