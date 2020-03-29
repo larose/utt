@@ -21,7 +21,9 @@ from ...components.now import Now, now
 from ...components.output import Output
 from ...components.parse_args import parse_args
 from ...components.report_model import ReportModel, report
+from ...components.report_view import ReportView
 from ...components.timezone_config import TimezoneConfig, timezone_config
+from ...report.csv_view import CSVReportView
 
 
 def create_container():
@@ -45,6 +47,8 @@ def create_container():
     _container[Output] = sys.stdout
     _container[ReportModel] = report
     _container[TimezoneConfig] = timezone_config
+    _container[ReportView] = ReportView
+    _container[CSVReportView] = CSVReportView
 
     return _container
 

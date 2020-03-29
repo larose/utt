@@ -2,17 +2,30 @@ import argparse
 
 from ..api import _v1
 from ..components.report_model import ReportModel, csv_section_name_to_csv_section
-from ..report.view import ReportView  # Private API
 
 
 class ReportHandler:
-    def __init__(self, report_model: ReportModel, output: _v1.Output):
+    def __init__(
+        self,
+        report_model: ReportModel,
+        output: _v1.Output,
+        report_view: _v1.ReportView,
+        csv_report_view: _v1.CSVReportView,
+    ):
         self._report = report_model
         self._output = output
+        self._report_view = report_view
+        self._csv_report_view = csv_report_view
 
     def __call__(self):
-        view = ReportView(self._report)
+        view = self._get_view()
         view.render(self._output)
+
+    def _get_view(self):
+        if self._report.csv_section:
+            return self._csv_report_view
+
+        return self._report_view
 
 
 def add_args(parser: argparse.ArgumentParser):
