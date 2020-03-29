@@ -1,40 +1,34 @@
 from ..components.output import Output
+from ..components.report_model import CSVSection, ReportModel
 from .activities_section import ActivitiesView
 from .details_section import DetailsView
-from .model import Report
 from .per_day_section import PerDayView
 from .projects_section import ProjectsView
 from .summary_section import SummaryView
 
 
 class ReportView:
-    def __init__(self, report: Report):
+    def __init__(self, report: ReportModel):
         self._report = report
 
-    def render(self, output: Output) -> None:
+    def render(self, output: Output):
+        if self._report.csv_section:
+            self._render_csv(output)
+        else:
+            self._render_human_readable(output)
+
+    def _render_human_readable(self, output: Output) -> None:
         SummaryView(self._report.summary_model).render(output)
-        if self._report.args.per_day:
+        if self._report.per_day:
             PerDayView(self._report.per_day_model).render(output)
         else:
             ProjectsView(self._report.projects_model).render(output)
         ActivitiesView(self._report.activities_model).render(output)
-        if (self._report.start_date == self._report.end_date) or (self._report.args.details):
-            DetailsView(self._report.details_model, show_comments=self._report.args.comments).render(output)
+        if (self._report.start_date == self._report.end_date) or (self._report.show_details):
+            DetailsView(self._report.details_model, show_comments=self._report.show_comments).render(output)
 
-    def csv(self, section: str, output: Output) -> None:
-        if section == "summary":
-            view = SummaryView(self._report.summary_model)
-        elif section in ["per_day", "per-day"]:
-            view = PerDayView(self._report.per_day_model)
-        elif section == "projects":
-            view = ProjectsView(self._report.projects_model)
-        elif section == "activities":
-            view = ActivitiesView(self._report.activities_model)
-        elif section == "details":
-            view = DetailsView(self._report.details_model, show_comments=self._report.args.comments)
-        else:
-            view = None
+    def _render_csv(self, output: Output) -> None:
+        section = self._report.csv_section
 
-        if not hasattr(view, "csv"):
-            raise ValueError("CSV output not yet implemented for '{}' section" "".format(section))
-        view.csv(output)
+        if section == CSVSection.per_day:
+            PerDayView(self._report.per_day_model).csv(output)
