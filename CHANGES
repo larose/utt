@@ -1,3 +1,7 @@
+1.20 (2020-03-29)
+
+  * Plugins can now register components
+
 1.19 (2020-03-14)
 
   * Prevent EINVAL when reading empty log file
