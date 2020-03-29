@@ -1,7 +1,7 @@
 from utt.api import _v1
 
 
-class DefaultReportView:
+class DefaultReportView(_v1.ReportView):
     def __init__(self, report: _v1.ReportModel):
         self._report = report
 
