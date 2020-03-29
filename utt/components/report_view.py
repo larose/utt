@@ -1,10 +1,10 @@
 from utt.components.output import Output
 from utt.components.report_model import ReportModel
-from utt.report.activities_section import ActivitiesView
-from utt.report.details_section import DetailsView
+from utt.report.activities.activities_section import ActivitiesView
+from utt.report.details.view import DetailsView
 from utt.report.per_day.view import PerDayView
-from utt.report.projects_section import ProjectsView
-from utt.report.summary_section import SummaryView
+from utt.report.projects.view import ProjectsView
+from utt.report.summary.view import SummaryView
 
 
 class ReportView:

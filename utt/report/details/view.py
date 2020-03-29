@@ -1,22 +1,11 @@
-from __future__ import print_function
-
-from datetime import date, datetime
-from typing import List
+from datetime import datetime
 
 from pytz.tzinfo import DstTzInfo
 
-from ..components.output import Output
-from ..data_structures.activity import Activity
-from . import formatter
-from .common import clip_activities_by_range
-
-
-class DetailsModel:
-    def __init__(
-        self, activities: List[Activity], start_date: date, end_date: date, local_timezone: DstTzInfo,
-    ):
-        self.activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
-        self.local_timezone = local_timezone
+from ...components.output import Output
+from ...data_structures.activity import Activity
+from .. import formatter
+from .model import DetailsModel
 
 
 class DetailsView:
@@ -28,8 +17,8 @@ class DetailsView:
         format_str = "(%s) %s-%s %s"
         line = [
             formatter.format_duration(activity.duration),
-            _format_time(activity.start, self._model.local_timezone),
-            _format_time(activity.end, self._model.local_timezone),
+            format_time(activity.start, self._model.local_timezone),
+            format_time(activity.end, self._model.local_timezone),
             activity.name,
         ]
 
@@ -62,5 +51,5 @@ class DetailsView:
         print(file=output)
 
 
-def _format_time(datetime: datetime, local_timezone: DstTzInfo) -> str:
+def format_time(datetime: datetime, local_timezone: DstTzInfo) -> str:
     return datetime.astimezone(local_timezone).strftime("%H:%M")

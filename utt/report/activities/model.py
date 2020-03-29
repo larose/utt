@@ -4,10 +4,9 @@ from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
-from ..components.output import Output
-from ..data_structures.activity import Activity
-from . import formatter
-from .common import clip_activities_by_range, filter_activities_by_type, print_dicts
+from ...data_structures.activity import Activity
+from .. import formatter
+from ..common import clip_activities_by_range, filter_activities_by_type
 
 
 class ActivitiesModel:
@@ -17,22 +16,6 @@ class ActivitiesModel:
         activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
         self.names_work = _groupby_name(filter_activities_by_type(activities, Activity.Type.WORK))
         self.names_break = _groupby_name(filter_activities_by_type(activities, Activity.Type.BREAK))
-
-
-class ActivitiesView:
-    def __init__(self, model: ActivitiesModel):
-        self._model = model
-
-    def render(self, output: Output) -> None:
-        print(file=output)
-        print(formatter.title("Activities"), file=output)
-        print(file=output)
-
-        print_dicts(self._model.names_work, output)
-
-        print(file=output)
-
-        print_dicts(self._model.names_break, output)
 
 
 def _groupby_name(activities: List[Activity]) -> List[Dict]:

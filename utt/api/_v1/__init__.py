@@ -10,5 +10,4 @@ from ...constants import HELLO_ENTRY_NAME
 from ...data_structures.activity import Activity
 from ...data_structures.entry import Entry
 from ...data_structures.name import Name
-from ...report.csv_view import CSVReportView
 from ._private import add_command

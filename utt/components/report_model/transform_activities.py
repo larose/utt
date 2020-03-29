@@ -1,12 +1,12 @@
 import datetime
 from typing import Optional
 
-from utt.components.activities import Activities
-from utt.components.local_timezone import LocalTimezone
-from utt.components.now import Now
-from utt.constants import HELLO_ENTRY_NAME
-from utt.data_structures.activity import Activity
-from utt.report.range import ReportRange
+from ...constants import HELLO_ENTRY_NAME
+from ...data_structures.activity import Activity
+from ..activities import Activities
+from ..local_timezone import LocalTimezone
+from ..now import Now
+from ..report_model.range import ReportRange
 
 
 def transform_activities(

@@ -5,17 +5,17 @@ from typing import List, Optional
 
 from pytz.tzinfo import DstTzInfo
 
-from utt.components.activities import Activities
-from utt.components.local_timezone import LocalTimezone
-from utt.components.now import Now
-from utt.data_structures.activity import Activity
-from utt.report.activities_section import ActivitiesModel
-from utt.report.details_section import DetailsModel
-from utt.report.per_day.model import PerDayModel
-from utt.report.projects_section import ProjectsModel
-from utt.report.range import parse_report_range_arguments
-from utt.report.summary_section import SummaryModel
-from utt.report.transform_activities import transform_activities
+from ...data_structures.activity import Activity
+from ...report.activities.model import ActivitiesModel
+from ...report.details.model import DetailsModel
+from ...report.per_day.model import PerDayModel
+from ...report.projects.model import ProjectsModel
+from ...report.summary.model import SummaryModel
+from ..activities import Activities
+from ..local_timezone import LocalTimezone
+from ..now import Now
+from ..report_model.range import parse_report_range_arguments
+from ..report_model.transform_activities import transform_activities
 
 
 class CSVSection(Enum):
