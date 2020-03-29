@@ -113,5 +113,5 @@ def _duration(activities: List[Activity]) -> datetime.timedelta:
     return sum((act.duration for act in activities), datetime.timedelta())
 
 
-def _format_date(datetime: datetime.datetime) -> str:
-    return datetime.strftime("%A, %b %d, %Y (week {week})".format(week=datetime.isocalendar()[1]))
+def _format_date(date: datetime.date) -> str:
+    return date.strftime("%A, %b %d, %Y (week {week})".format(week=date.isocalendar()[1]))
