@@ -1,22 +1,18 @@
 import argparse
 
 from ..api import _v1
-from ..report import Report  # Private API
+from ..components.report_model import ReportModel, csv_section_name_to_csv_section
 from ..report.view import ReportView  # Private API
 
 
 class ReportHandler:
-    def __init__(self, report: Report, output: _v1.Output):
-        self._report = report
+    def __init__(self, report_model: ReportModel, output: _v1.Output):
+        self._report = report_model
         self._output = output
-        self._csv_section = report.args.csv_section
 
     def __call__(self):
         view = ReportView(self._report)
-        if self._csv_section:
-            view.csv(self._csv_section, self._output)
-        else:
-            view.render(self._output)
+        view.render(self._output)
 
 
 def add_args(parser: argparse.ArgumentParser):
@@ -57,7 +53,7 @@ def add_args(parser: argparse.ArgumentParser):
 
     parser.add_argument(
         "--csv-section",
-        choices=["summary", "per_day", "per-day", "projects", "activities", "details"],
+        choices=list(csv_section_name_to_csv_section.keys()),
         default=None,
         help="Instead of text output, print CSV of desired section",
     )
@@ -104,6 +100,5 @@ def add_args(parser: argparse.ArgumentParser):
 
 
 report_command = _v1.Command("report", "Summarize tasks for given time period", ReportHandler, add_args)
-
 
 _v1.add_command(report_command)

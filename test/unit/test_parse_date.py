@@ -3,7 +3,7 @@ import unittest
 
 import ddt
 
-from utt.report import _parse_date
+from utt.report.range import parse_date
 
 VALID_ENTRIES = [
     ("monday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 9), True),
@@ -29,5 +29,5 @@ class ParseDate(unittest.TestCase):
     @ddt.data(*VALID_ENTRIES)
     @ddt.unpack
     def test(self, report_date, today, expected_report_date, is_past):
-        actual_report_date = _parse_date(today, report_date, is_past)
+        actual_report_date = parse_date(today, report_date, is_past)
         self.assertEqual(actual_report_date, expected_report_date)

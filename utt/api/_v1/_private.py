@@ -20,8 +20,8 @@ from ...components.local_timezone import LocalTimezone, local_timezone
 from ...components.now import Now, now
 from ...components.output import Output
 from ...components.parse_args import parse_args
+from ...components.report_model import ReportModel, report
 from ...components.timezone_config import TimezoneConfig, timezone_config
-from ...report import Report, report
 
 
 def create_container():
@@ -43,7 +43,7 @@ def create_container():
     _container[LocalTimezone] = local_timezone
     _container[Now] = now
     _container[Output] = sys.stdout
-    _container[Report] = report
+    _container[ReportModel] = report
     _container[TimezoneConfig] = timezone_config
 
     return _container
