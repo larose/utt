@@ -5,7 +5,7 @@ UTT = /usr/local/bin/utt
 all: add \
   completion \
   edit \
-  foo-plugin \
+  example-plugin \
   hello \
   stretch \
   report-1 \
@@ -79,16 +79,20 @@ empty-file: $(UTT)
 
 	@echo "<< EMPTY FILE"
 
-.PHONY: foo-plugin
-foo-plugin: $(UTT)
+.PHONY: example-plugin
+example-plugin: $(UTT)
 	@echo
-	@echo ">> FOO PLUGIN"
+	@echo ">> EXAMPLE PLUGIN"
 
-	cd utt_foo_plugin && python3 setup.py install --record utt_foo_files
-	bash -c 'diff <(utt  --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00+00:00)'
-	cd utt_foo_plugin && cat utt_foo_files | xargs rm -rf
+	cd utt_example_plugin && python3 setup.py install --record utt_example_files
+	bash -c 'diff <(utt --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00+00:00)'
+	rm -f $(UTT_DATA_FILENAME)
+	utt --now "2020-01-03 9:00" hello
+	utt --now "2020-01-03 10:00" add work
+	bash -c 'diff <(utt --now "2020-01-03 10:30" report) data/utt-example-plugin-report.stdout'
+	cd utt_example_plugin && cat utt_example_files | xargs rm -rf
 
-	@echo "<< FOO PLUGIN"
+	@echo "<< EXAMPLE PLUGIN"
 
 .PHONY: hello
 hello: $(UTT)
@@ -210,8 +214,6 @@ report-timezone-daylight-change: $(UTT)
 	rm -f $(UTT_DATA_FILENAME)
 	echo "2018-10-28 08:00+0800 hello" >> $(UTT_DATA_FILENAME)
 	echo "2018-10-28 12:00+0800 travel" >> $(UTT_DATA_FILENAME)
-
-	utt --now "2018-10-28 18:30" --timezone "Europe/London" report --no-current-activity
 
 	bash -c 'diff <(utt --now "2018-10-28 18:30" --timezone "Europe/London" report --no-current-activity) data/utt-report-timezone-daylight-change.stdout'
 

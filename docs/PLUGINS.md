@@ -1,14 +1,18 @@
 # How to write a utt plugin
 
-utt plugins allow to add new commands to utt. For example, `$ utt
-foo`, where `foo` is a new command.
+utt plugins allow you to register new components and commands to
+utt.
 
 A utt plugin is simply a [namespace
 package](https://packaging.python.org/guides/packaging-namespace-packages/)
 in the `utt.plugins`.
 
-You can find an [example plugin](../test/integration/utt_foo_plugin)
-in the tests:
+You can find an [example plugin](../test/integration/utt_example_plugin)
+in the tests.
+
+## How to add a new command
+
+[foo_command.py](../test/integration/utt_example_plugin/utt/plugins/foo_command.py)
 
 ```
 from utt.api import _v1
@@ -57,14 +61,19 @@ class FooHandler:
         ...
 ```
 
-Consult [`../utt/api/_v1/__init__.py`](../utt/api/_v1/__init__.py) to
-see the list of available types that can be injected.
+Read [`../utt/api/_v1/__init__.py`](../utt/api/_v1/__init__.py) to see
+the list of available types that can be injected.
 
 Finally, the plugin registers the new command to utt:
 
 ```
 _v1.register_command(foo_command)
 ```
+
+## How to override the report view
+
+See
+[report_view.py](../test/integration/utt_example_plugin/utt/plugins/report_view.py)
 
 
 ## Best practices

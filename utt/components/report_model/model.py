@@ -1,11 +1,10 @@
 import argparse
 from datetime import date
 from enum import Enum, auto
-from typing import List, Optional
+from typing import Optional
 
 from pytz.tzinfo import DstTzInfo
 
-from ...data_structures.activity import Activity
 from ...report.activities.model import ActivitiesModel
 from ...report.details.model import DetailsModel
 from ...report.per_day.model import PerDayModel
@@ -60,7 +59,7 @@ def report(args: argparse.Namespace, now: Now, activities: Activities, local_tim
 class ReportModel:
     def __init__(
         self,
-        activities: List[Activity],
+        activities: Activities,
         start_date: date,
         end_date: date,
         local_timezone: DstTzInfo,

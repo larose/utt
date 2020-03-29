@@ -1,6 +1,6 @@
 import inspect
 from abc import ABC, abstractmethod
-from typing import List, Type
+from typing import Any, List, Type
 
 
 class FactorySpec(ABC):
@@ -83,7 +83,7 @@ class Container:
     def __init__(self):
         self._values = {}
 
-    def __setitem__(self, key: Type, value):
+    def __setitem__(self, key: Type, value: Any):
         if inspect.isclass(value):
             self._values[key] = Factory(ClassFactorySpec(value))
         elif inspect.isfunction(value) or inspect.ismethod(value):

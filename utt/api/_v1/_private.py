@@ -1,7 +1,7 @@
 import argparse
 import sys
 from configparser import ConfigParser
-from typing import Type
+from typing import Any, Type
 
 from ... import ioc
 from ...command import Command
@@ -59,7 +59,7 @@ def register_command(command: Command):
     container[command.handler_class] = command.handler_class
 
 
-def register_component(interface: Type, constructor):
+def register_component(interface: Type, constructor: Any):
     container[interface] = constructor
 
 
