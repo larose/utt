@@ -7,6 +7,7 @@ import utt.components.report_model
 import utt.report
 from utt.components.activities import activities as _activities
 from utt.data_structures.entry import Entry
+from utt.report.per_day.common import timedelta_to_billable
 
 
 class Args:
@@ -141,5 +142,4 @@ def test_timedelta_to_billable(delta, billable):
 
     Hours are divided in 10, and we round up to the next "6 minute unit".
     """
-    to_billable = utt.report.per_day_section.PerDayView._timedelta_to_billable
-    assert to_billable(datetime.timedelta(**delta)) == billable
+    assert timedelta_to_billable(datetime.timedelta(**delta)) == billable
