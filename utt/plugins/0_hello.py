@@ -1,12 +1,11 @@
 import argparse
 
 from ..api import _v1
-from ..components.add_entry import AddEntry  # Private API
 
 
 class HelloHandler:
     def __init__(
-        self, args: argparse.Namespace, now: _v1.Now, add_entry: AddEntry,
+        self, args: argparse.Namespace, now: _v1.Now, add_entry: _v1._private.AddEntry,
     ):
         self._args = args
         self._now = now
@@ -23,4 +22,4 @@ hello_command = _v1.Command(
     lambda p: None,
 )
 
-_v1.add_command(hello_command)
+_v1.register_command(hello_command)

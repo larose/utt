@@ -1,6 +1,7 @@
 import argparse
 import sys
 from configparser import ConfigParser
+from typing import Type
 
 from ... import ioc
 from ...command import Command
@@ -21,8 +22,7 @@ from ...components.now import Now, now
 from ...components.output import Output
 from ...components.parse_args import parse_args
 from ...components.report_model import ReportModel
-from ...components.report_model.model import report
-from ...components.report_view import ReportView
+from ...components.report_model.model import csv_section_name_to_csv_section, report  # noqa
 from ...components.timezone_config import TimezoneConfig, timezone_config
 from ...report.csv_view import CSVReportView
 
@@ -48,16 +48,19 @@ def create_container():
     _container[Output] = sys.stdout
     _container[ReportModel] = report
     _container[TimezoneConfig] = timezone_config
-    _container[ReportView] = ReportView
     _container[CSVReportView] = CSVReportView
 
     return _container
 
 
-def add_command(command: Command):
+def register_command(command: Command):
     commands[command.name] = command
     container[Commands].append(command)
     container[command.handler_class] = command.handler_class
+
+
+def register_component(interface: Type, constructor):
+    container[interface] = constructor
 
 
 commands = {}

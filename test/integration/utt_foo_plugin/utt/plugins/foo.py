@@ -13,4 +13,4 @@ class FooHandler:
 foo_command = _v1.Command(name="foo", description="Foo", handler_class=FooHandler, add_args=lambda p: None)
 
 
-_v1.add_command(foo_command)
+_v1.register_command(foo_command)

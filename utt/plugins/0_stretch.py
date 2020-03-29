@@ -50,4 +50,4 @@ stretch_command = _v1.Command(
 )
 
 
-_v1.add_command(stretch_command)
+_v1.register_command(stretch_command)

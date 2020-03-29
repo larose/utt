@@ -15,7 +15,7 @@ from ..activities import Activities
 from ..local_timezone import LocalTimezone
 from ..now import Now
 from ..report_model.range import parse_report_range_arguments
-from ..report_model.transform_activities import transform_activities
+from ..report_model.transform_activities import add_current_activity_and_filter_activities
 
 
 class CSVSection(Enum):
@@ -35,7 +35,7 @@ def report(args: argparse.Namespace, now: Now, activities: Activities, local_tim
         today=now.date(),
     )
 
-    activities_ = transform_activities(
+    activities_ = add_current_activity_and_filter_activities(
         activities=activities.copy(),
         current_activity_name=args.current_activity,
         include_current_activity=not args.no_current_activity,
