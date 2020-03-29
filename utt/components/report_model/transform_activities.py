@@ -9,7 +9,7 @@ from ..now import Now
 from ..report_model.range import ReportRange
 
 
-def transform_activities(
+def add_current_activity_and_filter_activities(
     activities: Activities,
     current_activity_name: str,
     include_current_activity: bool,

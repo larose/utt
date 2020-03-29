@@ -1,13 +1,15 @@
 import argparse
 
 from ..api import _v1
-from ..components.add_entry import AddEntry  # Private API
-from ..components.data_filename import DataFilename  # Private API
 
 
 class AddHandler:
     def __init__(
-        self, args: argparse.Namespace, data_filename: DataFilename, now: _v1.Now, add_entry: AddEntry,
+        self,
+        args: argparse.Namespace,
+        data_filename: _v1._private.DataFilename,
+        now: _v1.Now,
+        add_entry: _v1._private.AddEntry,
     ):
         self._args = args
         self._data_filename = data_filename
@@ -25,4 +27,4 @@ def add_args(parser: argparse.ArgumentParser):
 
 add_command = _v1.Command("add", "Add a completed task", AddHandler, add_args)
 
-_v1.add_command(add_command)
+_v1.register_command(add_command)

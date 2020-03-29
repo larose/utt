@@ -2,13 +2,11 @@ import argparse
 import os
 import subprocess
 
-from utt.components.data_filename import DataFilename  # Private API
-
 from ..api import _v1
 
 
 class EditHandler:
-    def __init__(self, args: argparse.Namespace, data_filename: DataFilename):
+    def __init__(self, args: argparse.Namespace, data_filename: _v1._private.DataFilename):
         self._args = args
         self._data_filename = data_filename
 
@@ -18,8 +16,7 @@ class EditHandler:
 
 edit_command = _v1.Command("edit", "Edit task log using your system's default editor", EditHandler, lambda p: None)
 
-
-_v1.add_command(edit_command)
+_v1.register_command(edit_command)
 
 
 def _editor():
