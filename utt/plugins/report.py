@@ -1,7 +1,9 @@
 import argparse
 
 from ..api import _v1
-from ..components.report_model import ReportModel, csv_section_name_to_csv_section
+from ..components.report_model import ReportModel  # Private API
+from ..components.report_model.model import csv_section_name_to_csv_section  # Private API
+from ..report.csv_view import CSVReportView  # Private API
 
 
 class ReportHandler:
@@ -10,7 +12,7 @@ class ReportHandler:
         report_model: ReportModel,
         output: _v1.Output,
         report_view: _v1.ReportView,
-        csv_report_view: _v1.CSVReportView,
+        csv_report_view: CSVReportView,
     ):
         self._report = report_model
         self._output = output

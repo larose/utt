@@ -73,7 +73,7 @@ def test_range(args, activities, local_timezone):
     args.to_date = "2014-03-19"
     args.no_current_activity = True
 
-    actual_report = utt.components.report_model.report(args, now, activities, local_timezone)
+    actual_report = utt.components.report_model.model.report(args, now, activities, local_timezone)
     assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(hours=6, minutes=45)
     assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(hours=6, minutes=45)
     assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
@@ -87,7 +87,7 @@ def test_weekday_range(args, activities, local_timezone):
     args.to_date = "wednesday"  # 2014-03-19
     args.no_current_activity = True
 
-    actual_report = utt.components.report_model.report(args, now, activities, local_timezone)
+    actual_report = utt.components.report_model.model.report(args, now, activities, local_timezone)
     assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(hours=5, minutes=30)
     assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(hours=5, minutes=30)
     assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)
@@ -97,7 +97,7 @@ def test_weekday_range(args, activities, local_timezone):
 def test_single_day(args, activities, local_timezone):
     now = local_timezone.localize(datetime.datetime(2014, 3, 19, 18, 30))
 
-    actual_report = utt.components.report_model.report(args, now, activities, local_timezone)
+    actual_report = utt.components.report_model.model.report(args, now, activities, local_timezone)
     assert actual_report.summary_model.working_time.total_duration == datetime.timedelta(hours=7, minutes=30)
     assert actual_report.summary_model.working_time.weekly_duration == datetime.timedelta(hours=8, minutes=45)
     assert actual_report.summary_model.break_time.weekly_duration == datetime.timedelta(hours=1)

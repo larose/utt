@@ -1,15 +1,12 @@
-from __future__ import print_function
-
 import datetime
 import itertools
 from typing import Dict, List
 
 from pytz.tzinfo import DstTzInfo
 
-from ..components.output import Output
-from ..data_structures.activity import Activity
-from . import formatter
-from .common import clip_activities_by_range, filter_activities_by_type, print_dicts
+from ...data_structures.activity import Activity
+from .. import formatter
+from ..common import clip_activities_by_range, filter_activities_by_type
 
 
 class ProjectsModel:
@@ -18,22 +15,10 @@ class ProjectsModel:
     ):
         activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
 
-        self.projects = _groupby_project(filter_activities_by_type(activities, Activity.Type.WORK))
+        self.projects = groupby_project(filter_activities_by_type(activities, Activity.Type.WORK))
 
 
-class ProjectsView:
-    def __init__(self, model: ProjectsModel):
-        self._model = model
-
-    def render(self, output: Output) -> None:
-        print(file=output)
-        print(formatter.title("Projects"), file=output)
-        print(file=output)
-
-        print_dicts(self._model.projects, output)
-
-
-def _groupby_project(activities: List[Activity]) -> List[Dict]:
+def groupby_project(activities: List[Activity]) -> List[Dict]:
     def key(act):
         return act.name.project
 

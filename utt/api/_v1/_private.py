@@ -20,7 +20,8 @@ from ...components.local_timezone import LocalTimezone, local_timezone
 from ...components.now import Now, now
 from ...components.output import Output
 from ...components.parse_args import parse_args
-from ...components.report_model import ReportModel, report
+from ...components.report_model import ReportModel
+from ...components.report_model.model import report
 from ...components.report_view import ReportView
 from ...components.timezone_config import TimezoneConfig, timezone_config
 from ...report.csv_view import CSVReportView

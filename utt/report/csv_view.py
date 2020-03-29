@@ -1,7 +1,8 @@
 from utt.report.per_day.view import PerDayView
 
 from ..components.output import Output
-from ..components.report_model import CSVSection, ReportModel
+from ..components.report_model import ReportModel
+from ..components.report_model.model import CSVSection
 
 
 class CSVReportView:
