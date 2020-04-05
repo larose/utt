@@ -1,3 +1,8 @@
+1.22 (2020-04-05)
+
+  * Warn if Python version is unsupported.
+  * [Security] Bump bleach from 3.1.2 to 3.1.4.
+
 1.21 (2020-03-29)
 
   * Plugins can now register components
