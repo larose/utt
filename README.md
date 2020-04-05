@@ -37,6 +37,14 @@ application written in Python.
 
 ## Quick Start
 
+
+### Prerequisites
+
+`utt` requires Python version 3.7 or above.
+
+
+### Installing `utt`
+
 Install `utt` from PyPI:
 
 `$ pip install utt`
