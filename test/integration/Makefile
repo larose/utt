@@ -343,7 +343,7 @@ report-details: $(UTT)
 
 
 .PHONY: report-comments
-report-commentss: $(UTT)
+report-comments: $(UTT)
 	@echo
 	@echo ">> REPORT-COMMENTS"
 
