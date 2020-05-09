@@ -26,6 +26,7 @@ all: add \
   report-month \
   report-details \
   report-comments \
+  report-week-current \
   version
 
 $(UTT):
@@ -352,6 +353,18 @@ report-comments: $(UTT)
 	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details --comments) data/utt-report-comments.stdout'
 
 	@echo "<< REPORT-COMMENTS"
+
+
+.PHONY: report-week-current
+report-week-current: $(UTT)
+	@echo
+	@echo ">> REPORT-WEEK-CURRENT"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --week) data/utt-report-week-current.stdout'
+
+	@echo "<< REPORT-WEEK-CURRENT"
 
 
 .PHONY: shell

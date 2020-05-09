@@ -2,6 +2,8 @@ import calendar
 import datetime
 from typing import NamedTuple, Optional
 
+from ...fromisocalendar import date_fromisocalendar
+
 
 class DateRange(NamedTuple):
     start: datetime.date
@@ -184,7 +186,7 @@ def parse_relative_week(today, weekstring):
         (year, week, _d) = (today - datetime.timedelta(days=7)).isocalendar()
     else:
         return None
-    return datetime.date.fromisocalendar(year, week, 1)
+    return date_fromisocalendar(year, week, 1)
 
 
 def parse_week_number(today, weekstring):
@@ -199,12 +201,12 @@ def parse_week_number(today, weekstring):
         one_week = datetime.timedelta(days=7)
         # Note: weeknum is negative so this effectively subtracts
         (year, week, _d) = (today + weeknum * one_week).isocalendar()
-        return datetime.date.fromisocalendar(year, week, 1)
+        return date_fromisocalendar(year, week, 1)
     else:
         (year, week, _d) = today.isocalendar()
         if weeknum > week:
             year -= 1
-        return datetime.date.fromisocalendar(year, weeknum, 1)
+        return date_fromisocalendar(year, weeknum, 1)
 
 
 def parse_week(today, weekstring):
