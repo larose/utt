@@ -1,3 +1,7 @@
+1.23 (2020-05-09)
+
+  * utt report --week now works on Python 3.7
+
 1.22 (2020-04-05)
 
   * Warn if Python version is unsupported.
