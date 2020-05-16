@@ -1,67 +1,91 @@
 INTEGRATION_DIR = test/integration
+GENERATED_DOCKERFILE=$(INTEGRATION_DIR)/Dockerfile.generated
+TEMPLATE_DOCKERFILE=$(INTEGRATION_DIR)/Dockerfile.template
 UNIT_DIR = test/unit
-CONTAINER_NAME = utt-integration-py$*
-SOURCE_DIRECTORIES=utt test
-VERSION := $(shell python3 setup.py --version)
+TEST_DOCKER_IMAGE=utt-integration
+SOURCE_DIRS=utt test
+PYPI_REPO_NAME=pypi
+PYPI_JSON_API_URL=https://pypi.org/pypi
+PYPI_LEGACY_API_URL=https://upload.pypi.org/legacy/
+TEST_PYPI_REPO_NAME=test-pypi
+TEST_PYPI_JSON_API_URL=https://test.pypi.org/pypi
+TEST_PYPI_LEGACY_API_URL=https://test.pypi.org/legacy/
 
-.PHONY: all
-all:
+.PHONY: build
+build:
+	poetry build
+
+.PHONY: bootstrap
+bootstrap: bootstrap.install
+
+.PHONY: bootstrap.install
+bootstrap.install:
+	poetry install
+
+.PHONY: check
+check: lint test
+
+.PHONY: ci.bootstrap
+ci.bootstrap:
+	pip install poetry
+	make bootstrap
+
+.PHONY: ci.configure-poetry
+ci.configure-poetry:
+	poetry config repositories.$(PYPI_REPO_NAME) $(PYPI_LEGACY_API_URL)
+	@poetry config pypi-token.$(PYPI_REPO_NAME) $(PYPI_API_TOKEN)
+	poetry config repositories.$(TEST_PYPI_REPO_NAME) $(TEST_PYPI_LEGACY_API_URL)
+	@poetry config pypi-token.$(TEST_PYPI_REPO_NAME) $(TEST_PYPI_API_TOKEN)
+	poetry config --list
+
+.PHONY: ci.publish.pypi
+ci.publish.pypi:
+	python scripts/publish.py $(PYPI_REPO_NAME) $(PYPI_JSON_API_URL)
+
+.PHONY: ci.publish.test-pypi
+ci.publish.test-pypi:
+	python scripts/publish.py $(TEST_PYPI_REPO_NAME) $(TEST_PYPI_JSON_API_URL)
+
+.PHONY: ci.update-version-in-pyproject
+ci.update-version-in-pyproject:
+	python scripts/update_version_in_pyproject.py $(CHANGELOG_FILENAME)
+	python scripts/update_version_txt.py utt/version.txt
 
 .PHONY: clean
 clean:
-	rm -rf build
 	rm -rf dist
-	rm -f $(INTEGRATION_DIR)/utt-*.tar.gz
-	rm -f $(INTEGRATION_DIR)/utt-*.whl
+	rm -f $(INTEGRATION_DIR)/*.whl
 
 .PHONY: format
 format:
-	pipenv run black utt test
-	pipenv run isort --recursive $(SOURCE_DIRECTORIES)
-
-.PHONY: bdist_wheel
-bdist_wheel:
-	pipenv run python setup.py bdist_wheel --universal
-
-.PHONY: install-dev
-install-dev:
-	pipenv install --dev --deploy
+	poetry run black $(SOURCE_DIRS)
+	poetry run isort --recursive $(SOURCE_DIRS)
 
 .PHONY: lint
-lint:
-	pipenv run flake8 utt test
-	pipenv run isort --check-only --diff --ignore-whitespace --recursive --quiet $(SOURCE_DIRECTORIES)
-	pipenv run black --diff --check $(SOURCE_DIRECTORIES)
+lint: lint.format  # lint.types
 
-.PHONY: sdist
-sdist:
-	pipenv run python setup.py sdist
+.PHONY: lint.format
+lint.format:
+	poetry run flake8 $(SOURCE_DIRS)
+	poetry run isort --check-only --diff --ignore-whitespace --recursive --quiet $(SOURCE_DIRS)
+	poetry run black --check --diff $(SOURCE_DIRS)
+
+#.PHONY: lint.types
+#lint.types:
+#	poetry run mypy $(SOURCE_DIRS)
 
 .PHONY: test
-test: test-unit test-integration
+test: test.unit test.integration
 
-.PHONY: test-integration
-test-integration: clean test-integration-container
-	docker run --rm -ti --mount source=utt-pip-cache,target=/root/.cache/pip $(CONTAINER_NAME) $(INTEGRATION_CMD)
+.PHONY: test.unit
+test.unit:
+	poetry run pytest --verbose
 
-.PHONY: test-integration-container
-test-integration-container: $(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl
-	docker build -t $(CONTAINER_NAME) $(INTEGRATION_DIR)
+.PHONY: test.integration
+test.integration: clean build
+	cp dist/utt-*-py3-none-any.whl $(INTEGRATION_DIR)
 
-.PHONY: test-unit
-test-unit:
-	pipenv run pytest --verbose --verbose test/unit
-
-.PHONY: upload
-upload: clean test-unit test-integration
-	pipenv run twine upload --username mathieularose dist/*
-
-.PHONY: upload-test
-upload-test: clean test-unit test-integration
-	pipenv run twine upload --username mathieularose --repository-url https://test.pypi.org/legacy/ dist/*
-
-$(INTEGRATION_DIR)/utt-$(VERSION).tar.gz: sdist
-	cp dist/utt-$(VERSION).tar.gz $@
-
-$(INTEGRATION_DIR)/utt-$(VERSION)-py2.py3-none-any.whl: bdist_wheel
-	cp dist/utt-$(VERSION)-py2.py3-none-any.whl $@
+	python -c 'import sys; print(f"FROM python:{sys.version_info.major}.{sys.version_info.minor}-buster")' > $(GENERATED_DOCKERFILE)
+	cat $(TEMPLATE_DOCKERFILE) >> $(GENERATED_DOCKERFILE)
+	docker build --tag $(TEST_DOCKER_IMAGE) --file $(GENERATED_DOCKERFILE) $(INTEGRATION_DIR)
+	docker run --rm $(TEST_DOCKER_IMAGE) $(INTEGRATION_CMD)

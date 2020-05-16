@@ -19,7 +19,7 @@ You will need the following tools on your system to work on utt:
 
 - [Python](https://www.python.org/)
 - [Make](https://www.gnu.org/software/make/)
-- [Pipenv](https://pipenv.readthedocs.io/en/latest/)
+- [Poetry](https://python-poetry.org/)
 - [Docker](https://www.docker.com/)
 
 
@@ -28,7 +28,7 @@ You will need the following tools on your system to work on utt:
 Once the dependencies above have been installed on your system, you
 can install utt's Python dependencies with this command:
 
-`$ pipenv install --dev`
+`$ make bootstrap`
 
 
 ## Formatting code
@@ -55,7 +55,7 @@ imports, unused variables, etc.
 
 To run utt from local source:
 
-`$ pipenv run ./run`
+`$ poetry run utt`
 
 
 ## Tests
@@ -76,7 +76,7 @@ are located in [../test/unit](../test/unit).
 
 To run them:
 
-`$ make test-unit`
+`$ make test.unit`
 
 
 #### Integration Tests
@@ -99,18 +99,18 @@ Integration tests are located in
 
 To run them:
 
-`$ make test-integration`
+`$ make test.integration`
 
 The tests are listed in this [Makefile](../test/integration/Makefile)
 
 You can also run a specific test. For example, to run the `hello`
 test:
 
-`$ make test-integration INTEGRATION_CMD=hello`
+`$ make test.integration INTEGRATION_CMD=hello`
 
 You can also spawn a shell in the container:
 
-`$ make test-integration INTEGRATION_CMD=shell`
+`$ make test.integration INTEGRATION_CMD=shell`
 
 And, then you can run a specific test:
 

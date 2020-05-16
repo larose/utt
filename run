@@ -1,3 +1,0 @@
-#!/bin/sh
-
-PYTHONPATH=. python3 -c "import utt.__main__; utt.__main__.main()" "$@"
