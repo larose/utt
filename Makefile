@@ -1,7 +1,8 @@
-INTEGRATION_DIR = test/integration
+CHANGELOG_FILENAME=CHANGELOG.md
+INTEGRATION_DIR=test/integration
 GENERATED_DOCKERFILE=$(INTEGRATION_DIR)/Dockerfile.generated
 TEMPLATE_DOCKERFILE=$(INTEGRATION_DIR)/Dockerfile.template
-UNIT_DIR = test/unit
+UNIT_DIR=test/unit
 TEST_DOCKER_IMAGE=utt-integration
 SOURCE_DIRS=utt test
 PYPI_REPO_NAME=pypi
