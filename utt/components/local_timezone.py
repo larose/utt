@@ -1,10 +1,10 @@
 import argparse
 import typing
 
-import tzlocal
-from pytz.tzinfo import DstTzInfo
+import tzlocal  # type: ignore
+from pytz.tzinfo import DstTzInfo  # type: ignore
 
-LocalTimezone = typing.NewType("LocalTimezone", DstTzInfo)
+LocalTimezone = typing.NewType("LocalTimezone", DstTzInfo)  # type: ignore
 
 
 def local_timezone(args: argparse.Namespace) -> LocalTimezone:

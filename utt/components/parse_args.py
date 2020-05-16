@@ -2,7 +2,7 @@ import argparse
 import datetime
 import sys
 
-import argcomplete
+import argcomplete  # type: ignore
 import pytz
 
 from ..__version__ import VERSION
