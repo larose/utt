@@ -1,0 +1,23 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Bootstrap
+        run: make ci.bootstrap
+      - name: Check
+        run: make check

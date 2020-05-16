@@ -1,0 +1,58 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-check:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Bootstrap
+        run: make ci.bootstrap
+      - name: Update version in pyproject.toml
+        run: make ci.update-version-in-pyproject
+      - name: Check
+        run: make check
+      - name: Upload dist directory
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist-${{ matrix.python-version }}
+          path: dist
+
+  publish:
+    runs-on: ubuntu-18.04
+    needs: build-and-check
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Bootstrap
+        run: make ci.bootstrap
+      - name: Configure poetry
+        run: make ci.configure-poetry
+        env:
+          PYPI_API_TOKEN: ${{ secrets.pypi_api_token }}
+          TEST_PYPI_API_TOKEN: ${{ secrets.test_pypi_api_token }}
+      - name: Update version in pyproject.toml
+        run: make ci.update-version-in-pyproject
+      - name: Download dist directory
+        uses: actions/download-artifact@v1
+        with:
+          name: dist-3.7
+          path: dist
+#      - name: Publish (Test PyPI)
+#        run: make ci.publish.test-pypi
+      - name: Publish
+        run: make ci.publish.pypi

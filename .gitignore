@@ -1,11 +1,7 @@
-*~
-*.swp
-*.pyc
-.coverage
-.idea
-build
+*.egg-info
+__pycache__
+.mypy_cache/
+Dockerfile.generated
 dist
-test/integration/utt-*.tar.gz
 test/integration/utt-*.whl
-tmp
-utt.egg-info/
+utt/version.txt
