@@ -66,6 +66,14 @@ typed-ast = ">=1.4.0"
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
+category = "main"
+description = "Dependency injection library for Python."
+name = "cargo"
+optional = false
+python-versions = ">=3.7,<4.0"
+version = "0.3"
+
+[[package]]
 category = "dev"
 description = "Python package for providing Mozilla's CA Bundle."
 name = "certifi"
@@ -418,7 +426,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "f3f0342aaf371adf5ab1ff5d52c05b7f6e02bcee90d8b25d2ff78a1314f828e5"
+content-hash = "4bf00947da10d79d7998ba44134bbb89517bd48d107cf071cd1ea30befc77c49"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -441,6 +449,10 @@ attrs = [
 black = [
     {file = "black-19.10b0-py36-none-any.whl", hash = "sha256:1b30e59be925fafc1ee4565e5e08abef6b03fe455102883820fe5ee2e4734e0b"},
     {file = "black-19.10b0.tar.gz", hash = "sha256:c2edb73a08e9e0e6f65a0e6af18b059b8b1cdd5bef997d7a0b181df93dc81539"},
+]
+cargo = [
+    {file = "cargo-0.3-py3-none-any.whl", hash = "sha256:eb41caddbdfab94d5ce72c363fb1109ff74e55d3381ba545a62ca25763cd8adb"},
+    {file = "cargo-0.3.tar.gz", hash = "sha256:38534a877b2df38f3ab6c2767e673351888dfeb062ce6f2a715b3dce6ca1f8fe"},
 ]
 certifi = [
     {file = "certifi-2020.4.5.1-py2.py3-none-any.whl", hash = "sha256:1d987a998c75633c40847cc966fcf5904906c920a7f17ef374f5aa4282abd304"},

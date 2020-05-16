@@ -3,7 +3,8 @@ import sys
 from configparser import ConfigParser
 from typing import Any, Type
 
-from ... import ioc
+import cargo
+
 from ...command import Command
 from ...components.activities import Activities, activities
 from ...components.add_entry import AddEntry
@@ -28,7 +29,7 @@ from ...report.csv_view import CSVReportView
 
 
 def create_container():
-    _container = ioc.Container()
+    _container = cargo.containers.Standard()
 
     _container[Activities] = activities
     _container[AddEntry] = AddEntry

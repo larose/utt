@@ -1,3 +1,7 @@
+## 1.25 (2020-05-16)
+
+  * Use Cargo for dependency injection. 
+
 ## 1.24 (2020-05-16)
 
   * Migrate from Pipenv to Poetry
