@@ -6,11 +6,8 @@ build-backend = "poetry.masonry.api"
 line-length = 120
 
 [tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-line_length = 88
+profile = "black"
+line_length = 120
 
 [tool.poetry]
 authors = ["Mathieu Larose <mathieu@mathieularose.com>"]
@@ -33,7 +30,7 @@ tzlocal = "2.0.0"
 black = "^19.10b0"
 ddt = "==1.2.2"
 flake8 = "^3.7.9"
-isort = "^4.3.21"
+isort = "5.0.9"
 mypy = "^0.770"
 pytest = "^5.2"
 requests = "^2.23.0"
