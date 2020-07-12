@@ -1,3 +1,7 @@
+## (unreleased)
+
+  * Migrate to isort 5.
+
 ## 1.25 (2020-05-16)
 
   * Use Cargo for dependency injection. 

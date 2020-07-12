@@ -60,7 +60,7 @@ clean:
 .PHONY: format
 format:
 	poetry run black $(SOURCE_DIRS)
-	poetry run isort --recursive $(SOURCE_DIRS)
+	poetry run isort $(SOURCE_DIRS)
 
 .PHONY: lint
 lint: lint.format  # lint.types
@@ -68,7 +68,7 @@ lint: lint.format  # lint.types
 .PHONY: lint.format
 lint.format:
 	poetry run flake8 $(SOURCE_DIRS)
-	poetry run isort --check-only --diff --ignore-whitespace --recursive --quiet $(SOURCE_DIRS)
+	poetry run isort --check-only --diff --ignore-whitespace --quiet $(SOURCE_DIRS)
 	poetry run black --check --diff $(SOURCE_DIRS)
 
 #.PHONY: lint.types
