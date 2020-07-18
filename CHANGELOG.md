@@ -1,6 +1,8 @@
-## (unreleased)
+## 1.26 (2020-07-18)
 
   * Migrate to isort 5.
+  * Weekly working and break times are no longer shown in single-day reports.
+  * The current activity is now included in multi-day reports.
 
 ## 1.25 (2020-05-16)
 

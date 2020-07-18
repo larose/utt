@@ -1,19 +1,14 @@
 import itertools
-from datetime import date, timedelta
+from datetime import timedelta
 from typing import Dict, List
-
-from pytz.tzinfo import DstTzInfo
 
 from ...data_structures.activity import Activity
 from .. import formatter
-from ..common import clip_activities_by_range, filter_activities_by_type
+from ..common import filter_activities_by_type
 
 
 class ActivitiesModel:
-    def __init__(
-        self, activities: List[Activity], start_date: date, end_date: date, local_timezone: DstTzInfo,
-    ):
-        activities = clip_activities_by_range(start_date, end_date, activities, local_timezone)
+    def __init__(self, activities: List[Activity]):
         self.names_work = _groupby_name(filter_activities_by_type(activities, Activity.Type.WORK))
         self.names_break = _groupby_name(filter_activities_by_type(activities, Activity.Type.BREAK))
 

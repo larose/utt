@@ -262,7 +262,7 @@ report-per-day: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --per-day) data/utt-report-per-day.stdout'
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --per-day --no-current-activity) data/utt-report-per-day.stdout'
 
 	@echo "<< REPORT-PER-DAY"
 
@@ -274,7 +274,7 @@ report-project-per-day: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --per-day) data/utt-report-project-per-day.stdout'
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --per-day --no-current-activity) data/utt-report-project-per-day.stdout'
 
 	@echo "<< REPORT-PROJECT-PER-DAY"
 
@@ -286,7 +286,7 @@ report-project-per-day-csv: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --csv-section per_day) data/utt-report-project-per-day-csv.csv'
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --project project_1 --csv-section per_day --no-current-activity) data/utt-report-project-per-day-csv.csv'
 
 	@echo "<< REPORT-PROJECT-PER-DAY-CSV"
 
@@ -314,7 +314,7 @@ report-per-day-csv: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --csv-section per_day) data/utt-report-per-day-csv.csv'
+	bash -c 'diff -u --strip-trailing-cr <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to  2018-08-21 --csv-section per_day --no-current-activity) data/utt-report-per-day-csv.csv'
 
 	@echo "<< REPORT-PER-DAY-CSV"
 
@@ -338,7 +338,7 @@ report-details: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details) data/utt-report-details.stdout'
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details --no-current-activity) data/utt-report-details.stdout'
 
 	@echo "<< REPORT-DETAILS"
 
@@ -350,7 +350,7 @@ report-comments: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details --comments) data/utt-report-comments.stdout'
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --from 2018-08-20 --to 2018-08-21 --details --comments --no-current-activity) data/utt-report-comments.stdout'
 
 	@echo "<< REPORT-COMMENTS"
 
@@ -362,7 +362,7 @@ report-week-current: $(UTT)
 
 	mkdir -p `dirname $(UTT_DATA_FILENAME)`
 	cp data/utt-report-project.log $(UTT_DATA_FILENAME)
-	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --week) data/utt-report-week-current.stdout'
+	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --week --no-current-activity) data/utt-report-week-current.stdout'
 
 	@echo "<< REPORT-WEEK-CURRENT"
 

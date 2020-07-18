@@ -3,7 +3,7 @@ import datetime
 from ...components.output import Output
 from ...data_structures.activity import Activity
 from .. import formatter
-from .model import SummaryModel, WorkingBreakTime
+from .model import SummaryModel
 
 
 class SummaryView:
@@ -12,53 +12,38 @@ class SummaryView:
 
     def render(self, output: Output) -> None:
         print(file=output)
-        date_str = format_date(self._model.start_date)
-        if self._model.end_date != self._model.start_date:
-            date_str = " ".join([date_str, "to", format_date(self._model.end_date)])
+        date_str = format_date(self._model.report_range.start)
+        if self._model.report_range.start != self._model.report_range.end:
+            date_str = " ".join([date_str, "to", format_date(self._model.report_range.end)])
         print(formatter.title(date_str), file=output)
 
         print(file=output)
-        _print_time(self._model, self._model.working_time, output)
-        _print_time(self._model, self._model.break_time, output)
+        _print_time(self._model, self._model.working_time, Activity.Type.WORK, "Working Time", output)
+        _print_time(self._model, self._model.break_time, Activity.Type.BREAK, "Break   Time", output)
 
 
-def _print_time(summary_section: SummaryModel, working_break_time: WorkingBreakTime, output: Output,) -> None:
-    activity_names = {
-        Activity.Type.WORK: "Working Time",
-        Activity.Type.BREAK: "Break   Time",
-    }
-
+# working_break_time: duration
+def _print_time(
+    model: SummaryModel, working_break_time, activity_type: Activity.Type, activity_name: str, output: Output,
+) -> None:
     print(
-        "%s: %s"
-        % (
-            activity_names[working_break_time.activity_type],
-            formatter.format_duration(working_break_time.total_duration),
-        ),
-        end="",
-        file=output,
+        "%s: %s" % (activity_name, formatter.format_duration(working_break_time),), end="", file=output,
     )
 
     if (
-        summary_section.current_activity is not None
-        and summary_section.current_activity.type == working_break_time.activity_type
+        model.last_activity is not None
+        and model.last_activity.is_current_activity
+        and model.last_activity.type == activity_type
     ):
-        cur_duration = summary_section.current_activity.duration
+        cur_duration = model.last_activity.duration
         print(
             " (%s + %s)"
-            % (
-                formatter.format_duration(working_break_time.total_duration - cur_duration),
-                formatter.format_duration(cur_duration),
-            ),
+            % (formatter.format_duration(working_break_time - cur_duration), formatter.format_duration(cur_duration),),
             end="",
             file=output,
         )
 
-    if summary_section.start_date == summary_section.end_date:
-        print(
-            " [%s]" % formatter.format_duration(working_break_time.weekly_duration), file=output,
-        )
-    else:
-        print(file=output)
+    print(file=output)
 
 
 def format_date(date: datetime.date) -> str:
