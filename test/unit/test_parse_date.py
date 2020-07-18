@@ -3,7 +3,7 @@ import unittest
 
 import ddt
 
-from utt.components.report_model.range import parse_date
+from utt.components.report_args import parse_date
 
 VALID_ENTRIES = [
     ("monday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 9), True),

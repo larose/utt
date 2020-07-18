@@ -22,7 +22,6 @@ application written in Python.
       - [Sections](#sections)
       - [Report Date](#report-date)
       - [Current Activity](#current-activity)
-      - [Weekly Working and Break Times](#weekly-working-and-break-times)
     - [`stretch`](#stretch)
   - [Plugins](#plugins)
     - [Plugin development](#plugin-development)
@@ -224,8 +223,8 @@ $ utt report
 
 ----------------------- Saturday, Nov 03, 2018 (week 44) -----------------------
 
-Working Time: 7h00 [7h00]
-Break   Time: 1h00 [1h00]
+Working Time: 7h00
+Break   Time: 1h00
 
 ----------------------------------- Projects -----------------------------------
 
@@ -304,8 +303,7 @@ $ utt report --from monday
 
 #### Current Activity
 
-A `-- Current Activity --` is inserted if the date of the report is
-today.
+A `-- Current Activity --` is inserted if the current time is included in the report range.
 
 The first duration between the parentheses (1h00) represents the
 working time without the current activity. The second duration between
@@ -381,24 +379,6 @@ Break   Time: 0h00
 
 (1h00) : #12
 ```
-
-
-#### Weekly Working and Break Times
-
-The time reported in the square brackets is the total time for the
-week.
-
-```
-$ utt report
-
------------------------ Tuesday, Mar 25, 2014 (week 13) ------------------------
-
-Working Time: 1h00 [8h00]
-Break   Time: 0h00 [0h30]
-
-...
-```
-
 
 ### `stretch`
 

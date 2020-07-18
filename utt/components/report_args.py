@@ -1,8 +1,18 @@
+import argparse
 import calendar
 import datetime
+from enum import Enum, auto
 from typing import NamedTuple, Optional
 
-from ...fromisocalendar import date_fromisocalendar
+from ..fromisocalendar import date_fromisocalendar
+from .now import Now
+
+
+class CSVSection(Enum):
+    per_day = auto()
+
+
+csv_section_name_to_csv_section = {"per-day": CSVSection.per_day, "per_day": CSVSection.per_day}
 
 
 class DateRange(NamedTuple):
@@ -10,9 +20,14 @@ class DateRange(NamedTuple):
     end: datetime.date
 
 
-class ReportRange(NamedTuple):
-    report_range: DateRange
-    collect_range: DateRange
+class ReportArgs(NamedTuple):
+    range: DateRange
+    current_activity_name: Optional[str]
+    project_name_filter: Optional[str]
+    csv_section: Optional[CSVSection]
+    show_comments: bool
+    show_details: bool
+    show_per_day: bool
 
 
 def parse_report_range_arguments(
@@ -22,7 +37,7 @@ def parse_report_range_arguments(
     unparsed_from_date: Optional[str],
     unparsed_to_date: Optional[str],
     today: datetime.date,
-) -> ReportRange:
+) -> DateRange:
     if unparsed_report_date is None:
         report_date = today
     else:
@@ -42,19 +57,7 @@ def parse_report_range_arguments(
         report_end_date if unparsed_to_date is None else parse_date(report_start_date, unparsed_to_date, is_past=False)
     )
 
-    if report_start_date == report_end_date:
-        collect_from_date, collect_to_date = week_dates(report_start_date)
-    else:
-        collect_from_date = report_start_date
-        collect_to_date = report_end_date
-
-    collect_to_date = min(today, collect_to_date)
-    collect_from_date = min(today, collect_from_date)
-
-    return ReportRange(
-        report_range=DateRange(start=report_start_date, end=report_end_date),
-        collect_range=DateRange(start=collect_from_date, end=collect_to_date),
-    )
+    return DateRange(start=report_start_date, end=report_end_date)
 
 
 def parse_date(today, datestring, is_past=True):
@@ -248,3 +251,28 @@ MONTH_NAMES = [
     "NOVEMBER",
     "DECEMBER",
 ]
+
+
+def report_args(args: argparse.Namespace, now: Now) -> ReportArgs:
+    report_range = parse_report_range_arguments(
+        unparsed_report_date=args.report_date,
+        unparsed_month=args.month,
+        unparsed_week=args.week,
+        unparsed_from_date=args.from_date,
+        unparsed_to_date=args.to_date,
+        today=now.date(),
+    )
+
+    current_activity_name = args.current_activity
+    if args.no_current_activity:
+        current_activity_name = None
+
+    return ReportArgs(
+        range=report_range,
+        current_activity_name=current_activity_name,
+        project_name_filter=args.project,
+        csv_section=csv_section_name_to_csv_section.get(args.csv_section),
+        show_comments=args.comments,
+        show_details=args.details,
+        show_per_day=args.per_day,
+    )

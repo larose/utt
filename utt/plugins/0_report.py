@@ -21,7 +21,7 @@ class ReportHandler:
         view.render(self._output)
 
     def _get_view(self):
-        if self._report.csv_section:
+        if self._report.args.csv_section:
             return self._csv_report_view
 
         return self._report_view
