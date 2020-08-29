@@ -23,7 +23,7 @@ argcomplete = "1.11.1"
 cargo = "0.3"
 python = "^3.7"
 python_dateutil = "2.8.1"
-pytz = "2019.3"
+pytz = "^2020"
 tzlocal = "2.0.0"
 
 [tool.poetry.dev-dependencies]

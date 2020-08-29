@@ -1,3 +1,7 @@
+## 1.27 (2020-08-29)
+
+  * Update pytz
+
 ## 1.26 (2020-07-18)
 
   * Migrate to isort 5.
@@ -6,7 +10,7 @@
 
 ## 1.25 (2020-05-16)
 
-  * Use Cargo for dependency injection. 
+  * Use Cargo for dependency injection.
 
 ## 1.24 (2020-05-16)
 
