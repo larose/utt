@@ -1,6 +1,11 @@
+## 1.29 (2021-01-16)
+
+  * Show total time in summary section
+  * Remove "Time" from summary section
+
 ## 1.28 (2021-01-16)
 
-  * Fix current activity start time overflow issue.
+  * Fix current activity start time overflow issue
 
 ## 1.27 (2020-08-29)
 
@@ -8,9 +13,9 @@
 
 ## 1.26 (2020-07-18)
 
-  * Migrate to isort 5.
-  * Weekly working and break times are no longer shown in single-day reports.
-  * The current activity is now included in multi-day reports.
+  * Migrate to isort 5
+  * Weekly working and break times are no longer shown in single-day reports
+  * The current activity is now included in multi-day reports
 
 ## 1.25 (2020-05-16)
 
@@ -28,7 +33,7 @@
 ## 1.22 (2020-04-05)
 
   * Warn if Python version is unsupported.
-  * [Security] Bump bleach from 3.1.2 to 3.1.4.
+  * [Security] Bump bleach from 3.1.2 to 3.1.4
 
 ## 1.21 (2020-03-29)
 
