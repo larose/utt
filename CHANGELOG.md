@@ -1,3 +1,7 @@
+## 1.28 (2021-01-16)
+
+  * Fix current activity start time overflow issue.
+
 ## 1.27 (2020-08-29)
 
   * Update pytz

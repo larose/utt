@@ -33,16 +33,22 @@ def filter_activities_by_range(activities: Activities, date_range: DateRange, lo
 
 
 def get_current_activity(
-    current_activity_name: Optional[str], last_activity: Optional[Activity], now: Now, end_datetime,
+    current_activity_name: Optional[str],
+    last_activity: Optional[Activity],
+    now: Now,
+    start_datetime: datetime,
+    end_datetime: datetime,
 ) -> Optional[Activity]:
     if current_activity_name is None or last_activity is None:
         return
 
-    now_is_between_last_activity_and_end_report_range = last_activity.end < now <= end_datetime
+    last_activity_end = max(last_activity.end, start_datetime)
+
+    now_is_between_last_activity_and_end_report_range = last_activity_end < now <= end_datetime
     if not now_is_between_last_activity_and_end_report_range:
         return
 
-    return Activity(current_activity_name, last_activity.end, now, True)
+    return Activity(current_activity_name, last_activity_end, now, True)
 
 
 def remove_hello_activities(activities):
@@ -55,6 +61,12 @@ def activities(report_args: ReportArgs, now: Now, local_timezone: LocalTimezone,
     activities = list(_activities(entries))
     _filtered_activities = list(filter_activities_by_range(activities, report_args.range, local_timezone))
 
+    start_datetime = local_timezone.localize(
+        datetime.datetime(
+            year=report_args.range.start.year, month=report_args.range.start.month, day=report_args.range.start.day
+        )
+    )
+
     end_datetime = local_timezone.localize(
         datetime.datetime(
             year=report_args.range.end.year, month=report_args.range.end.month, day=report_args.range.end.day
@@ -63,7 +75,9 @@ def activities(report_args: ReportArgs, now: Now, local_timezone: LocalTimezone,
     )
 
     last_activity = activities[-1] if activities else None
-    current_activity = get_current_activity(report_args.current_activity_name, last_activity, now, end_datetime)
+    current_activity = get_current_activity(
+        report_args.current_activity_name, last_activity, now, start_datetime, end_datetime
+    )
     if current_activity is not None:
         _filtered_activities.append(current_activity)
 
