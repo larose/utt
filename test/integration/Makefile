@@ -2,7 +2,8 @@ UTT_DATA_FILENAME = $(HOME)/.local/share/utt/utt.log
 UTT = /usr/local/bin/utt
 
 .PHONY: all
-all: add \
+all: \
+  add \
   completion \
   edit \
   example-plugin \
@@ -23,6 +24,7 @@ all: add \
   report-project-per-day-csv \
   report-project-per-day-csv-2 \
   report-per-day-csv \
+  report-truncate-current-activity \
   report-month \
   report-details \
   report-comments \
@@ -365,6 +367,19 @@ report-week-current: $(UTT)
 	bash -c 'diff -u <(utt --now "2018-08-21 20:00" report --week --no-current-activity) data/utt-report-week-current.stdout'
 
 	@echo "<< REPORT-WEEK-CURRENT"
+
+.PHONY: report-truncate-current-activity
+report-truncate-current-activity: $(UTT)
+	@echo
+	@echo ">> REPORT-TRUNCATE-CURRENT-ACTIVITY"
+
+	rm -f $(UTT_DATA_FILENAME)
+	utt --now "2020-12-29 23:00" hello
+	utt --now "2020-12-29 23:00" add a
+
+	bash -c 'diff -u <(utt --now "2020-12-30 01:00" report) data/utt-report-truncate-current-activity.stdout'
+
+	@echo "<< REPORT-TRUNCATE-CURRENT-ACTIVITY"
 
 
 .PHONY: shell
