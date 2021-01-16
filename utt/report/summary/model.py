@@ -15,6 +15,7 @@ class SummaryModel:
 
         self.working_time = duration(working_activities)
         self.break_time = duration(break_activities)
+        self.total_time = self.working_time + self.break_time
 
         self.last_activity = activities[-1] if activities else None
 
