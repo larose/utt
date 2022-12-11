@@ -16,7 +16,7 @@ class HelloHandler:
 
 
 hello_command = _v1.Command(
-    "hello",
+    "om",
     "Say '{hello_entry_name}' when you arrive in the morning...".format(hello_entry_name=_v1.HELLO_ENTRY_NAME),
     HelloHandler,
     lambda p: None,
