@@ -12,7 +12,8 @@ if [ ${#desc} -gt 0 ]; then
 else
     sh -c "utt add \"$project\""
 fi
-read -t 3 -p "Log added ...Do you want to see/edit the log file? " ledit
+echo "Log added ..."
+read -t 3 -p "Do you want to see/edit the log file? " ledit
 ledit=${ledit,,}
 if [[ $ledit =~ ^(yes|y)$ ]];
 then
