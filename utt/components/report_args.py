@@ -1,3 +1,4 @@
+import sys
 import argparse
 import calendar
 import datetime
@@ -71,7 +72,11 @@ def parse_date(today, datestring, is_past=True):
 
 
 def parse_absolute_date(datestring):
-    return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
+    try:
+        return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
+    except ValueError:
+        print(f"Wrong date format: {datestring}.")
+        sys.exit(1)
 
 
 def parse_relative_day(today, datestring):
