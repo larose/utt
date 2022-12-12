@@ -1,11 +1,13 @@
-Ultimate Time Tracker
-======================
+# Wrappper for` utt`
+
+![ulog](./images/ulog.gif)
+
+# Ultimate Time Tracker
 
 Ultimate Time Tracker (utt) is a simple command-line time tracking
 application written in Python.
 
 **Table of Contents**
-
 
 - [Ultimate Time Tracker](#ultimate-time-tracker)
   - [Quick Start](#quick-start)
@@ -33,14 +35,11 @@ application written in Python.
   - [License](#license)
   - [Website](#website)
 
-
 ## Quick Start
-
 
 ### Prerequisites
 
 `utt` requires Python version 3.7 or above.
-
 
 ### Installing `utt`
 
@@ -48,20 +47,17 @@ Install `utt` from PyPI:
 
 `$ pip install utt`
 
-
 ### hello
 
 Say hello when you arrive in the morning:
 
 `$ utt hello`
 
-
 ### add
 
 Add a task when you have finished working on it:
 
 `$ utt add "programming"`
-
 
 ### report
 
@@ -89,13 +85,11 @@ Break   Time: 0h00
 (0h07) 08:27-08:34 programming
 ```
 
-
 ### edit
 
 Edit your timesheet:
 
 `$ utt edit`
-
 
 ## Commands
 
@@ -136,7 +130,6 @@ activity. Otherwise, it's a working activity.
 
 Examples:
 
-
 - Working activity
 
 ```
@@ -155,7 +148,6 @@ $ utt add "lunch **"
 $ utt add "commuting ***"
 ```
 
-
 ### `edit`
 
 `edit` opens your timesheet in a text editor so you can edit it.
@@ -170,7 +162,6 @@ $ utt edit
 `$VISUAL` and, if not set, by the environment variable `$EDITOR`. If
 neither is set, `utt` opens `vi`.
 
-
 ### `report`
 
 `$ utt report` shows your timesheet.
@@ -183,25 +174,22 @@ Examples:
 
 - Timesheet for a period: `$ utt report --from 2018-10-22 --to 2018-10-26`
 
-
-
 #### Sections
 
 There are four sections in a report. As we will see, each one is a
 aggregated view of the previous one.
 
 1. Summary: shows the report date and the total working and break
-time.
+   time.
 
 2. Projects: groups activities by project. This is useful to track the
-total time by projects. We will see how to specify the project for an
-activity.
+   total time by projects. We will see how to specify the project for an
+   activity.
 
 3. Activities: groups activities by name. This is useful to track the
-total time worked on a task when you have worked on it multiple times.
+   total time worked on a task when you have worked on it multiple times.
 
 4. Details: timeline of your activities.
-
 
 Let's look at an example. Let's say you entered those activities
 throughout the day:
@@ -264,7 +252,6 @@ each activity. For instance, even though you worked twice on
 
 Finally, the details section shows a timeline of all your activity.
 
-
 #### Report Date
 
 You can choose the report date by passing a date to the `report`
@@ -291,15 +278,16 @@ You can also specify a date range. All the activities will be aggregated for
 the given time period.
 
 To report activities from 2013-07-01 00:00:00 to 2013-12-31 23:59:59 :
+
 ```
 $ utt report --from 2013-07-01 --to 2013-12-31
 ```
 
 To report activities since Monday:
+
 ```
 $ utt report --from monday
 ```
-
 
 #### Current Activity
 
@@ -398,13 +386,11 @@ utt can be extended by installing plugins. Unfortunately, since this
 is a recent feature, no plugins have been listed here yet. Write to
 Mathieu Larose <<mathieu@mathieularose.com>> to add your plugin here.
 
-
 ### Plugin development
 
 See
 [docs/CONTRIBUTING.md#how-can-i-create-a-plugin](docs/CONTRIBUTING.md#how-can-i-create-a-plugin)
 how to create a utt plugin.
-
 
 ## Configuration
 
@@ -438,7 +424,6 @@ installed:
 - Fedora: `$ sudo dnf install bash-completion`
 - Ubuntu: `$ sudo apt-get install bash-completion`
 
-
 Then execute:
 
 ```
@@ -447,11 +432,9 @@ $ register-python-argcomplete utt >> ~/.bashrc
 
 Finally, start a new shell.
 
-
 ## Contributing
 
 See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for how to contribute to utt.
-
 
 ## Contributors
 
@@ -464,11 +447,9 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for how to contribute to utt.
 - Stephan Gross <<stephangross6@gmail.com>>
 - Kent Martin <<kentaasvang@gmail.com>>
 
-
 ## License
 
 utt is released under the GPLv3. See the LICENSE file for details.
-
 
 ## Website
 
