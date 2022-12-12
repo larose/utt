@@ -1,0 +1,36 @@
+From a386907948635f26cfa5ad00f1f4f9dac8a4dbb3 Mon Sep 17 00:00:00 2001
+From: Satish Viswanathan <satish.viswanathan.in@gmail.com>
+Date: Mon, 12 Dec 2022 20:02:29 +0530
+Subject: [PATCH] fix(parse_absolute_date_error): Exit if wrong date format
+
+Traceback if wrong date format is passed.
+Using try-except to deal with it and exit if format found wrong
+---
+ utt/components/report_args.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/utt/components/report_args.py b/utt/components/report_args.py
+index 3be785a..2a9b6ef 100644
+--- a/utt/components/report_args.py
++++ b/utt/components/report_args.py
+@@ -1,3 +1,4 @@
++import sys
+ import argparse
+ import calendar
+ import datetime
+@@ -71,7 +72,11 @@ def parse_date(today, datestring, is_past=True):
+ 
+ 
+ def parse_absolute_date(datestring):
+-    return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
++    try:
++        return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
++    except ValueError:
++        print(f"Wrong date format: {datestring}.")
++        sys.exit(1)
+ 
+ 
+ def parse_relative_day(today, datestring):
+-- 
+2.38.1
+
