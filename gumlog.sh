@@ -8,7 +8,7 @@ clear
 
 while :
 do
-gum style --foreground 80 --border double --border-foreground 80 --padding "1 2" --margin 1 --align center "Utt Log Form" "Use arrows or j-k to move up down"
+    gum style --foreground 80 --border double --border-foreground 80 --padding "1 2" --margin 1 --align center "Utt Log Form" "Use arrows or j-k to move up down"
     CHOICE=$(gum choose "Add Log Entry" "Edit File" "See Report" "See Log File" "Quit")
     case $CHOICE in 
         "Add Log Entry")
