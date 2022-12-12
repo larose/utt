@@ -1,7 +1,7 @@
 # Wrapper for` utt`
 
 `utt` is a nice program. But I wanted more from it.. So this got made.
-I am using the **gum** program for the nice effects.
+I am using the [**gum**](https://github.com/charmbracelet/gum) program for the nice effects.
 
 ![ulog](./images/ulog.gif)
 
