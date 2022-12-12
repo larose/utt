@@ -6,6 +6,9 @@ then
 fi
 clear
 
+ENTRY_FILENAME="utt.log"
+DATA_HOME_SUB_DIRNAME="utt"
+UTT_LOG_FILE=$XDG_DATA_HOME/$DATA_HOME_SUB_DIRNAME/$ENTRY_FILENAME
 while :
 do
     gum style --foreground 80 --border double --border-foreground 80 --padding "1 2" --margin 1 --align center "Utt Log Form" "Use arrows or j-k to move up down"
