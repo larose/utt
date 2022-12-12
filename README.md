@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Wrapper for` utt`
 
 `utt` is a nice program. But I wanted more from it.. So this got made.
@@ -6,6 +7,20 @@ I am using the [**gum**](https://github.com/charmbracelet/gum) program for the n
 ![ulog](./images/ulog.gif)
 
 # Ultimate Time Tracker
+||||||| parent of 3b1d797 (Updated the README to showcase ulog)
+Ultimate Time Tracker
+======================
+=======
+# Wrapper for` utt`
+
+`utt` is a nice program. But I wanted more from it.. So this got made.
+
+I am using the [**gum**](https://github.com/charmbracelet/gum) program for the nice effects.
+
+![ulog](./images/ulog.gif)
+
+# Ultimate Time Tracker
+>>>>>>> 3b1d797 (Updated the README to showcase ulog)
 
 Ultimate Time Tracker (utt) is a simple command-line time tracking
 application written in Python.
