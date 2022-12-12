@@ -1,4 +1,7 @@
-# Wrappper for` utt`
+# Wrapper for` utt`
+
+`utt` is a nice program. But I wanted more from it.. So this got made.
+I am using the **gum** program for the nice effects.
 
 ![ulog](./images/ulog.gif)
 
