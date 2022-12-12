@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 IFS=":"
-read -p "Utt Log - Project: Description: " project desc
+read -p -r "Utt Log - Project: Description: " project desc
 if [[ -z "$project" && -z "$desc" ]]; then
     echo "No input received!... Exiting..."
     exit 1
@@ -13,7 +13,7 @@ else
     sh -c "utt add \"$project\""
 fi
 echo "Log added ..."
-read -t 3 -p "Do you want to see/edit the log file? " ledit
+read -t 3 -p -r "Do you want to see or edit the log file? " ledit
 ledit=${ledit,,}
 if [[ $ledit =~ ^(yes|y)$ ]];
 then
