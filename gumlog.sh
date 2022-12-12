@@ -13,10 +13,15 @@ gum style --foreground 80 --border double --border-foreground 80 --padding "1 2"
     case $CHOICE in 
         "Add Log Entry")
             PROJECT=$(gum input --prompt "Project: " --placeholder "Which Project you were wroking on? ")
-            DESC=$(gum input --prompt "${PROJECT}: Description: " --placeholder "Explain what you did in about 10-15 words...")
-            test -n "$PROJECT" && SCOPE="$PROJECT: "
-            test -n "$DESC" && SCOPE="$SCOPE$DESC"
-            test -n "$SCOPE" && sh -c "utt add \"$SCOPE\"" && gum spin -s minidot --title "Log written ..." -- sleep 1 && clear || gum spin -s monkey --title "No input provided ..." -- sleep 2 && clear
+            test -n "$PROJECT" && PROMPT="$PROJECT: "
+            DESC=$(gum input --prompt "${PROMPT}Description: " --placeholder "Explain what you did in about 10-15 words...")
+            test -n "$PROJECT" && ENTRY="$PROJECT: "
+            test -n "$DESC" && ENTRY="$ENTRY$DESC"
+            test -n "$ENTRY" && sh -c "utt add \"$ENTRY\"" && gum spin -s minidot --title "Log written ..." -- sleep 1 && clear || gum spin -s monkey --title "No input provided ..." -- sleep 2 && clear
+            unset -v PROJECT
+            unset -v PROMPT
+            unset -v DESC
+            unset -v ENTRY
             ;;
 
         "Edit File")
