@@ -4,47 +4,159 @@ then
     echo "You need to install 'charmbracelet/gum' to run this ... Exiting"
     exit 1
 fi
-clear
 
-ENTRY_FILENAME="utt.log"
-DATA_HOME_SUB_DIRNAME="utt"
-UTT_LOG_FILE=$XDG_DATA_HOME/$DATA_HOME_SUB_DIRNAME/$ENTRY_FILENAME
+utt=$HOME/.local/bin/utt
+
+header(){
+    gum style --foreground 40 --border double --border-foreground 80 --padding "1 1" --margin 1 --width 40 --align center "$(gum style --foreground 212 \
+'+------------------+
+|       Ulog       |
++------------------+
+')" "A Ultimate Time Tracker Log Program"
+}
+
+message(){
+    gum style --foreground 80 "$1" 
+}
+
+pressakey() {
+    gum confirm --selected.foreground 0 --selected.background 80 --affirmative  "Yes"  --negative "" "Shall We $(gum style --foreground 80 'Continue?')'"
+}
+
+TOPREPORTS=(\
+    "Add Log Entry" \
+    "Add Log Entry With Comments" \
+    "See Today Report" \
+    "See Yesterday Report" \
+    "Other Reports[Sub Menu]" \
+    "See Full Log File" \
+    "Edit Log File" \
+    "Show Help" \
+    "Quit" \
+)
+printf -v topjoin '%s\n' "${TOPREPORTS[@]}"
+
+WEEKDAYS=(\
+    "Monday" \
+    "Tuesday" \
+    "Wednesday" \
+    "Thursday" \
+    "Friday" \
+    "Saturday" \
+    "Sunday"\
+) 
+
+REPORTS=(\
+    "DOW" \
+    "Since-DOW" \
+    "From-To Date" \
+    "Custom Report" \
+    "Report Help" \
+)
+
+show_reports() {
+    echo "use j/k or arrow keys to move up/down"
+    RCHOICE=$(gum choose --cursor.foreground 40 "${REPORTS[@]}")
+    case $RCHOICE in
+        "DOW")
+            DOW=$(gum choose --cursor.foreground 40 "${WEEKDAYS[@]}")
+            sh -c "$utt report $DOW"
+            ;;
+
+        "Since-DOW")
+            DOW=$(gum choose --cursor.foreground 40 "${WEEKDAYS[@]}")
+            sh -c "$utt report --from $DOW"
+            ;;
+
+        "Custom Report")
+            sh -c "utt report --from"
+            message "The Error is deliberate... Craft your command here..."
+            CUSTOM=$(gum write --header "Custom Report: " --placeholder "Type the full custom command: utt report --from <date> --to <date>.... Press <C-d> to end")
+            sh -c "$CUSTOM"
+            ;;
+
+        "Report Help")
+            sh -c "utt report --help" | gum pager
+            ;;
+
+        "From-To Date")
+            FROM=$(gum input --prompt "FROM: " --placeholder "Report's from date")
+            test -z "$FROM" && echo "From: is mandatory..." && return
+            TO=$(gum input --prompt "${FROM} TO: " --placeholder "Report's to date")
+            test -n "$TO" && \
+                sh -c "$utt report --from $FROM --to $TO" || \
+                sh -c "$utt report --from $FROM"
+            ;;
+
+        *)
+            message "Return to Main menu..."
+            return
+            ;;
+    esac
+}
+
 while :
 do
-    gum style --foreground 80 --border double --border-foreground 80 --padding "1 2" --margin 1 --align center "Utt Log Form" "Use arrows or j-k to move up down"
-    CHOICE=$(gum choose "Add Log Entry" "Edit File" "See Report" "See Log File" "Quit")
+    clear
+    header
+    # Use this if you want normal Menu and not fuzzy one
+    # CHOICE=$(gum choose "${TOPREPORTS[@]}")
+    CHOICE=$(echo "$topjoin" | gum filter --indicator ">" --indicator.foreground 40 --match.foreground 40 --placeholder "Fuzzy search here..." --prompt "Fuzzy Main Menu: " --prompt.foreground 212 --height 10)
     case $CHOICE in 
         "Add Log Entry")
-            PROJECT=$(gum input --prompt "Project: " --placeholder "Which Project you were wroking on? ")
+            PROJECT=$(gum input --prompt "Project: " --prompt.foreground 80 --placeholder "Which Project you were working on? ")
             test -n "$PROJECT" && PROMPT="$PROJECT: "
-            DESC=$(gum input --prompt "${PROMPT}Description: " --placeholder "Explain what you did in about 10-15 words...")
+            DESC=$(gum input --prompt "$(gum style --foreground 80 ${PROMPT})Description: " --placeholder "Explain what you did in about 10-15 words...")
             test -n "$PROJECT" && ENTRY="$PROJECT: "
             test -n "$DESC" && ENTRY="$ENTRY$DESC"
-            test -n "$ENTRY" && sh -c "utt add \"$ENTRY\"" && gum spin -s minidot --title "Log written ..." -- sleep 1 && clear || gum spin -s monkey --title "No input provided ..." -- sleep 2 && clear
-            unset -v PROJECT
-            unset -v PROMPT
-            unset -v DESC
-            unset -v ENTRY
+            test -n "$ENTRY" && sh -c "$utt add \"$ENTRY\"" && gum spin -s minidot --title "Log written ..." -- sleep 1 && clear || gum spin -s monkey --title "No input provided ..." -- sleep 2 && clear
             ;;
 
-        "Edit File")
-            sh -c "utt edit"
-            clear
+        "Add Log Entry With Comments")
+            PROJECT=$(gum input --prompt "Project: " --prompt.foreground 80 --placeholder "Which Project you were working on? ")
+            test -n "$PROJECT" && PROMPT="$PROJECT: "
+            DESC=$(gum input --prompt "$(gum style --foreground 80 ${PROMPT})Description: " --placeholder "Explain what you did in about 10-15 words...")
+            test -n "$PROJECT" && ENTRY="$PROJECT: "
+            test -n "$DESC" && ENTRY="$ENTRY$DESC"
+            COMMENTS=$(gum write --header "Comments/Annotations" --placeholder "Write your comments here (Ctrl-D) to exit")
+            test -n "$ENTRY" && sh -c "$utt add -c \"$COMMENTS\" \"$ENTRY\"" && gum spin -s minidot --title "Log written ..." -- sleep 1 && clear || gum spin -s monkey --title "No input provided ..." -- sleep 2 && clear
             ;;
 
-        "See Report")
-            sh -c "utt report"
-            gum confirm "Continue?" 
-            clear
+        "See Today Report")
+            sh -c "$utt report"
+            pressakey 
             ;;
 
-        "See Log File")
-            gum pager < "$UTT_LOG_FILE"
-            clear
+        "See Yesterday Report")
+            sh -c "$utt report yesterday"
+            pressakey 
             ;;
-        *)
-            echo -n "Quitting ..." ; sleep 1
+
+        "Edit Log File")
+            sh -c "$utt edit"
+            ;;
+
+        "Other Reports[Sub Menu]")
+            show_reports
+            pressakey 
+            ;;
+
+        "See Full Log File")
+            # This is hardcoded... 
+            gum pager < "$HOME"/.local/share/utt/utt.log
+            ;;
+        "Show Help")
+            sh -c "$utt --help"
+            pressakey 
+            ;;
+
+        "Quit")
+            message "Thanks for using Ulog ..."; sleep 1 
             break
+            ;;
+
+        *)
+            continue
             ;;
     esac
 done
