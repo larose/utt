@@ -1,8 +1,6 @@
 # Ultimate Time Tracker
-========================
 
-# Created Wrapper for` utt`
-
+## Addition: Ulog - Shell Wrapper for **utt**
 
 `utt` is a nice program. But I wanted more from it.. So this got made.
 
