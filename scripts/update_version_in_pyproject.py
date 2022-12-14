@@ -41,11 +41,7 @@ def main():
     if version == UNRELEASED_VERSION_NAME:
         version = "0"
 
-    print(
-        subprocess.check_output(
-            ["poetry", "version", version], stderr=sys.stderr
-        ).decode()
-    )
+    print(subprocess.check_output(["poetry", "version", version], stderr=sys.stderr).decode())
 
 
 if __name__ == "__main__":

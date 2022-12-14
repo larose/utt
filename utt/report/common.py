@@ -19,9 +19,12 @@ def print_dicts(dcts: List[Dict], output: Output) -> None:
 
 
 def clip_activities_by_range(
-    start_date: datetime.date, end_date: datetime.date, activities: List[Activity], local_timezone: DstTzInfo,
+    start_date: datetime.date,
+    end_date: datetime.date,
+    activities: List[Activity],
+    local_timezone: DstTzInfo,
 ) -> List[Activity]:
-    """ Clip a list of Activity with the given range, remove activities
+    """Clip a list of Activity with the given range, remove activities
     which have zero durations
 
     Parameters
@@ -46,7 +49,7 @@ def clip_activities_by_range(
 
 
 def filter_activities_by_type(activities: List[Activity], activity_type: str) -> List[Activity]:
-    """ Filter a list of Activity with the given activity type.
+    """Filter a list of Activity with the given activity type.
 
     Parameters
     ----------

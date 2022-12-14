@@ -35,13 +35,9 @@ def publish(repo_name: str):
 def tag(package_version):
     tag_name = f"v{package_version}"
 
-    subprocess.check_call(
-        ["git", "tag", tag_name], stdout=sys.stdout, stderr=sys.stderr
-    )
+    subprocess.check_call(["git", "tag", tag_name], stdout=sys.stdout, stderr=sys.stderr)
 
-    subprocess.check_call(
-        ["git", "push", "origin", tag_name], stdout=sys.stdout, stderr=sys.stderr
-    )
+    subprocess.check_call(["git", "push", "origin", tag_name], stdout=sys.stdout, stderr=sys.stderr)
 
 
 def check_version_already_published(repository_url, package_name, version):
@@ -60,9 +56,7 @@ def main():
     print(f"Repository name: {repo_name}")
     print(f"Repository JSON API URL: {repo_json_api_url}")
 
-    poetry_version_output = (
-        subprocess.check_output(["poetry", "version", "-n"]).decode().strip()
-    )
+    poetry_version_output = subprocess.check_output(["poetry", "version", "-n"]).decode().strip()
     package_info = PackageInfo.from_poetry_version_output(poetry_version_output)
 
     print(f"Package name: {package_info.name}")

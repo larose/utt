@@ -27,7 +27,7 @@ pytz = "^2020"
 tzlocal = "2.0.0"
 
 [tool.poetry.dev-dependencies]
-black = "^19.10b0"
+black = "*"
 ddt = "==1.2.2"
 flake8 = "^3.7.9"
 isort = "5.0.9"

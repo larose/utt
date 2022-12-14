@@ -3,7 +3,11 @@ from datetime import datetime
 
 class Entry:
     def __init__(
-        self, entry_datetime: datetime, name: str, is_current_entry: bool, comment: str = None,
+        self,
+        entry_datetime: datetime,
+        name: str,
+        is_current_entry: bool,
+        comment: str = None,
     ):
         self.datetime = entry_datetime
         self.name = name

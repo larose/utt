@@ -31,15 +31,25 @@ def add_args(parser: argparse.ArgumentParser):
     parser.add_argument("report_date", metavar="date", type=str, nargs="?")
 
     parser.add_argument(
-        "--current-activity", default="-- Current Activity --", type=str, help="Set the current activity",
+        "--current-activity",
+        default="-- Current Activity --",
+        type=str,
+        help="Set the current activity",
     )
 
     parser.add_argument(
-        "--no-current-activity", action="store_true", default=False, help="Do not display the current activity",
+        "--no-current-activity",
+        action="store_true",
+        default=False,
+        help="Do not display the current activity",
     )
 
     parser.add_argument(
-        "--from", default=None, dest="from_date", type=str, help="Specify an inclusive start date to report.",
+        "--from",
+        default=None,
+        dest="from_date",
+        type=str,
+        help="Specify an inclusive start date to report.",
     )
 
     parser.add_argument(
@@ -56,11 +66,17 @@ def add_args(parser: argparse.ArgumentParser):
     )
 
     parser.add_argument(
-        "--project", default=None, type=str, help="Show activities only for the specified project.",
+        "--project",
+        default=None,
+        type=str,
+        help="Show activities only for the specified project.",
     )
 
     parser.add_argument(
-        "--per-day", action="store_true", default=False, help="Show total hours per day.",
+        "--per-day",
+        action="store_true",
+        default=False,
+        help="Show total hours per day.",
     )
 
     parser.add_argument(
@@ -103,11 +119,17 @@ def add_args(parser: argparse.ArgumentParser):
     )
 
     parser.add_argument(
-        "--details", action="store_true", default=False, help="Show details even for multi-day reports.",
+        "--details",
+        action="store_true",
+        default=False,
+        help="Show details even for multi-day reports.",
     )
 
     parser.add_argument(
-        "--comments", action="store_true", default=False, help="Show comments in details sections.",
+        "--comments",
+        action="store_true",
+        default=False,
+        help="Show comments in details sections.",
     )
 
 

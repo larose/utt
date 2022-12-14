@@ -1,7 +1,7 @@
-import sys
 import argparse
 import calendar
 import datetime
+import sys
 from enum import Enum, auto
 from typing import NamedTuple, Optional
 
