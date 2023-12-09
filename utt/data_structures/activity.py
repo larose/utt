@@ -11,7 +11,12 @@ class Activity:
         IGNORED = 2
 
     def __init__(
-        self, name: str, start: datetime, end: datetime, is_current_activity: bool, comment: str = None,
+        self,
+        name: str,
+        start: datetime,
+        end: datetime,
+        is_current_activity: bool,
+        comment: str = None,
     ):
         self.name = Name(name)
         self.start = start
@@ -46,7 +51,7 @@ class Activity:
         return Activity.Type.WORK
 
     def clip(self, start=None, end=None):
-        """ Return a new Activity with the start and end time clipped to the
+        """Return a new Activity with the start and end time clipped to the
         given range.
 
         Parameters

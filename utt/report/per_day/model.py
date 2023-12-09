@@ -29,9 +29,17 @@ def _groupby_date(activities: List[Activity]) -> List[Dict]:
                 "hours": duration,
                 "date": date,
                 "projects": ", ".join(
-                    sorted(set(act.name.project for act in activities), key=lambda project: project.lower(),)
+                    sorted(
+                        set(act.name.project for act in activities),
+                        key=lambda project: project.lower(),
+                    )
                 ),
-                "tasks": ", ".join(sorted(set(act.name.task for act in activities), key=lambda task: task.lower(),)),
+                "tasks": ", ".join(
+                    sorted(
+                        set(act.name.task for act in activities),
+                        key=lambda task: task.lower(),
+                    )
+                ),
             }
         )
 

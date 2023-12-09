@@ -86,7 +86,7 @@ test.unit:
 test.integration: clean build
 	cp dist/utt-*-py3-none-any.whl $(INTEGRATION_DIR)
 
-	python -c 'import sys; print(f"FROM python:{sys.version_info.major}.{sys.version_info.minor}-buster")' > $(GENERATED_DOCKERFILE)
+	python -c 'import sys; print(f"FROM python:{sys.version_info.major}.{sys.version_info.minor}-slim-bullseye")' > $(GENERATED_DOCKERFILE)
 	cat $(TEMPLATE_DOCKERFILE) >> $(GENERATED_DOCKERFILE)
 	docker build --tag $(TEST_DOCKER_IMAGE) --file $(GENERATED_DOCKERFILE) $(INTEGRATION_DIR)
 	docker run --rm $(TEST_DOCKER_IMAGE) $(INTEGRATION_CMD)

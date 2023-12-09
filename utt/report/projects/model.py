@@ -25,7 +25,12 @@ def groupby_project(activities: List[Activity]) -> List[Dict]:
             {
                 "duration": formatter.format_duration(sum((act.duration for act in activities), datetime.timedelta())),
                 "project": project,
-                "name": ", ".join(sorted(set(act.name.task for act in activities), key=lambda task: task.lower(),)),
+                "name": ", ".join(
+                    sorted(
+                        set(act.name.task for act in activities),
+                        key=lambda task: task.lower(),
+                    )
+                ),
             }
         )
 

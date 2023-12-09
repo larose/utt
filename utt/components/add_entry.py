@@ -18,7 +18,9 @@ class AddEntry:
         insert_new_line_before = _insert_new_line(self._entries, new_entry)
         new_entry = _localize(self._timezone_config, new_entry)
         _append_line_to_file(
-            self._data_filename, str(new_entry), insert_new_line_before=insert_new_line_before,
+            self._data_filename,
+            str(new_entry),
+            insert_new_line_before=insert_new_line_before,
         )
 
 
