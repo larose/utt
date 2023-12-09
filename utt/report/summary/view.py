@@ -52,7 +52,13 @@ def _print_time(
     output: Output,
 ) -> None:
     print(
-        "%s: %s" % (activity_name, formatter.format_duration(duration),), end="", file=output,
+        "%s: %s"
+        % (
+            activity_name,
+            formatter.format_duration(duration),
+        ),
+        end="",
+        file=output,
     )
 
     if current_activity_duration:

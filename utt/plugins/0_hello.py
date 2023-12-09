@@ -5,7 +5,10 @@ from ..api import _v1
 
 class HelloHandler:
     def __init__(
-        self, args: argparse.Namespace, now: _v1.Now, add_entry: _v1._private.AddEntry,
+        self,
+        args: argparse.Namespace,
+        now: _v1.Now,
+        add_entry: _v1._private.AddEntry,
     ):
         self._args = args
         self._now = now

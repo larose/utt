@@ -16,24 +16,24 @@ homepage = "https://github.com/larose/utt"
 license = "GPL-3.0-only"
 maintainers = ["Mathieu Larose <mathieu@mathieularose.com>"]
 name = "utt"
-version = "0" # Do not change. Updated by a script.
+version = "0"                                                # Do not change. Updated by a script.
 
 [tool.poetry.dependencies]
-argcomplete = "1.11.1"
-cargo = "0.3"
-python = "^3.7"
-python_dateutil = "2.8.1"
-pytz = "^2020"
-tzlocal = "2.0.0"
-
-[tool.poetry.dev-dependencies]
-black = "^19.10b0"
-ddt = "==1.2.2"
-flake8 = "^3.7.9"
-isort = "5.0.9"
-mypy = "^0.770"
-pytest = "^5.2"
-requests = "^2.23.0"
+argcomplete = "^3.2.1"
+cargo = "^0.3"
+python = "^3.8.1"
+python_dateutil = "^2.8.1"
+pytz = "^2023.3.post1"
+tzlocal = "^5.2"
 
 [tool.poetry.scripts]
 utt = "utt.__main__:main"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.12.1"
+ddt = "^1.7.1"
+flake8 = "^7.0.0"
+isort = "^5.13.2"
+mypy = "^1.8.0"
+pytest = "^7.4.4"
+requests = "^2.31.0"

@@ -87,13 +87,13 @@ example-plugin: $(UTT)
 	@echo
 	@echo ">> EXAMPLE PLUGIN"
 
-	cd utt_example_plugin && python3 setup.py install --record utt_example_files
+	cd utt_example_plugin && python3 -m pip install .
 	bash -c 'diff <(utt --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00+00:00)'
 	rm -f $(UTT_DATA_FILENAME)
 	utt --now "2020-01-03 9:00" hello
 	utt --now "2020-01-03 10:00" add work
 	bash -c 'diff <(utt --now "2020-01-03 10:30" report) data/utt-example-plugin-report.stdout'
-	cd utt_example_plugin && cat utt_example_files | xargs rm -rf
+	pip uninstall --yes utt-foo
 
 	@echo "<< EXAMPLE PLUGIN"
 

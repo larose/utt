@@ -90,7 +90,11 @@ def activities(report_args: ReportArgs, now: Now, local_timezone: LocalTimezone,
 def _activities(entries: Entries):
     for prev_entry, next_entry in _pairwise(entries):
         activity = Activity(
-            next_entry.name, prev_entry.datetime, next_entry.datetime, False, comment=next_entry.comment,
+            next_entry.name,
+            prev_entry.datetime,
+            next_entry.datetime,
+            False,
+            comment=next_entry.comment,
         )
         yield activity
 
