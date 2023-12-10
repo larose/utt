@@ -33,7 +33,7 @@ flake8 = "^3.7.9"
 isort = "5.0.9"
 mypy = "^0.770"
 pytest = "^5.2"
-requests = "^2.23.0"
+requests = "^2.31.0"
 
 [tool.poetry.scripts]
 utt = "utt.__main__:main"
