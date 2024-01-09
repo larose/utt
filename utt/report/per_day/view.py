@@ -4,7 +4,7 @@ from utt.components.output import Output
 from utt.report import formatter
 from utt.report.per_day.model import PerDayModel
 
-from .common import timedelta_to_billable
+from ..common import timedelta_to_billable
 
 
 class PerDayView:

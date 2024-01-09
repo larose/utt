@@ -2,7 +2,7 @@ import datetime
 
 import pytest
 
-from utt.report.per_day.common import timedelta_to_billable
+from utt.report.common import timedelta_to_billable
 
 
 @pytest.mark.parametrize(

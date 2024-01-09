@@ -10,9 +10,10 @@ from .now import Now
 
 class CSVSection(Enum):
     per_day = auto()
+    per_task = auto()
 
 
-csv_section_name_to_csv_section = {"per-day": CSVSection.per_day, "per_day": CSVSection.per_day}
+csv_section_name_to_csv_section = {"per-day": CSVSection.per_day, "per_day": CSVSection.per_day, "per_task": CSVSection.per_task, "per-task": CSVSection.per_task}
 
 
 class DateRange(NamedTuple):

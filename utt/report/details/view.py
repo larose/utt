@@ -1,7 +1,10 @@
+import csv
+
 from datetime import datetime
 
 from pytz.tzinfo import DstTzInfo
 
+from ..common import timedelta_to_billable
 from ...components.output import Output
 from ...data_structures.activity import Activity
 from .. import formatter
@@ -49,6 +52,27 @@ class DetailsView:
             print(self._create_line_for_render(activity), file=output)
 
         print(file=output)
+
+
+    def csv(self, output: Output) -> None:
+        if not self._model.activities:
+            print(" -- No activities for this time range --", file=output)
+            return
+
+        fieldnames = ["task", "project", "date", "duration", "type", "comment"]
+        writer = csv.DictWriter(output, fieldnames=fieldnames)
+        writer.writerow({fn: fn.capitalize() for fn in fieldnames})
+
+        for activity in self._model.activities:
+            task_details = {
+                "task": activity.name.task,
+                "project": activity.name.project,
+                "date": activity.start.strftime("%Y-%m-%d"),
+                "duration": timedelta_to_billable(activity.duration).strip(),
+                "type": Activity.Type.name(activity.type),
+                "comment": activity.comment
+            }
+            writer.writerow(task_details)
 
 
 def format_time(datetime: datetime, local_timezone: DstTzInfo) -> str:

@@ -1,0 +1,11 @@
+Task,Project,Date,Duration,Type,Comment
+task_1,project_1,2018-08-20,0.1,WORK,
+task_1,project_2,2018-08-20,0.1,WORK,
+task_2,project_1,2018-08-20,0.1,WORK,
+task_2,project_2,2018-08-20,0.1,WORK,
+task_1,project_1,2018-08-21,0.1,WORK,
+task_1,project_2,2018-08-21,0.1,WORK,
+task_2,project_1,2018-08-21,0.1,WORK,
+task_2,project_2,2018-08-21,0.1,WORK,
+task_3,project_1,2018-08-21,0.1,WORK,creating tests for task_3
+task_3,project_2,2018-08-21,0.1,WORK,refactoring project_2 UI

@@ -10,6 +10,14 @@ class Activity:
         BREAK = 1
         IGNORED = 2
 
+        def name(type: int) -> str:
+            return {
+                Activity.Type.WORK: 'WORK',
+                Activity.Type.BREAK: 'BREAK',
+                Activity.Type.IGNORED: 'IGNORED',
+            }.get(type)
+
+
     def __init__(
         self,
         name: str,
