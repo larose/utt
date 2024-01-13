@@ -4,10 +4,10 @@ from datetime import datetime
 
 from pytz.tzinfo import DstTzInfo
 
-from ..common import timedelta_to_billable
 from ...components.output import Output
 from ...data_structures.activity import Activity
 from .. import formatter
+from ..common import timedelta_to_billable
 from .model import DetailsModel
 
 
@@ -53,7 +53,6 @@ class DetailsView:
 
         print(file=output)
 
-
     def csv(self, output: Output) -> None:
         if not self._model.activities:
             print(" -- No activities for this time range --", file=output)
@@ -70,7 +69,7 @@ class DetailsView:
                 "date": activity.start.strftime("%Y-%m-%d"),
                 "duration": timedelta_to_billable(activity.duration).strip(),
                 "type": Activity.Type.name(activity.type),
-                "comment": activity.comment
+                "comment": activity.comment,
             }
             writer.writerow(task_details)
 

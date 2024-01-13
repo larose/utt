@@ -12,11 +12,10 @@ class Activity:
 
         def name(type: int) -> str:
             return {
-                Activity.Type.WORK: 'WORK',
-                Activity.Type.BREAK: 'BREAK',
-                Activity.Type.IGNORED: 'IGNORED',
+                Activity.Type.WORK: "WORK",
+                Activity.Type.BREAK: "BREAK",
+                Activity.Type.IGNORED: "IGNORED",
             }.get(type)
-
 
     def __init__(
         self,

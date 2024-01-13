@@ -1,5 +1,5 @@
-from utt.report.per_day.view import PerDayView
 from utt.report.details.view import DetailsView
+from utt.report.per_day.view import PerDayView
 
 from ..components.output import Output
 from ..components.report_args import CSVSection
