@@ -37,7 +37,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.8
       - name: Bootstrap
         run: make ci.bootstrap
       - name: Configure poetry
@@ -50,7 +50,7 @@ jobs:
       - name: Download dist directory
         uses: actions/download-artifact@v1
         with:
-          name: dist-3.7
+          name: dist-3.8
           path: dist
 #      - name: Publish (Test PyPI)
 #        run: make ci.publish.test-pypi
