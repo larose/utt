@@ -1,11 +1,11 @@
-Task,Project,Date,Duration,Type,Comment
-task_1,project_1,2018-08-20,0.1,WORK,
-task_1,project_2,2018-08-20,0.1,WORK,
-task_2,project_1,2018-08-20,0.1,WORK,
-task_2,project_2,2018-08-20,0.1,WORK,
-task_1,project_1,2018-08-21,0.1,WORK,
-task_1,project_2,2018-08-21,0.1,WORK,
-task_2,project_1,2018-08-21,0.1,WORK,
-task_2,project_2,2018-08-21,0.1,WORK,
-task_3,project_1,2018-08-21,0.1,WORK,creating tests for task_3
-task_3,project_2,2018-08-21,0.1,WORK,refactoring project_2 UI
+Date,Projects,Tasks,Duration,Type,Comment
+2018-08-20,project_1,task_1,0.1,WORK,
+2018-08-20,project_2,task_1,0.1,WORK,
+2018-08-20,project_1,task_2,0.1,WORK,
+2018-08-20,project_2,task_2,0.1,WORK,
+2018-08-21,project_1,task_1,0.1,WORK,
+2018-08-21,project_2,task_1,0.1,WORK,
+2018-08-21,project_1,task_2,0.1,WORK,
+2018-08-21,project_2,task_2,0.1,WORK,
+2018-08-21,project_1,task_3,0.1,WORK,creating tests for task_3
+2018-08-21,project_2,task_3,0.1,WORK,refactoring project_2 UI

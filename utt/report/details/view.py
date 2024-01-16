@@ -58,15 +58,15 @@ class DetailsView:
             print(" -- No activities for this time range --", file=output)
             return
 
-        fieldnames = ["task", "project", "date", "duration", "type", "comment"]
+        fieldnames = ["date", "projects", "tasks", "duration", "type", "comment"]
         writer = csv.DictWriter(output, fieldnames=fieldnames)
         writer.writerow({fn: fn.capitalize() for fn in fieldnames})
 
         for activity in self._model.activities:
             task_details = {
-                "task": activity.name.task,
-                "project": activity.name.project,
                 "date": activity.start.strftime("%Y-%m-%d"),
+                "projects": activity.name.project,
+                "tasks": activity.name.task,
                 "duration": timedelta_to_billable(activity.duration).strip(),
                 "type": Activity.Type.name(activity.type),
                 "comment": activity.comment,
