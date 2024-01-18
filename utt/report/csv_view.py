@@ -1,3 +1,4 @@
+from utt.report.details.view import DetailsView
 from utt.report.per_day.view import PerDayView
 
 from ..components.output import Output
@@ -14,3 +15,5 @@ class CSVReportView:
 
         if section == CSVSection.per_day:
             PerDayView(self._report.per_day_model).csv(output)
+        if section == CSVSection.per_task:
+            DetailsView(self._report.details_model).csv(output)

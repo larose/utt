@@ -1,7 +1,7 @@
 import csv
 
 from ...components.output import Output
-from .common import timedelta_to_billable
+from ..common import timedelta_to_billable
 from .model import PerDayModel
 
 
