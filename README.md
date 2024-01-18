@@ -463,6 +463,7 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for how to contribute to utt.
 - Henrik Holm <<ukrutt@gmail.com>>
 - Stephan Gross <<stephangross6@gmail.com>>
 - Kent Martin <<kentaasvang@gmail.com>>
+- fighterpoul <<fighter.poul@gmail.com>>
 
 
 ## License
