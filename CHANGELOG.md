@@ -1,3 +1,7 @@
+## 1.30 (2024-01-17)
+
+  * Add 'per-task' CSV report type
+
 ## 1.29 (2021-01-16)
 
   * Show total time in summary section
