@@ -5,7 +5,7 @@
 ## 1.29 (2021-01-16)
 
   * Show total time in summary section
-  * Remove "Time" from summary section
+  * Remove redundant "time" label from summary section
 
 ## 1.28 (2021-01-16)
 
