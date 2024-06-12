@@ -30,7 +30,7 @@ tzlocal = "^5.2"
 utt = "utt.__main__:main"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.12.1"
+black = ">=23.12.1,<25.0.0"
 ddt = "^1.7.1"
 flake8 = "^7.0.0"
 isort = "^5.13.2"
