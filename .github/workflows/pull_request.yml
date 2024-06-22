@@ -20,7 +20,7 @@ jobs:
       - name: Bullfrog Secure Runner
         uses: bullfrogsec/bullfrog@larose/fix-tetragon-install
         with:
-            allowed-ips: |
+            allowed-domains: |
               github.com
               pypi.org
               files.pythonhosted.org
