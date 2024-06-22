@@ -16,6 +16,8 @@ jobs:
         with:
             block-dns: false
             egress-policy: audit
+      - run: |
+          sudo nft list ruleset
       - uses: actions/checkout@v2
       - name: Setup python
         uses: actions/setup-python@v1
