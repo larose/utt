@@ -22,8 +22,9 @@ jobs:
         with:
             allowed-domains: |
               github.com
-              pypi.org
               files.pythonhosted.org
+              pypi.org
+              registry-1.docker.io
             egress-policy: block
       - uses: actions/checkout@v2
       - name: Setup python
