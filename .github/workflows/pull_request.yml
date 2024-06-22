@@ -22,6 +22,7 @@ jobs:
         with:
             allowed-domains: |
               auth.docker.io
+              deb.debian.org
               github.com
               files.pythonhosted.org
               production.cloudflare.docker.com
