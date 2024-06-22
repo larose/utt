@@ -24,6 +24,7 @@ jobs:
               auth.docker.io
               github.com
               files.pythonhosted.org
+              production.cloudflare.docker.com
               pypi.org
               registry-1.docker.io
             egress-policy: block
