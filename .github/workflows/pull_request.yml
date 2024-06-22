@@ -21,6 +21,7 @@ jobs:
         uses: bullfrogsec/bullfrog@larose/fix-tetragon-install
         with:
             allowed-ips: |
+              github.com
               pypi.org
               files.pythonhosted.org
             egress-policy: block
