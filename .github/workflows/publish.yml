@@ -12,9 +12,20 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v2
+      - name: Bullfrog Secure Runner
+        uses: bullfrogsec/bullfrog@v0
+        with:
+          egress-policy: block
+          allowed-domains: |
+            auth.docker.io
+            deb.debian.org
+            files.pythonhosted.org
+            production.cloudflare.docker.com
+            pypi.org
+            registry-1.docker.io
+      - uses: actions/checkout@v4
       - name: Setup python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Bootstrap
@@ -24,7 +35,7 @@ jobs:
       - name: Check
         run: make check
       - name: Upload dist directory
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.python-version }}
           path: dist
@@ -33,9 +44,15 @@ jobs:
     runs-on: ubuntu-22.04
     needs: build-and-check
     steps:
-      - uses: actions/checkout@v2
+      - uses: bullfrogsec/bullfrog@v0
+        with:
+          egress-policy: block
+          allowed-domains: |
+            files.pythonhosted.org
+            pypi.org
+      - uses: actions/checkout@v4
       - name: Setup python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
       - name: Bootstrap
@@ -48,7 +65,7 @@ jobs:
       - name: Update version in pyproject.toml
         run: make ci.update-version-in-pyproject
       - name: Download dist directory
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4
         with:
           name: dist-3.8
           path: dist
