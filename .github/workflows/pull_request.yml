@@ -16,7 +16,7 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
       - name: Bullfrog Secure Runner
-        uses: bullfrogsec/bullfrog@26e64ce6d5cbd5278698c9d4cddc7fc86e92767e
+        uses: bullfrogsec/bullfrog@6ec26fc5dfcb7b4a67be7c634658451497844c0a
         with:
             egress-policy: block
             allowed-domains: |
