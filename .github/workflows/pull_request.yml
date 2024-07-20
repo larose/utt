@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - larose/bullfrog
 
 jobs:
   build-and-check:
@@ -13,7 +16,7 @@ jobs:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
       - name: Bullfrog Secure Runner
-        uses: bullfrogsec/bullfrog@v0
+        uses: bullfrogsec/bullfrog@d0551a50c7a77ebbebcde1e288cfd495a8ee9878
         with:
             egress-policy: block
             allowed-domains: |
