@@ -179,13 +179,70 @@ def test_view_mixed_named_and_unnamed_projects():
     model = ProjectSummaryModel(activities)
     view = ProjectSummaryView(model)
     output = StringIO()
-
+    
     view.render(output)
     result = output.getvalue()
-
+    
     lines = result.split("\n")
     assert "asd : 3h15" in lines[3]
     assert "    : 1h00" in lines[4]
     assert "qwer: 0h45" in lines[5]
     assert "A   : 0h30" in lines[6]
     assert "Total: 5h30" in lines[8]
+
+
+def test_view_with_percentages():
+    activities = [
+        create_activity("project1: task1", datetime(2024, 1, 1, 9, 0), 240),
+        create_activity("project2: task1", datetime(2024, 1, 1, 13, 0), 120),
+        create_activity("project3: task1", datetime(2024, 1, 1, 15, 0), 60),
+    ]
+    model = ProjectSummaryModel(activities)
+    view = ProjectSummaryView(model, show_perc=True)
+    output = StringIO()
+    
+    view.render(output)
+    result = output.getvalue()
+    
+    lines = result.split("\n")
+    assert "project1: 4h00 ( 57.1%)" in lines[3]
+    assert "project2: 2h00 ( 28.6%)" in lines[4]
+    assert "project3: 1h00 ( 14.3%)" in lines[5]
+    assert "Total   : 7h00 (100.0%)" in lines[7]
+
+
+def test_view_with_percentages_and_current_activity():
+    activities = [
+        create_activity("project1: task1", datetime(2024, 1, 1, 9, 0), 240),
+        create_activity("project2: task1", datetime(2024, 1, 1, 13, 0), 120),
+        create_activity("-- Current Activity --", datetime(2024, 1, 1, 15, 0), 60, is_current=True),
+    ]
+    model = ProjectSummaryModel(activities)
+    view = ProjectSummaryView(model, show_perc=True)
+    output = StringIO()
+    
+    view.render(output)
+    result = output.getvalue()
+    
+    lines = result.split("\n")
+    assert "project1: 4h00 ( 57.1%)" in lines[3]
+    assert "project2: 2h00 ( 28.6%)" in lines[4]
+    assert "-- Current Activity --: 1h00 ( 14.3%)" in lines[5]
+    assert "Total   : 7h00 (100.0%)" in lines[7]
+
+
+def test_view_percentages_without_flag():
+    activities = [
+        create_activity("project1: task1", datetime(2024, 1, 1, 9, 0), 240),
+        create_activity("project2: task1", datetime(2024, 1, 1, 13, 0), 120),
+    ]
+    model = ProjectSummaryModel(activities)
+    view = ProjectSummaryView(model, show_perc=False)
+    output = StringIO()
+    
+    view.render(output)
+    result = output.getvalue()
+    
+    assert "%" not in result
+    assert "project1: 4h00" in result
+    assert "project2: 2h00" in result
