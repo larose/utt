@@ -179,10 +179,10 @@ def test_view_mixed_named_and_unnamed_projects():
     model = ProjectSummaryModel(activities)
     view = ProjectSummaryView(model)
     output = StringIO()
-    
+
     view.render(output)
     result = output.getvalue()
-    
+
     lines = result.split("\n")
     assert "asd : 3h15" in lines[3]
     assert "    : 1h00" in lines[4]
@@ -200,10 +200,10 @@ def test_view_with_percentages():
     model = ProjectSummaryModel(activities)
     view = ProjectSummaryView(model, show_perc=True)
     output = StringIO()
-    
+
     view.render(output)
     result = output.getvalue()
-    
+
     lines = result.split("\n")
     assert "project1: 4h00 ( 57.1%)" in lines[3]
     assert "project2: 2h00 ( 28.6%)" in lines[4]
@@ -220,10 +220,10 @@ def test_view_with_percentages_and_current_activity():
     model = ProjectSummaryModel(activities)
     view = ProjectSummaryView(model, show_perc=True)
     output = StringIO()
-    
+
     view.render(output)
     result = output.getvalue()
-    
+
     lines = result.split("\n")
     assert "project1: 4h00 ( 57.1%)" in lines[3]
     assert "project2: 2h00 ( 28.6%)" in lines[4]
@@ -239,10 +239,10 @@ def test_view_percentages_without_flag():
     model = ProjectSummaryModel(activities)
     view = ProjectSummaryView(model, show_perc=False)
     output = StringIO()
-    
+
     view.render(output)
     result = output.getvalue()
-    
+
     assert "%" not in result
     assert "project1: 4h00" in result
     assert "project2: 2h00" in result

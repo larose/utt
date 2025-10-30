@@ -20,6 +20,7 @@ all: \
   report-hello-only-today \
   report-project \
   report-project-summary \
+  report-project-summary-perc \
   report-per-day \
   report-project-per-day \
   report-project-per-day-csv \
@@ -266,6 +267,18 @@ report-project-summary: $(UTT)
 	bash -c 'diff -u <(utt --now "2014-3-19 18:30" project-summary 2014-3-19 --no-current-activity) data/utt-project-summary.stdout'
 
 	@echo "<< REPORT-PROJECT-SUMMARY"
+
+
+.PHONY: report-project-summary-perc
+report-project-summary-perc: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-SUMMARY-PERC"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-1.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2014-3-19 18:30" project-summary 2014-3-19 --no-current-activity --show-perc) data/utt-project-summary-perc.stdout'
+
+	@echo "<< REPORT-PROJECT-SUMMARY-PERC"
 
 
 .PHONY: report-per-day
