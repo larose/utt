@@ -19,6 +19,7 @@ all: \
   report-timezone-daylight-change \
   report-hello-only-today \
   report-project \
+  report-project-summary \
   report-per-day \
   report-project-per-day \
   report-project-per-day-csv \
@@ -56,7 +57,7 @@ completion: $(UTT)
 	@echo ">> COMPLETION"
 
 	register-python-argcomplete utt >> ~/.bashrc
-	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]} | tr " " "\n" | sort) <(echo -h --help --data --now --timezone --version add config edit hello report stretch | tr " " "\n" | sort)'
+	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]} | tr " " "\n" | sort) <(echo -h --help --data --now --timezone --version add config edit hello project-summary report stretch | tr " " "\n" | sort)'
 
 	@echo "<< COMPLETION"
 
@@ -253,6 +254,18 @@ report-project: $(UTT)
 	bash -c 'diff -u <(utt --now "2018-08-20 20:00" report --project project_1) data/utt-report-project.stdout'
 
 	@echo "<< REPORT-PROJECT"
+
+
+.PHONY: report-project-summary
+report-project-summary: $(UTT)
+	@echo
+	@echo ">> REPORT-PROJECT-SUMMARY"
+
+	mkdir -p `dirname $(UTT_DATA_FILENAME)`
+	cp data/utt-1.log $(UTT_DATA_FILENAME)
+	bash -c 'diff -u <(utt --now "2014-3-19 18:30" project-summary 2014-3-19 --no-current-activity) data/utt-project-summary.stdout'
+
+	@echo "<< REPORT-PROJECT-SUMMARY"
 
 
 .PHONY: report-per-day
