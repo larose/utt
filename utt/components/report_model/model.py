@@ -1,6 +1,7 @@
 from ...report.activities.model import ActivitiesModel
 from ...report.details.model import DetailsModel
 from ...report.per_day.model import PerDayModel
+from ...report.project_summary.model import ProjectSummaryModel
 from ...report.projects.model import ProjectsModel
 from ...report.summary.model import SummaryModel
 from ..activities import Activities
@@ -17,6 +18,7 @@ class ReportModel:
         self.args = args
         self.summary_model = SummaryModel(activities, args.range)
         self.projects_model = ProjectsModel(activities)
+        self.project_summary_model = ProjectSummaryModel(activities)
         self.per_day_model = PerDayModel(activities)
         self.activities_model = ActivitiesModel(activities)
         self.details_model = DetailsModel(activities, local_timezone)

@@ -14,6 +14,7 @@ from ...data_structures.name import Name
 from ...report.activities.view import ActivitiesView
 from ...report.details.view import DetailsView
 from ...report.per_day.view import PerDayView
+from ...report.project_summary.view import ProjectSummaryView
 from ...report.projects.view import ProjectsView
 from ...report.summary.view import SummaryView
 from ._private import register_command, register_component
