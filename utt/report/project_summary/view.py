@@ -21,11 +21,17 @@ class ProjectSummaryView:
         if self._model.current_activity:
             total_seconds += self._model.current_activity["duration_obj"].total_seconds()
 
+        max_duration_length = 0
+        if self._show_perc:
+            durations = [len(p["duration"]) for p in self._model.projects]
+            durations.append(len(self._model.total_duration))
+            max_duration_length = max(durations, default=0)
+
         for project in self._model.projects:
             duration_str = project["duration"]
             if self._show_perc and total_seconds > 0:
                 perc = (project["duration_obj"].total_seconds() / total_seconds) * 100
-                duration_str = f"{duration_str} ({perc:5.1f}%)"
+                duration_str = f"{duration_str:<{max_duration_length}} ({perc:5.1f}%)"
             print(f"{project['project']:<{max_project_length}}: {duration_str}", file=output)
 
         if self._model.current_activity:
@@ -39,7 +45,7 @@ class ProjectSummaryView:
         print(file=output)
         total_str = self._model.total_duration
         if self._show_perc:
-            total_str = f"{total_str} (100.0%)"
+            total_str = f"{total_str:<{max_duration_length}} (100.0%)"
         print(f"{'Total':<{max_project_length}}: {total_str}", file=output)
 
         print(file=output)
