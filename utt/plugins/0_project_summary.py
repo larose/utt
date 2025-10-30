@@ -4,18 +4,27 @@ from ..api import _v1
 
 
 class ProjectSummaryHandler:
-    def __init__(self, args: argparse.Namespace, report_model: _v1._private.ReportModel, output: _v1.Output):
+    def __init__(
+        self,
+        args: argparse.Namespace,
+        filtered_activities: _v1.Activities,
+        output: _v1.Output,
+    ):
         self._args = args
-        self._report = report_model
+        self._activities = filtered_activities
         self._output = output
 
     def __call__(self):
-        view = _v1.ProjectSummaryView(self._report.project_summary_model, show_perc=self._args.show_perc)
+        model = _v1.ProjectSummaryModel(self._activities)
+        view = _v1.ProjectSummaryView(model, show_perc=self._args.show_perc)
         view.render(self._output)
 
 
 def add_args(parser: argparse.ArgumentParser):
     parser.add_argument("report_date", metavar="date", type=str, nargs="?")
+
+    # Set defaults for report_args attributes that project-summary doesn't use
+    # but are required by the ReportArgs component
     parser.set_defaults(csv_section=None, comments=False, details=False, per_day=False)
 
     parser.add_argument(
