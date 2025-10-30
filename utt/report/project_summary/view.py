@@ -16,15 +16,15 @@ class ProjectSummaryView:
         print(file=output)
 
         max_project_length = max((len(p["project"]) for p in self._model.projects), default=0)
-        
+
         total_seconds = sum((p["duration_obj"] for p in self._model.projects), timedelta()).total_seconds()
         if self._model.current_activity:
             total_seconds += self._model.current_activity["duration_obj"].total_seconds()
 
         for project in self._model.projects:
-            duration_str = project['duration']
+            duration_str = project["duration"]
             if self._show_perc and total_seconds > 0:
-                perc = (project['duration_obj'].total_seconds() / total_seconds) * 100
+                perc = (project["duration_obj"].total_seconds() / total_seconds) * 100
                 duration_str = f"{duration_str} ({perc:5.1f}%)"
             print(f"{project['project']:<{max_project_length}}: {duration_str}", file=output)
 

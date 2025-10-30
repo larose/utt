@@ -4,7 +4,7 @@ from ..api import _v1
 
 
 class ProjectSummaryHandler:
-    def __init__(self, args: argparse.Namespace,report_model: _v1._private.ReportModel, output: _v1.Output):
+    def __init__(self, args: argparse.Namespace, report_model: _v1._private.ReportModel, output: _v1.Output):
         self._args = args
         self._report = report_model
         self._output = output
