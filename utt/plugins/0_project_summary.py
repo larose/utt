@@ -15,6 +15,7 @@ class ProjectSummaryHandler:
 
 def add_args(parser: argparse.ArgumentParser):
     parser.add_argument("report_date", metavar="date", type=str, nargs="?")
+    parser.set_defaults(csv_section=None, comments=False, details=False, per_day=False)
 
     parser.add_argument(
         "--current-activity",
@@ -88,34 +89,6 @@ def add_args(parser: argparse.ArgumentParser):
             "will override start and end, respectively.  If the week is "
             "the current week, 'today' will be the last day of the report."
         ),
-    )
-
-    parser.add_argument(
-        "--csv-section",
-        choices=list(_v1._private.csv_section_name_to_csv_section.keys()),
-        default=None,
-        help="Instead of text output, print CSV of desired section",
-    )
-
-    parser.add_argument(
-        "--per-day",
-        action="store_true",
-        default=False,
-        help="Show total hours per day.",
-    )
-
-    parser.add_argument(
-        "--details",
-        action="store_true",
-        default=False,
-        help="Show details even for multi-day reports.",
-    )
-
-    parser.add_argument(
-        "--comments",
-        action="store_true",
-        default=False,
-        help="Show comments in details sections.",
     )
 
 
