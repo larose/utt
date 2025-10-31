@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - name: Setup python
@@ -37,7 +37,7 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: 3.12
       - name: Bootstrap
         run: make ci.bootstrap
       - name: Configure poetry
@@ -50,7 +50,7 @@ jobs:
       - name: Download dist directory
         uses: actions/download-artifact@v4
         with:
-          name: dist-3.8
+          name: dist-3.12
           path: dist
 #      - name: Publish (Test PyPI)
 #        run: make ci.publish.test-pypi

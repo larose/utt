@@ -21,7 +21,7 @@ version = "0"                                                # Do not change. Up
 [tool.poetry.dependencies]
 argcomplete = "^3.2.1"
 cargo = "^0.3"
-python = "^3.8.1"
+python = "^3.10"
 python_dateutil = "^2.8.1"
 pytz = "^2023.3.post1"
 tzlocal = "^5.2"

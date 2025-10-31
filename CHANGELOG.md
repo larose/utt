@@ -1,3 +1,7 @@
+## (unreleased)
+
+  * Remove support for Python 3.8 and 3.9.
+
 ## 1.30 (2024-01-17)
 
   * Add 'per-task' CSV report type
