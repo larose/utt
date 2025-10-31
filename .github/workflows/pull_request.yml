@@ -12,17 +12,6 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
-      - name: Bullfrog Secure Runner
-        uses: bullfrogsec/bullfrog@v0
-        with:
-            egress-policy: block
-            allowed-domains: |
-              auth.docker.io
-              deb.debian.org
-              files.pythonhosted.org
-              production.cloudflare.docker.com
-              pypi.org
-              registry-1.docker.io
       - uses: actions/checkout@v4
       - name: Setup python
         uses: actions/setup-python@v5
