@@ -1,5 +1,4 @@
 import csv
-
 from datetime import datetime
 
 from pytz.tzinfo import DstTzInfo
