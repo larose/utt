@@ -41,16 +41,16 @@ ci.configure-poetry:
 
 .PHONY: ci.publish.pypi
 ci.publish.pypi:
-	python scripts/publish.py $(PYPI_REPO_NAME) $(PYPI_JSON_API_URL)
+	python3 scripts/publish.py $(PYPI_REPO_NAME) $(PYPI_JSON_API_URL)
 
 .PHONY: ci.publish.test-pypi
 ci.publish.test-pypi:
-	python scripts/publish.py $(TEST_PYPI_REPO_NAME) $(TEST_PYPI_JSON_API_URL)
+	python3 scripts/publish.py $(TEST_PYPI_REPO_NAME) $(TEST_PYPI_JSON_API_URL)
 
 .PHONY: ci.update-version-in-pyproject
 ci.update-version-in-pyproject:
-	python scripts/update_version_in_pyproject.py $(CHANGELOG_FILENAME)
-	python scripts/update_version_txt.py utt/version.txt
+	python3 scripts/update_version_in_pyproject.py $(CHANGELOG_FILENAME)
+	python3 scripts/update_version_txt.py utt/version.txt
 
 .PHONY: clean
 clean:
@@ -86,7 +86,7 @@ test.unit:
 test.integration: clean build
 	cp dist/utt-*-py3-none-any.whl $(INTEGRATION_DIR)
 
-	python -c 'import sys; print(f"FROM python:{sys.version_info.major}.{sys.version_info.minor}-slim-bullseye")' > $(GENERATED_DOCKERFILE)
+	python3 -c 'import sys; print(f"FROM python:{sys.version_info.major}.{sys.version_info.minor}-slim-bullseye")' > $(GENERATED_DOCKERFILE)
 	cat $(TEMPLATE_DOCKERFILE) >> $(GENERATED_DOCKERFILE)
 	docker build --tag $(TEST_DOCKER_IMAGE) --file $(GENERATED_DOCKERFILE) $(INTEGRATION_DIR)
 	docker run --rm $(TEST_DOCKER_IMAGE) $(INTEGRATION_CMD)

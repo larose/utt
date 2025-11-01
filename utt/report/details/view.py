@@ -2,8 +2,6 @@ import csv
 
 from datetime import datetime
 
-from pytz.tzinfo import DstTzInfo
-
 from ...components.output import Output
 from ...data_structures.activity import Activity
 from .. import formatter
@@ -20,8 +18,8 @@ class DetailsView:
         format_str = "(%s) %s-%s %s"
         line = [
             formatter.format_duration(activity.duration),
-            format_time(activity.start, self._model.local_timezone),
-            format_time(activity.end, self._model.local_timezone),
+            format_time(activity.start),
+            format_time(activity.end),
             activity.name,
         ]
 
@@ -74,5 +72,5 @@ class DetailsView:
             writer.writerow(task_details)
 
 
-def format_time(datetime: datetime, local_timezone: DstTzInfo) -> str:
-    return datetime.astimezone(local_timezone).strftime("%H:%M")
+def format_time(datetime: datetime) -> str:
+    return datetime.strftime("%H:%M")

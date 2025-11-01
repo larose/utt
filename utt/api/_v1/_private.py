@@ -18,14 +18,12 @@ from ...components.default_config import DefaultConfig
 from ...components.entries import Entries, entries
 from ...components.entry_lines import EntryLines
 from ...components.entry_parser import EntryParser
-from ...components.local_timezone import LocalTimezone, local_timezone
 from ...components.now import Now, now
 from ...components.output import Output
 from ...components.parse_args import parse_args
 from ...components.report_args import ReportArgs, csv_section_name_to_csv_section, report_args  # noqa
 from ...components.report_model import ReportModel
 from ...components.report_model.model import report
-from ...components.timezone_config import TimezoneConfig, timezone_config
 from ...report.csv_view import CSVReportView
 
 
@@ -45,12 +43,10 @@ def create_container():
     _container[Entries] = entries
     _container[EntryParser] = EntryParser
     _container[EntryLines] = EntryLines
-    _container[LocalTimezone] = local_timezone
     _container[Now] = now
     _container[Output] = sys.stdout
     _container[ReportArgs] = report_args
     _container[ReportModel] = report
-    _container[TimezoneConfig] = timezone_config
     _container[CSVReportView] = CSVReportView
 
     return _container

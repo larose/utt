@@ -3,7 +3,6 @@ import datetime
 import sys
 
 import argcomplete
-import pytz
 
 from ..__version__ import VERSION
 from .commands import Commands
@@ -19,8 +18,6 @@ def parse_args(commands: Commands) -> argparse.Namespace:
     parser.add_argument("--data", dest="data_filename")
 
     parser.add_argument("--now", dest="now", type=parse_datetime)
-
-    parser.add_argument("--timezone", dest="timezone", type=pytz.timezone)
 
     parser.add_argument(
         "--version",

@@ -1,6 +1,7 @@
 ## (unreleased)
 
-  * Remove support for Python 3.8 and 3.9.
+  * Remove support for Python 3.8 and 3.9
+  * Remove timezone support
 
 ## 1.30 (2024-01-17)
 
