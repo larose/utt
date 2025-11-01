@@ -5,11 +5,10 @@
 - [System dependencies](#system-dependencies)
 - [Python dependencies](#python-dependencies)
 - [Formatting code](#formatting-code)
-- [Code quality](#code-quality)
 - [Executing `utt` from source](#executing-utt-from-source)
 - [Tests](#tests)
     - [Unit tests](#unit-tests)
-        - [Integration Tests](#integration-tests)
+    - [Integration Tests](#integration-tests)
 
 
 
@@ -39,18 +38,6 @@ format the code with this command:
 `$ make format`
 
 
-## Code quality
-
-We run a few checks to enforce a minimum code quality. You can run
-them with this command:
-
-`$ make lint`
-
-It checks that the code is properly formatted (it shouldn't be an
-issue if you ran `make format`) and a few other checks such as unused
-imports, unused variables, etc.
-
-
 ## Executing `utt` from source
 
 To run utt from local source:
@@ -62,9 +49,7 @@ To run utt from local source:
 
 This section is very important as most code changes need tests.
 
-There are two kinds of tests: unit and integration tests.
-
-You can run both with this command:
+You can run all tests (including format checks, unit tests, and integration tests) with this command:
 
 `$ make test`
 

@@ -23,9 +23,6 @@ bootstrap: bootstrap.install
 bootstrap.install:
 	poetry install
 
-.PHONY: check
-check: lint test
-
 .PHONY: ci.bootstrap
 ci.bootstrap:
 	pip install poetry
@@ -62,25 +59,14 @@ format:
 	poetry run black $(SOURCE_DIRS)
 	poetry run isort $(SOURCE_DIRS)
 
-.PHONY: lint
-lint: lint.format  # lint.types
+.PHONY: test
+test: test.format test.integration test.unit
 
-.PHONY: lint.format
-lint.format:
+.PHONY: test.format
+test.format:
 	poetry run flake8 $(SOURCE_DIRS)
 	poetry run isort --check-only --diff --ignore-whitespace --quiet $(SOURCE_DIRS)
 	poetry run black --check --diff $(SOURCE_DIRS)
-
-#.PHONY: lint.types
-#lint.types:
-#	poetry run mypy $(SOURCE_DIRS)
-
-.PHONY: test
-test: test.unit test.integration
-
-.PHONY: test.unit
-test.unit:
-	poetry run pytest --verbose
 
 .PHONY: test.integration
 test.integration: clean build
@@ -90,3 +76,8 @@ test.integration: clean build
 	cat $(TEMPLATE_DOCKERFILE) >> $(GENERATED_DOCKERFILE)
 	docker build --tag $(TEST_DOCKER_IMAGE) --file $(GENERATED_DOCKERFILE) $(INTEGRATION_DIR)
 	docker run --rm $(TEST_DOCKER_IMAGE) $(INTEGRATION_CMD)
+
+.PHONY: test.unit
+test.unit:
+	poetry run pytest --verbose
+
