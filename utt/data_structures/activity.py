@@ -33,21 +33,6 @@ class Activity:
         self.is_current_activity = is_current_activity
         self.comment = comment
 
-    def __eq__(self, other):
-        return (
-            self.name == other.name
-            and self.start == other.start
-            and self.end == other.end
-            and self.duration == other.duration
-            and self.type == other.type
-        )
-
-    def __str__(self):
-        return "Activity(" + ", ".join(map(str, [self.name, self.start, self.end, self.duration, self.type])) + ")"
-
-    def __repr__(self):
-        return self.__str__()
-
     @staticmethod
     def _type_from_name(name):
         if name[-3:] == "***":

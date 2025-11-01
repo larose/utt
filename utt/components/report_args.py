@@ -227,12 +227,6 @@ def parse_week(today, weekstring):
     return (start, end)
 
 
-def week_dates(date):
-    week_start_date = date + datetime.timedelta(-date.weekday())
-    week_end_date = date + datetime.timedelta(6 - date.weekday())
-    return week_start_date, week_end_date
-
-
 DAY_NAMES = [
     "MONDAY",
     "TUESDAY",
