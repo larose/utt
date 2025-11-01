@@ -1,4 +1,4 @@
-## (unreleased)
+## 1.31 (2025-11-01)
 
   * Remove support for Python 3.8 and 3.9
   * Remove timezone support
