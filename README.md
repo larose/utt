@@ -25,8 +25,6 @@ application written in Python.
     - [`stretch`](#stretch)
   - [Plugins](#plugins)
     - [Plugin development](#plugin-development)
-  - [Configuration](#configuration)
-    - [Timezone](#timezone)
   - [Bash Completion](#bash-completion)
   - [Contributing](#contributing)
   - [Contributors](#contributors)
@@ -405,26 +403,6 @@ See
 [docs/CONTRIBUTING.md#how-can-i-create-a-plugin](docs/CONTRIBUTING.md#how-can-i-create-a-plugin)
 how to create a utt plugin.
 
-
-## Configuration
-
-### Timezone
-
-Warning: timezone is an experimental feature.
-
-To enable timezone support, get the config filename:
-
-```
-$ utt config --filename
-`/home/<user>/.config/utt/utt.cfg`
-```
-
-Then, open it with a text editor and change it so it looks like this:
-
-```
-[timezone]
-enabled = true
-```
 
 ## Bash Completion
 

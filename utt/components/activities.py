@@ -5,7 +5,6 @@ from typing import List, Optional
 from ..constants import HELLO_ENTRY_NAME
 from ..data_structures.activity import Activity
 from .entries import Entries
-from .local_timezone import LocalTimezone
 from .now import Now
 from .report_args import DateRange, ReportArgs
 
@@ -18,13 +17,9 @@ def filter_activities_by_project(activities: Activities, project_name: Optional[
             yield activity
 
 
-def filter_activities_by_range(activities: Activities, date_range: DateRange, local_timezone: LocalTimezone):
-    start_datetime = local_timezone.localize(
-        datetime.datetime(date_range.start.year, date_range.start.month, date_range.start.day)
-    )
-    end_datetime = local_timezone.localize(
-        datetime.datetime(date_range.end.year, date_range.end.month, date_range.end.day, 23, 59, 59, 99999)
-    )
+def filter_activities_by_range(activities: Activities, date_range: DateRange):
+    start_datetime = datetime.datetime(date_range.start.year, date_range.start.month, date_range.start.day)
+    end_datetime = datetime.datetime(date_range.end.year, date_range.end.month, date_range.end.day, 23, 59, 59, 99999)
 
     for full_activity in activities:
         activity = full_activity.clip(start_datetime, end_datetime)
@@ -36,8 +31,8 @@ def get_current_activity(
     current_activity_name: Optional[str],
     last_activity: Optional[Activity],
     now: Now,
-    start_datetime: datetime,
-    end_datetime: datetime,
+    start_datetime: datetime.datetime,
+    end_datetime: datetime.datetime,
 ) -> Optional[Activity]:
     if current_activity_name is None or last_activity is None:
         return
@@ -57,22 +52,17 @@ def remove_hello_activities(activities):
             yield activity
 
 
-def activities(report_args: ReportArgs, now: Now, local_timezone: LocalTimezone, entries: Entries) -> Activities:
+def activities(report_args: ReportArgs, now: Now, entries: Entries) -> Activities:
     activities = list(_activities(entries))
-    _filtered_activities = list(filter_activities_by_range(activities, report_args.range, local_timezone))
+    _filtered_activities = list(filter_activities_by_range(activities, report_args.range))
 
-    start_datetime = local_timezone.localize(
-        datetime.datetime(
-            year=report_args.range.start.year, month=report_args.range.start.month, day=report_args.range.start.day
-        )
+    start_datetime = datetime.datetime(
+        year=report_args.range.start.year, month=report_args.range.start.month, day=report_args.range.start.day
     )
 
-    end_datetime = local_timezone.localize(
-        datetime.datetime(
-            year=report_args.range.end.year, month=report_args.range.end.month, day=report_args.range.end.day
-        )
-        + datetime.timedelta(days=1)
-    )
+    end_datetime = datetime.datetime(
+        year=report_args.range.end.year, month=report_args.range.end.month, day=report_args.range.end.day
+    ) + datetime.timedelta(days=1)
 
     last_activity = activities[-1] if activities else None
     current_activity = get_current_activity(

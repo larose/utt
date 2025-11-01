@@ -15,8 +15,6 @@ all: \
   report-uppercase \
   report-range report-overnight \
   report-overnight-range \
-  report-change-timezone \
-  report-timezone-daylight-change \
   report-hello-only-today \
   report-project \
   report-per-day \
@@ -56,7 +54,7 @@ completion: $(UTT)
 	@echo ">> COMPLETION"
 
 	register-python-argcomplete utt >> ~/.bashrc
-	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]} | tr " " "\n" | sort) <(echo -h --help --data --now --timezone --version add config edit hello report stretch | tr " " "\n" | sort)'
+	bash -i -c 'diff <(COMP_LINE="utt" COMP_POINT=4 _python_argcomplete utt && echo $${COMPREPLY[@]} | tr " " "\n" | sort) <(echo -h --help --data --now --version add config edit hello report stretch | tr " " "\n" | sort)'
 
 	@echo "<< COMPLETION"
 
@@ -89,7 +87,7 @@ example-plugin: $(UTT)
 	@echo ">> EXAMPLE PLUGIN"
 
 	cd utt_example_plugin && python3 -m pip install .
-	bash -c 'diff <(utt --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00+00:00)'
+	bash -c 'diff <(utt --now "2020-01-03 9:00" foo) <(echo Now: 2020-01-03 09:00:00)'
 	rm -f $(UTT_DATA_FILENAME)
 	utt --now "2020-01-03 9:00" hello
 	utt --now "2020-01-03 10:00" add work
@@ -197,31 +195,6 @@ report-overnight-range: $(UTT)
 	bash -c 'diff <(utt --now "2014-3-19 18:30" report --from "2014-03-14" --to "2014-03-18") data/utt-overnight-range.stdout'
 
 	@echo "<< REPORT-OVERNIGHT-RANGE"
-
-report-change-timezone: $(UTT)
-	@echo
-	@echo ">> REPORT-CHANGE-TIMEZONE"
-
-	mkdir -p `dirname $(UTT_DATA_FILENAME)`
-	cp data/utt-change-timezone.log $(UTT_DATA_FILENAME)
-	bash -c 'diff <(utt --now "2018-08-10 18:00" report "2018-08-08") data/utt-change-timezone.stdout'
-
-	@echo "<< REPORT-CHANGE-TIMEZONE"
-
-
-.PHONY: report-timezone-daylight-change
-report-timezone-daylight-change: $(UTT)
-	@echo
-	@echo ">> REPORT-TIMEZONE-DAYLIGHT-CHANGE"
-
-	mkdir -p `dirname $(UTT_DATA_FILENAME)`
-	rm -f $(UTT_DATA_FILENAME)
-	echo "2018-10-28 08:00+0800 hello" >> $(UTT_DATA_FILENAME)
-	echo "2018-10-28 12:00+0800 travel" >> $(UTT_DATA_FILENAME)
-
-	bash -c 'diff <(utt --now "2018-10-28 18:30" --timezone "Europe/London" report --no-current-activity) data/utt-report-timezone-daylight-change.stdout'
-
-	@echo "<< REPORT-TIMEZONE-DAYLIGHT-CHANGE"
 
 report-hello-only-today: $(UTT)
 	@echo
