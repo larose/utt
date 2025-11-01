@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build-and-check:
+  build-and-test:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -21,8 +21,8 @@ jobs:
         run: make ci.bootstrap
       - name: Update version in pyproject.toml
         run: make ci.update-version-in-pyproject
-      - name: Check
-        run: make check
+      - name: Test
+        run: make test
       - name: Upload dist directory
         uses: actions/upload-artifact@v4
         with:
@@ -31,7 +31,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-22.04
-    needs: build-and-check
+    needs: build-and-test
     steps:
       - uses: actions/checkout@v4
       - name: Setup python
