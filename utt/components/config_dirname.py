@@ -1,9 +1,10 @@
 import os
-import typing
 
 from ..constants import DATA_CONFIG_DEFAULT_DIRNAME, DATA_CONFIG_ENV_VAR_NAME, DATA_CONFIG_SUB_DIRNAME
 
-ConfigDirname = typing.NewType("ConfigDirname", str)
+
+class ConfigDirname(str):
+    pass
 
 
 def config_dirname() -> ConfigDirname:

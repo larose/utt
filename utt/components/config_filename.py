@@ -1,10 +1,11 @@
 import os
-import typing
 
 from ..constants import CONFIG_FILENAME
 from .config_dirname import ConfigDirname
 
-ConfigFilename = typing.NewType("ConfigFilename", str)
+
+class ConfigFilename(str):
+    pass
 
 
 def config_filename(config_dirname: ConfigDirname) -> ConfigFilename:

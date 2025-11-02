@@ -60,7 +60,7 @@ format:
 	poetry run isort $(SOURCE_DIRS)
 
 .PHONY: test
-test: test.format test.integration test.unit
+test: test.format test.integration test.types test.unit
 
 .PHONY: test.format
 test.format:
@@ -77,7 +77,10 @@ test.integration: clean build
 	docker build --tag $(TEST_DOCKER_IMAGE) --file $(GENERATED_DOCKERFILE) $(INTEGRATION_DIR)
 	docker run --rm $(TEST_DOCKER_IMAGE) $(INTEGRATION_CMD)
 
+.PHONY: test.types
+test.types:
+	poetry run pyright
+
 .PHONY: test.unit
 test.unit:
 	poetry run pytest --verbose
-

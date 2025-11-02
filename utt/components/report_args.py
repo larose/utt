@@ -46,7 +46,7 @@ def parse_report_range_arguments(
     if unparsed_report_date is None:
         report_date = today
     else:
-        report_date = parse_date(today, unparsed_report_date)
+        report_date = parse_date(today, unparsed_report_date, is_past=True)
 
     if unparsed_month:
         report_start_date, report_end_date = parse_month(report_date, unparsed_month)
@@ -65,7 +65,7 @@ def parse_report_range_arguments(
     return DateRange(start=report_start_date, end=report_end_date)
 
 
-def parse_date(today, datestring, is_past=True):
+def parse_date(today: datetime.date, datestring: str, is_past: bool):
     day = parse_relative_day(today, datestring)
     if day is not None:
         return day
@@ -217,10 +217,13 @@ def parse_week_number(today, weekstring):
         return datetime.date.fromisocalendar(year, weeknum, 1)
 
 
-def parse_week(today, weekstring):
+def parse_week(today: datetime.date, weekstring: str):
     week = parse_relative_week(today, weekstring)
     if week is None:
         week = parse_week_number(today, weekstring)
+        if week is None:
+            raise ValueError(f"Invalid week string: {weekstring}")
+
     start = week
     end = week + datetime.timedelta(days=6)
 

@@ -16,19 +16,7 @@ def print_dicts(dcts: List[Dict], output: Output) -> None:
         print(format_string.format(**dict(context, **dct)), file=output)
 
 
-def filter_activities_by_type(activities: List[Activity], activity_type: str) -> List[Activity]:
-    """Filter a list of Activity with the given activity type.
-
-    Parameters
-    ----------
-    activities : list of Activity
-    activity_type : str
-        An activity type defined in Activity.Type
-
-    Returns
-    -------
-    filtered: list of Activity
-    """
+def filter_activities_by_type(activities: List[Activity], activity_type: int) -> List[Activity]:
     return list(filter(lambda act: act.type == activity_type, activities))
 
 

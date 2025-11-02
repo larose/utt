@@ -9,6 +9,9 @@ line-length = 120
 profile = "black"
 line_length = 120
 
+[tool.pyright]
+typeCheckingMode = "standard"
+
 [tool.poetry]
 authors = ["Mathieu Larose <mathieu@mathieularose.com>"]
 description = "A simple command-line time tracker"
@@ -31,5 +34,7 @@ black = "^23.12.1"
 ddt = "^1.7.1"
 flake8 = "^7.0.0"
 isort = "^5.13.2"
+pyright = "^1.1.407"
 pytest = "^7.4.4"
 requests = "^2.31.0"
+setuptools = "^80.9.0"

@@ -1,5 +1,6 @@
 import copy
 from datetime import datetime
+from typing import Optional
 
 from .name import Name
 
@@ -10,12 +11,13 @@ class Activity:
         BREAK = 1
         IGNORED = 2
 
+        @staticmethod
         def name(type: int) -> str:
             return {
                 Activity.Type.WORK: "WORK",
                 Activity.Type.BREAK: "BREAK",
                 Activity.Type.IGNORED: "IGNORED",
-            }.get(type)
+            }[type]
 
     def __init__(
         self,
@@ -23,7 +25,7 @@ class Activity:
         start: datetime,
         end: datetime,
         is_current_activity: bool,
-        comment: str = None,
+        comment: Optional[str],
     ):
         self.name = Name(name)
         self.start = start

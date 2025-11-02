@@ -1,4 +1,4 @@
-from typing import Generator, List, Tuple
+from typing import Generator, List, Optional, Tuple
 
 from ..data_structures.entry import Entry
 from .entry_lines import EntryLines
@@ -21,7 +21,7 @@ def _parse_log(lines: List[Tuple[int, str]], entry_parser: EntryParser) -> Gener
             yield entry
 
 
-def _parse_line(previous_entry: Entry, line_number: int, line: str, entry_parser: EntryParser):
+def _parse_line(previous_entry: Optional[Entry], line_number: int, line: str, entry_parser: EntryParser):
     # Ignore empty lines
     if not line:
         return None
@@ -30,7 +30,8 @@ def _parse_line(previous_entry: Entry, line_number: int, line: str, entry_parser
     if new_entry is None:
         raise SyntaxError("Invalid syntax at line %d: %s" % (line_number, line))
 
-    if previous_entry and previous_entry.datetime > new_entry.datetime:
+    if previous_entry is not None and previous_entry.datetime > new_entry.datetime:
         raise Exception("Error line %d. Not in chronological order: %s > %s" % (line_number, previous_entry, new_entry))
+
     previous_entry = new_entry
     return previous_entry, new_entry

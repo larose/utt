@@ -1,12 +1,14 @@
 import argparse
 import datetime
-import typing
 
-Now = typing.NewType("Now", datetime.datetime)
+
+class Now(datetime.datetime):
+    pass
 
 
 def now(args: argparse.Namespace) -> Now:
     if args.now:
-        return Now(args.now)
+        return Now.fromtimestamp(args.now.timestamp())
 
-    return Now(datetime.datetime.now())
+    dt = datetime.datetime.now()
+    return Now.fromtimestamp(dt.timestamp())

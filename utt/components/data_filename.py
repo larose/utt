@@ -1,11 +1,12 @@
 import argparse
 import os
-import typing
 
 from ..constants import ENTRY_FILENAME
 from .data_dirname import DataDirname
 
-DataFilename = typing.NewType("DataFilename", str)
+
+class DataFilename(str):
+    pass
 
 
 def data_filename(args: argparse.Namespace, data_dirname: DataDirname) -> DataFilename:
