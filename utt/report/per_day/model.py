@@ -20,8 +20,8 @@ def _groupby_date(activities: List[Activity]) -> List[Dict]:
     result = []
     sorted_activities = sorted(activities, key=key)
 
-    for date, activities in itertools.groupby(sorted_activities, key):
-        activities = list(activities)
+    for date, _activities in itertools.groupby(sorted_activities, key):
+        activities = list(_activities)
         duration = sum((act.duration for act in activities), datetime.timedelta())
         result.append(
             {

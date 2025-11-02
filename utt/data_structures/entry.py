@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 
 class Entry:
@@ -7,7 +8,7 @@ class Entry:
         entry_datetime: datetime,
         name: str,
         is_current_entry: bool,
-        comment: str = None,
+        comment: Optional[str],
     ):
         self.datetime = entry_datetime
         self.name = name

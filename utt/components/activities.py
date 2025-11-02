@@ -43,7 +43,7 @@ def get_current_activity(
     if not now_is_between_last_activity_and_end_report_range:
         return
 
-    return Activity(current_activity_name, last_activity_end, now, True)
+    return Activity(current_activity_name, last_activity_end, now, True, comment=None)
 
 
 def remove_hello_activities(activities):

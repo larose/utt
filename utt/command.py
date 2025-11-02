@@ -1,4 +1,5 @@
 import argparse
+import typing
 from dataclasses import dataclass
 from typing import Callable
 
@@ -7,5 +8,5 @@ from typing import Callable
 class Command:
     name: str
     description: str
-    handler_class: Callable[..., Callable[[None], None]]
+    handler_class: typing.Type
     add_args: Callable[[argparse.ArgumentParser], None]

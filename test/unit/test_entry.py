@@ -67,6 +67,9 @@ class ValidEntry(unittest.TestCase):
     def test(self, name, expected_datetime, expected_name, expected_comment):
         entry_parser = EntryParser()
         entry = entry_parser.parse(name)
+        if entry is None:
+            self.fail("EntryParser returned None for valid entry")
+
         self.assertEqual(entry.datetime, expected_datetime)
         self.assertEqual(entry.name, expected_name)
         self.assertEqual(entry.comment, expected_comment)

@@ -1,4 +1,5 @@
 import io
-import typing
 
-Output = typing.NewType("Output", io.TextIOWrapper)
+
+class Output(io.TextIOWrapper):
+    pass

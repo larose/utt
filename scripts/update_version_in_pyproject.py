@@ -38,14 +38,10 @@ def main():
     version = get_version(changelog_filename)
     print(f"Version: {version}")
 
-    if version == UNRELEASED_VERSION_NAME:
+    if version is None or version == UNRELEASED_VERSION_NAME:
         version = "0"
 
-    print(
-        subprocess.check_output(
-            ["poetry", "version", version], stderr=sys.stderr
-        ).decode()
-    )
+    print(subprocess.check_output(["poetry", "version", version]).decode())
 
 
 if __name__ == "__main__":

@@ -49,7 +49,7 @@ To run utt from local source:
 
 This section is very important as most code changes need tests.
 
-You can run all tests (including format checks, unit tests, and integration tests) with this command:
+You can run all tests with this command:
 
 `$ make test`
 

@@ -19,8 +19,8 @@ def groupby_project(activities: List[Activity]) -> List[Dict]:
     result = []
     sorted_activities = sorted(activities, key=key)
 
-    for project, activities in itertools.groupby(sorted_activities, key):
-        activities = list(activities)
+    for project, _activities in itertools.groupby(sorted_activities, key):
+        activities = list(_activities)
         result.append(
             {
                 "duration": formatter.format_duration(sum((act.duration for act in activities), datetime.timedelta())),

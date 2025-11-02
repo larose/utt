@@ -1,9 +1,10 @@
 import os
-import typing
 
 from ..constants import DATA_HOME_DEFAULT_DIRNAME, DATA_HOME_ENV_VAR_NAME, DATA_HOME_SUB_DIRNAME
 
-DataDirname = typing.NewType("DataDirname", str)
+
+class DataDirname(str):
+    pass
 
 
 def data_dirname() -> DataDirname:

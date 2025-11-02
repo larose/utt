@@ -19,8 +19,8 @@ def _groupby_name(activities: List[Activity]) -> List[Dict]:
 
     result = []
     sorted_activities = sorted(activities, key=key)
-    for _, activities in itertools.groupby(sorted_activities, key):
-        activities = list(activities)
+    for _, _activities in itertools.groupby(sorted_activities, key):
+        activities = list(_activities)
         project = activities[0].name.project
         result.append(
             {
