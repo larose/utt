@@ -1,8 +1,6 @@
 import datetime
 import unittest
 
-import ddt
-
 from utt.components.report_args import parse_date
 
 VALID_ENTRIES = [
@@ -24,10 +22,10 @@ VALID_ENTRIES = [
 ]
 
 
-@ddt.ddt
 class ParseDate(unittest.TestCase):
-    @ddt.data(*VALID_ENTRIES)
-    @ddt.unpack
-    def test(self, report_date, today, expected_report_date, is_past):
-        actual_report_date = parse_date(today, report_date, is_past)
-        self.assertEqual(actual_report_date, expected_report_date)
+    def test_parse_date(self):
+        for test_case in VALID_ENTRIES:
+            report_date, today, expected_report_date, is_past = test_case
+            with self.subTest(report_date=report_date, today=today, is_past=is_past):
+                actual_report_date = parse_date(today, report_date, is_past)
+                self.assertEqual(actual_report_date, expected_report_date)

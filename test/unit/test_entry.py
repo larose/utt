@@ -1,8 +1,6 @@
 import datetime
 import unittest
 
-import ddt
-
 from utt.components.entry_parser import EntryParser
 
 VALID_ENTRIES = [
@@ -60,26 +58,24 @@ INVALID_ENTRIES = [
 ]
 
 
-@ddt.ddt
 class ValidEntry(unittest.TestCase):
-    @ddt.data(*VALID_ENTRIES)
-    @ddt.unpack
-    def test(self, name, expected_datetime, expected_name, expected_comment):
-        entry_parser = EntryParser()
-        entry = entry_parser.parse(name)
-        if entry is None:
-            self.fail("EntryParser returned None for valid entry")
+    def test_valid_entries(self):
+        for test_case in VALID_ENTRIES:
+            with self.subTest(name=test_case["name"]):
+                entry_parser = EntryParser()
+                entry = entry_parser.parse(test_case["name"])
+                if entry is None:
+                    self.fail("EntryParser returned None for valid entry")
 
-        self.assertEqual(entry.datetime, expected_datetime)
-        self.assertEqual(entry.name, expected_name)
-        self.assertEqual(entry.comment, expected_comment)
+                self.assertEqual(entry.datetime, test_case["expected_datetime"])
+                self.assertEqual(entry.name, test_case["expected_name"])
+                self.assertEqual(entry.comment, test_case["expected_comment"])
 
 
-@ddt.ddt
 class InvalidEntry(unittest.TestCase):
-    @ddt.data(*INVALID_ENTRIES)
-    @ddt.unpack
-    def test(self, text):
-        entry_parser = EntryParser()
-        entry = entry_parser.parse(text)
-        self.assertIsNone(entry)
+    def test_invalid_entries(self):
+        for test_case in INVALID_ENTRIES:
+            with self.subTest(text=test_case[0]):
+                entry_parser = EntryParser()
+                entry = entry_parser.parse(test_case[0])
+                self.assertIsNone(entry)
