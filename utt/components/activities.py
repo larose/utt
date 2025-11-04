@@ -1,6 +1,6 @@
 import datetime
 import itertools
-from typing import List, Optional
+from typing import Generator, Iterable, List, Optional, TypeVar
 
 from ..constants import HELLO_ENTRY_NAME
 from ..data_structures.activity import Activity
@@ -9,6 +9,49 @@ from .now import Now
 from .report_args import DateRange, ReportArgs
 
 Activities = List[Activity]
+
+
+def activities(report_args: ReportArgs, now: Now, entries: Entries) -> Activities:
+    activities = list(entries_to_activities(entries))
+    last_activity = activities[-1] if activities else None
+
+    _filtered_activities = list(filter_activities_by_range(activities, report_args.range))
+
+    # TODO: both here and in filter_activities_by_range we create start_datetime
+    start_datetime = datetime.datetime(
+        year=report_args.range.start.year, month=report_args.range.start.month, day=report_args.range.start.day
+    )
+
+    end_datetime = datetime.datetime(
+        year=report_args.range.end.year, month=report_args.range.end.month, day=report_args.range.end.day
+    ) + datetime.timedelta(days=1)
+
+    current_activity = get_current_activity(
+        current_activity_name=report_args.current_activity_name,
+        last_activity=last_activity,
+        now=now,
+        start_datetime=start_datetime,
+        end_datetime=end_datetime,
+    )
+    if current_activity is not None:
+        _filtered_activities.append(current_activity)
+
+    _filtered_activities = list(remove_hello_activities(_filtered_activities))
+    _filtered_activities = list(filter_activities_by_project(_filtered_activities, report_args.project_name_filter))
+
+    return _filtered_activities
+
+
+def entries_to_activities(entries: Entries) -> Generator[Activity, None, None]:
+    for prev_entry, next_entry in pairwise(entries):
+        activity = Activity(
+            name=next_entry.name,
+            start=prev_entry.datetime,
+            end=next_entry.datetime,
+            is_current_activity=False,
+            comment=next_entry.comment,
+        )
+        yield activity
 
 
 def filter_activities_by_project(activities: Activities, project_name: Optional[str]):
@@ -46,50 +89,16 @@ def get_current_activity(
     return Activity(current_activity_name, last_activity_end, now, True, comment=None)
 
 
-def remove_hello_activities(activities):
+def remove_hello_activities(activities: List[Activity]):
     for activity in activities:
         if activity.name.name != HELLO_ENTRY_NAME:
             yield activity
 
 
-def activities(report_args: ReportArgs, now: Now, entries: Entries) -> Activities:
-    activities = list(_activities(entries))
-    _filtered_activities = list(filter_activities_by_range(activities, report_args.range))
-
-    start_datetime = datetime.datetime(
-        year=report_args.range.start.year, month=report_args.range.start.month, day=report_args.range.start.day
-    )
-
-    end_datetime = datetime.datetime(
-        year=report_args.range.end.year, month=report_args.range.end.month, day=report_args.range.end.day
-    ) + datetime.timedelta(days=1)
-
-    last_activity = activities[-1] if activities else None
-    current_activity = get_current_activity(
-        report_args.current_activity_name, last_activity, now, start_datetime, end_datetime
-    )
-    if current_activity is not None:
-        _filtered_activities.append(current_activity)
-
-    _filtered_activities = list(remove_hello_activities(_filtered_activities))
-    _filtered_activities = list(filter_activities_by_project(_filtered_activities, report_args.project_name_filter))
-
-    return _filtered_activities
+_T = TypeVar("_T")
 
 
-def _activities(entries: Entries):
-    for prev_entry, next_entry in _pairwise(entries):
-        activity = Activity(
-            next_entry.name,
-            prev_entry.datetime,
-            next_entry.datetime,
-            False,
-            comment=next_entry.comment,
-        )
-        yield activity
-
-
-def _pairwise(iterable):
+def pairwise(iterable: Iterable[_T]) -> Iterable[tuple[_T, _T]]:
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     a, b = itertools.tee(iterable)
     next(b, None)
