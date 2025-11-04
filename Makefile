@@ -83,4 +83,4 @@ test.types:
 
 .PHONY: test.unit
 test.unit:
-	poetry run pytest --verbose
+	poetry run python -m unittest discover -v
