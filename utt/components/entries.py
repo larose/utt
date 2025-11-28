@@ -7,6 +7,12 @@ from .entry_parser import EntryParser
 Entries = List[Entry]
 
 
+class UttError(Exception):
+    """User-facing error with a friendly message."""
+
+    pass
+
+
 def entries(entry_lines: EntryLines, entry_parser: EntryParser) -> Entries:
     return list(_parse_log(entry_lines(), entry_parser))
 
@@ -26,12 +32,16 @@ def _parse_line(previous_entry: Optional[Entry], line_number: int, line: str, en
     if not line:
         return None
 
-    new_entry = entry_parser.parse(line)
+    try:
+        new_entry = entry_parser.parse(line)
+    except ValueError:
+        raise UttError("Invalid date at line %d: %s" % (line_number, line))
+
     if new_entry is None:
         raise SyntaxError("Invalid syntax at line %d: %s" % (line_number, line))
 
     if previous_entry is not None and previous_entry.datetime > new_entry.datetime:
-        raise Exception("Error line %d. Not in chronological order: %s > %s" % (line_number, previous_entry, new_entry))
+        raise UttError("Line %d not in chronological order: %s" % (line_number, line))
 
     previous_entry = new_entry
     return previous_entry, new_entry

@@ -4,6 +4,7 @@ import datetime
 from enum import Enum, auto
 from typing import NamedTuple, Optional
 
+from .entries import UttError
 from .now import Now
 
 
@@ -76,7 +77,10 @@ def parse_date(today: datetime.date, datestring: str, is_past: bool):
 
 
 def parse_absolute_date(datestring):
-    return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
+    try:
+        return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
+    except ValueError:
+        raise UttError("Invalid date: %s (expected YYYY-MM-DD)" % datestring)
 
 
 def parse_relative_day(today, datestring):
@@ -168,7 +172,10 @@ def parse_integer_month(today, monthstring):
 
 
 def parse_absolute_month(monthstring):
-    return datetime.datetime.strptime(monthstring, "%Y-%m").date()
+    try:
+        return datetime.datetime.strptime(monthstring, "%Y-%m").date()
+    except ValueError:
+        raise UttError("Invalid month: %s (expected YYYY-MM)" % monthstring)
 
 
 def parse_month(today, monthstring):

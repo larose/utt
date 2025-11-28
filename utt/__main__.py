@@ -6,6 +6,7 @@ import sys
 import utt.plugins
 from utt.api import _v1
 from utt.components.commands import Commands
+from utt.components.entries import UttError
 
 
 def iter_namespace(ns_pkg):
@@ -34,7 +35,11 @@ def main():
     commands: Commands = _v1._private.container[Commands]
     for command in commands:
         if command.name == command_name:
-            _v1._private.container[command.handler_class]()
+            try:
+                _v1._private.container[command.handler_class]()
+            except UttError as e:
+                print("error: %s" % e, file=sys.stderr)
+                sys.exit(1)
 
 
 if __name__ == "__main__":
