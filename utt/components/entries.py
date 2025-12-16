@@ -3,7 +3,7 @@ from typing import Generator, List, Optional, Tuple
 from ..data_structures.entry import Entry
 from .entry_lines import EntryLines
 from .entry_parser import EntryParser
-from .utt_error import UttError
+from ..exceptions import UttError
 
 Entries = List[Entry]
 

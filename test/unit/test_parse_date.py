@@ -1,7 +1,7 @@
 import datetime
 import unittest
 
-from utt.components.utt_error import UttError
+from utt.exceptions import UttError
 from utt.components.report_args import parse_absolute_date, parse_absolute_month, parse_date
 
 VALID_ENTRIES = [

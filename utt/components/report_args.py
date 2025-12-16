@@ -4,7 +4,7 @@ import datetime
 from enum import Enum, auto
 from typing import NamedTuple, Optional
 
-from .utt_error import UttError
+from ..exceptions import UttError
 from .now import Now
 
 
