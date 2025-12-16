@@ -28,6 +28,7 @@ all: \
   report-details \
   report-comments \
   report-week-current \
+  error-invalid-date \
   version
 
 $(UTT):
@@ -367,6 +368,15 @@ report-truncate-current-activity: $(UTT)
 
 	@echo "<< REPORT-TRUNCATE-CURRENT-ACTIVITY"
 
+
+.PHONY: error-invalid-date
+error-invalid-date: $(UTT)
+	@echo
+	@echo ">> ERROR-INVALID-DATE"
+
+	bash -c 'diff <(utt report not-a-date 2>&1; true) data/utt-error-invalid-date.stderr'
+
+	@echo "<< ERROR-INVALID-DATE"
 
 .PHONY: shell
 shell:
