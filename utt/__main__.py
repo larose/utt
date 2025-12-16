@@ -6,7 +6,7 @@ import sys
 import utt.plugins
 from utt.api import _v1
 from utt.components.commands import Commands
-from utt.components.entries import UttError
+from utt.components.utt_error import UttError
 
 
 def iter_namespace(ns_pkg):

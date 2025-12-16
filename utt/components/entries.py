@@ -3,14 +3,9 @@ from typing import Generator, List, Optional, Tuple
 from ..data_structures.entry import Entry
 from .entry_lines import EntryLines
 from .entry_parser import EntryParser
+from .utt_error import UttError
 
 Entries = List[Entry]
-
-
-class UttError(Exception):
-    """User-facing error with a friendly message."""
-
-    pass
 
 
 def entries(entry_lines: EntryLines, entry_parser: EntryParser) -> Entries:
