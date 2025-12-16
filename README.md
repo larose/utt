@@ -442,6 +442,7 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for how to contribute to utt.
 - Stephan Gross <<stephangross6@gmail.com>>
 - Kent Martin <<kentaasvang@gmail.com>>
 - fighterpoul <<fighter.poul@gmail.com>>
+- Logan Thomas <<logan@datacentriq.net>>
 
 
 ## License
