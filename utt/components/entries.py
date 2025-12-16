@@ -30,13 +30,13 @@ def _parse_line(previous_entry: Optional[Entry], line_number: int, line: str, en
     try:
         new_entry = entry_parser.parse(line)
     except ValueError:
-        raise UttError("Invalid date at line %d: %s" % (line_number, line))
+        raise UttError(f"Invalid date at line {line_number}: {line}")
 
     if new_entry is None:
-        raise SyntaxError("Invalid syntax at line %d: %s" % (line_number, line))
+        raise SyntaxError(f"Invalid syntax at line {line_number}: {line}")
 
     if previous_entry is not None and previous_entry.datetime > new_entry.datetime:
-        raise UttError("Line %d not in chronological order: %s" % (line_number, line))
+        raise UttError(f"Line {line_number} not in chronological order: {line}")
 
     previous_entry = new_entry
     return previous_entry, new_entry

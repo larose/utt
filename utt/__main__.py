@@ -38,7 +38,7 @@ def main():
             try:
                 _v1._private.container[command.handler_class]()
             except UttError as e:
-                print("error: %s" % e, file=sys.stderr)
+                print(f"error: {e}", file=sys.stderr)
                 sys.exit(1)
 
 
