@@ -1,8 +1,8 @@
 import datetime
 import unittest
 
-from utt.exceptions import UttError
 from utt.components.report_args import parse_absolute_date, parse_absolute_month, parse_date
+from utt.exceptions import UttError
 
 VALID_ENTRIES = [
     ("monday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 9), True),

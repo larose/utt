@@ -1,9 +1,9 @@
 from typing import Generator, List, Optional, Tuple
 
 from ..data_structures.entry import Entry
+from ..exceptions import UttError
 from .entry_lines import EntryLines
 from .entry_parser import EntryParser
-from ..exceptions import UttError
 
 Entries = List[Entry]
 

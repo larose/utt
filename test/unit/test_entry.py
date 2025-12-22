@@ -79,4 +79,3 @@ class InvalidEntry(unittest.TestCase):
                 entry_parser = EntryParser()
                 with self.assertRaises(ValueError):
                     entry_parser.parse(test_case[0])
-
