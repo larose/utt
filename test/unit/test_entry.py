@@ -55,6 +55,7 @@ INVALID_ENTRIES = [
     ("9:15",),
     ("2015-1-1 9:15",),
     ("2014-03-23 An activity",),
+    ("2025-27-27 17:00 misc: testing",),
 ]
 
 
@@ -79,8 +80,3 @@ class InvalidEntry(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     entry_parser.parse(test_case[0])
 
-    def test_invalid_date_raises_value_error(self):
-        """Test that entries with invalid dates raise ValueError."""
-        entry_parser = EntryParser()
-        with self.assertRaises(ValueError):
-            entry_parser.parse("2025-27-27 17:00 misc: testing")
