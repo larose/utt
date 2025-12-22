@@ -29,8 +29,8 @@ def _parse_line(previous_entry: Optional[Entry], line_number: int, line: str, en
 
     try:
         new_entry = entry_parser.parse(line)
-    except ValueError:
-        raise UttError(f"Invalid entry at line {line_number}: {line}")
+    except ValueError as e:
+        raise UttError(f"Invalid entry at line {line_number}: {line}") from e
 
     if previous_entry is not None and previous_entry.datetime > new_entry.datetime:
         raise UttError(f"Line {line_number} not in chronological order: {line}")

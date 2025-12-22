@@ -79,8 +79,8 @@ def parse_date(today: datetime.date, datestring: str, is_past: bool):
 def parse_absolute_date(datestring):
     try:
         return datetime.datetime.strptime(datestring, "%Y-%m-%d").date()
-    except ValueError:
-        raise UttError(f"Invalid date: {datestring} (expected YYYY-MM-DD)")
+    except ValueError as e:
+        raise UttError(f"Invalid date: {datestring} (expected YYYY-MM-DD)") from e
 
 
 def parse_relative_day(today, datestring):
@@ -174,8 +174,8 @@ def parse_integer_month(today, monthstring):
 def parse_absolute_month(monthstring):
     try:
         return datetime.datetime.strptime(monthstring, "%Y-%m").date()
-    except ValueError:
-        raise UttError(f"Invalid month: {monthstring} (expected YYYY-MM)")
+    except ValueError as e:
+        raise UttError(f"Invalid month: {monthstring} (expected YYYY-MM)") from e
 
 
 def parse_month(today, monthstring):
