@@ -392,9 +392,14 @@ stretched 2013-07-08 08:34 programming
 
 ## Plugins
 
-utt can be extended by installing plugins. Unfortunately, since this
-is a recent feature, no plugins have been listed here yet. Write to
-Mathieu Larose <<mathieu@mathieularose.com>> to add your plugin here.
+`utt` can be extended by installing plugins.
+
+Available plugins:
+
+- [utt-balance](https://github.com/loganthomas/utt-balance) - Adds a balance command that shows worked time against daily and weekly targets
+- [utt-project-summary](https://github.com/loganthomas/utt-project-summary) - Provides a quick overview of how your time is distributed across different projects. It groups all activities by project and displays them sorted by total duration, giving you instant visibility into where your time is going.
+
+Open an issue or a pull request to add your plugin here.
 
 
 ### Plugin development
