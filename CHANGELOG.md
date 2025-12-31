@@ -1,3 +1,7 @@
+## 1.32 (2025-12-31)
+
+  * Improve error messages for invalid dates
+
 ## 1.31 (2025-11-01)
 
   * Remove support for Python 3.8 and 3.9
