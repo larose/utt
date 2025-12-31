@@ -1,6 +1,7 @@
 from typing import Generator, List, Optional, Tuple
 
 from ..data_structures.entry import Entry
+from ..exceptions import UttError
 from .entry_lines import EntryLines
 from .entry_parser import EntryParser
 
@@ -26,12 +27,13 @@ def _parse_line(previous_entry: Optional[Entry], line_number: int, line: str, en
     if not line:
         return None
 
-    new_entry = entry_parser.parse(line)
-    if new_entry is None:
-        raise SyntaxError("Invalid syntax at line %d: %s" % (line_number, line))
+    try:
+        new_entry = entry_parser.parse(line)
+    except ValueError as e:
+        raise UttError(f"Invalid entry at line {line_number}: {line}") from e
 
     if previous_entry is not None and previous_entry.datetime > new_entry.datetime:
-        raise Exception("Error line %d. Not in chronological order: %s > %s" % (line_number, previous_entry, new_entry))
+        raise UttError(f"Line {line_number} not in chronological order: {line}")
 
     previous_entry = new_entry
     return previous_entry, new_entry

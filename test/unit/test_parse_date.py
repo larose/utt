@@ -1,7 +1,8 @@
 import datetime
 import unittest
 
-from utt.components.report_args import parse_date
+from utt.components.report_args import parse_absolute_date, parse_absolute_month, parse_date
+from utt.exceptions import UttError
 
 VALID_ENTRIES = [
     ("monday", datetime.date(2015, 2, 11), datetime.date(2015, 2, 9), True),
@@ -29,3 +30,19 @@ class ParseDate(unittest.TestCase):
             with self.subTest(report_date=report_date, today=today, is_past=is_past):
                 actual_report_date = parse_date(today, report_date, is_past)
                 self.assertEqual(actual_report_date, expected_report_date)
+
+    def test_invalid_date_raises_utt_error(self):
+        with self.assertRaises(UttError):
+            parse_absolute_date("invalid-date")
+
+    def test_invalid_month_raises_utt_error(self):
+        with self.assertRaises(UttError):
+            parse_absolute_month("invalid-month")
+
+    def test_valid_absolute_date(self):
+        result = parse_absolute_date("2024-01-15")
+        self.assertEqual(result, datetime.date(2024, 1, 15))
+
+    def test_valid_absolute_month(self):
+        result = parse_absolute_month("2024-01")
+        self.assertEqual(result, datetime.date(2024, 1, 1))

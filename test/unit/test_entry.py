@@ -55,6 +55,7 @@ INVALID_ENTRIES = [
     ("9:15",),
     ("2015-1-1 9:15",),
     ("2014-03-23 An activity",),
+    ("2025-27-27 17:00 misc: testing",),
 ]
 
 
@@ -64,8 +65,6 @@ class ValidEntry(unittest.TestCase):
             with self.subTest(name=test_case["name"]):
                 entry_parser = EntryParser()
                 entry = entry_parser.parse(test_case["name"])
-                if entry is None:
-                    self.fail("EntryParser returned None for valid entry")
 
                 self.assertEqual(entry.datetime, test_case["expected_datetime"])
                 self.assertEqual(entry.name, test_case["expected_name"])
@@ -73,9 +72,10 @@ class ValidEntry(unittest.TestCase):
 
 
 class InvalidEntry(unittest.TestCase):
-    def test_invalid_entries(self):
+    def test_invalid_entries_raise_value_error(self):
+        """Test that invalid entries raise ValueError."""
         for test_case in INVALID_ENTRIES:
             with self.subTest(text=test_case[0]):
                 entry_parser = EntryParser()
-                entry = entry_parser.parse(test_case[0])
-                self.assertIsNone(entry)
+                with self.assertRaises(ValueError):
+                    entry_parser.parse(test_case[0])
