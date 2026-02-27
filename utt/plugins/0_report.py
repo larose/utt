@@ -66,6 +66,14 @@ def add_args(parser: argparse.ArgumentParser):
     )
 
     parser.add_argument(
+        "--on",
+        default=None,
+        dest="on_date",
+        type=str,
+        help="Specify a date to report.",
+    )
+
+    parser.add_argument(
         "--project",
         default=None,
         type=str,

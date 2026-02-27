@@ -42,6 +42,7 @@ def parse_report_range_arguments(
     unparsed_week: Optional[str],
     unparsed_from_date: Optional[str],
     unparsed_to_date: Optional[str],
+    unparsed_on_date: Optional[str],
     today: datetime.date,
 ) -> DateRange:
     if unparsed_report_date is None:
@@ -62,6 +63,11 @@ def parse_report_range_arguments(
     report_end_date = (
         report_end_date if unparsed_to_date is None else parse_date(report_start_date, unparsed_to_date, is_past=False)
     )
+
+    if unparsed_on_date:
+        on_date = parse_date(today, unparsed_on_date, is_past=True)
+        report_start_date = on_date
+        report_end_date = on_date
 
     return DateRange(start=report_start_date, end=report_end_date)
 
@@ -269,6 +275,7 @@ def report_args(args: argparse.Namespace, now: Now) -> ReportArgs:
         unparsed_week=args.week,
         unparsed_from_date=args.from_date,
         unparsed_to_date=args.to_date,
+        unparsed_on_date=args.on_date,
         today=now.date(),
     )
 
