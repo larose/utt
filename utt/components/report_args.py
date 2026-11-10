@@ -229,7 +229,7 @@ def parse_week(today: datetime.date, weekstring: str):
     if week is None:
         week = parse_week_number(today, weekstring)
         if week is None:
-            raise ValueError(f"Invalid week string: {weekstring}")
+            raise UttError(f'Invalid week: {weekstring} (expected "this", "previous" or a week number)')
 
     start = week
     end = week + datetime.timedelta(days=6)
